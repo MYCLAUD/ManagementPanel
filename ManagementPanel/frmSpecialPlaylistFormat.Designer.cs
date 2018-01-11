@@ -28,26 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle61 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle62 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle63 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSpecialPlaylistFormat));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle64 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle65 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle66 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle67 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle68 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle69 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle70 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle71 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle72 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle73 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle74 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle75 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgCommanGrid = new System.Windows.Forms.DataGridView();
             this.panel5 = new System.Windows.Forms.Panel();
             this.panel16 = new System.Windows.Forms.Panel();
+            this.rdoLang = new System.Windows.Forms.RadioButton();
+            this.rdoPlaylist = new System.Windows.Forms.RadioButton();
+            this.rdoCategory = new System.Windows.Forms.RadioButton();
             this.panel9 = new System.Windows.Forms.Panel();
+            this.panel10 = new System.Windows.Forms.Panel();
+            this.rdoRoyalty = new System.Windows.Forms.RadioButton();
+            this.rdoCopyright = new System.Windows.Forms.RadioButton();
             this.rdoVideo = new System.Windows.Forms.RadioButton();
             this.rdoAudio = new System.Windows.Forms.RadioButton();
             this.rdoTempo = new System.Windows.Forms.RadioButton();
@@ -72,6 +78,9 @@
             this.rdoSaveVideo = new System.Windows.Forms.RadioButton();
             this.rdoSaveAudio = new System.Windows.Forms.RadioButton();
             this.panel8 = new System.Windows.Forms.Panel();
+            this.picSave = new System.Windows.Forms.PictureBox();
+            this.picUp = new System.Windows.Forms.PictureBox();
+            this.picDown = new System.Windows.Forms.PictureBox();
             this.picDeleteSongs = new System.Windows.Forms.PictureBox();
             this.lblFormatDelete = new System.Windows.Forms.Label();
             this.panel7 = new System.Windows.Forms.Panel();
@@ -102,11 +111,17 @@
             this.lblCaption = new System.Windows.Forms.Label();
             this.bgLibrary = new System.ComponentModel.BackgroundWorker();
             this.bgSplPlaylist = new System.ComponentModel.BackgroundWorker();
-            this.rdoCategory = new System.Windows.Forms.RadioButton();
+            this.bgSaveSequence = new System.ComponentModel.BackgroundWorker();
+            this.panPopUp = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.lblPercentage = new System.Windows.Forms.Label();
+            this.lblName = new System.Windows.Forms.Label();
+            this.pBar = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.dgCommanGrid)).BeginInit();
             this.panel5.SuspendLayout();
             this.panel16.SuspendLayout();
             this.panel9.SuspendLayout();
+            this.panel10.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picAddtoPlaylist)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSearch)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgPlaylist)).BeginInit();
@@ -114,6 +129,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.picSavePlaylist)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel8.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picSave)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picUp)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picDeleteSongs)).BeginInit();
             this.panel7.SuspendLayout();
             this.tbcMain.SuspendLayout();
@@ -128,6 +146,8 @@
             this.panel3.SuspendLayout();
             this.panMainNew.SuspendLayout();
             this.panNew.SuspendLayout();
+            this.panPopUp.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // dgCommanGrid
@@ -138,39 +158,39 @@
             this.dgCommanGrid.AllowUserToResizeRows = false;
             this.dgCommanGrid.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(51)))), ((int)(((byte)(45)))));
             this.dgCommanGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle61.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle61.BackColor = System.Drawing.Color.Gray;
-            dataGridViewCellStyle61.Font = new System.Drawing.Font("Segoe UI", 11F);
-            dataGridViewCellStyle61.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle61.SelectionBackColor = System.Drawing.Color.Gray;
-            dataGridViewCellStyle61.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle61.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgCommanGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle61;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Gray;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 11F);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.Gray;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgCommanGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgCommanGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgCommanGrid.Cursor = System.Windows.Forms.Cursors.Hand;
-            dataGridViewCellStyle62.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle62.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle62.Font = new System.Drawing.Font("Segoe UI", 11F);
-            dataGridViewCellStyle62.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle62.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(162)))), ((int)(((byte)(175)))));
-            dataGridViewCellStyle62.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle62.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgCommanGrid.DefaultCellStyle = dataGridViewCellStyle62;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 11F);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(162)))), ((int)(((byte)(175)))));
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgCommanGrid.DefaultCellStyle = dataGridViewCellStyle2;
             this.dgCommanGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgCommanGrid.GridColor = System.Drawing.Color.Gainsboro;
-            this.dgCommanGrid.Location = new System.Drawing.Point(0, 46);
+            this.dgCommanGrid.Location = new System.Drawing.Point(0, 69);
             this.dgCommanGrid.Name = "dgCommanGrid";
-            dataGridViewCellStyle63.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle63.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle63.Font = new System.Drawing.Font("Segoe UI", 11F);
-            dataGridViewCellStyle63.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle63.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(162)))), ((int)(((byte)(175)))));
-            dataGridViewCellStyle63.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle63.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgCommanGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle63;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 11F);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(162)))), ((int)(((byte)(175)))));
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgCommanGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dgCommanGrid.RowHeadersVisible = false;
             this.dgCommanGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgCommanGrid.Size = new System.Drawing.Size(892, 243);
+            this.dgCommanGrid.Size = new System.Drawing.Size(955, 220);
             this.dgCommanGrid.TabIndex = 104;
             // 
             // panel5
@@ -180,12 +200,14 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel5.Location = new System.Drawing.Point(0, 0);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(892, 46);
+            this.panel5.Size = new System.Drawing.Size(955, 69);
             this.panel5.TabIndex = 103;
             // 
             // panel16
             // 
             this.panel16.BackColor = System.Drawing.Color.Transparent;
+            this.panel16.Controls.Add(this.rdoLang);
+            this.panel16.Controls.Add(this.rdoPlaylist);
             this.panel16.Controls.Add(this.rdoCategory);
             this.panel16.Controls.Add(this.panel9);
             this.panel16.Controls.Add(this.rdoTempo);
@@ -200,18 +222,96 @@
             this.panel16.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel16.Location = new System.Drawing.Point(0, 0);
             this.panel16.Name = "panel16";
-            this.panel16.Size = new System.Drawing.Size(888, 42);
+            this.panel16.Size = new System.Drawing.Size(951, 65);
             this.panel16.TabIndex = 1;
+            // 
+            // rdoLang
+            // 
+            this.rdoLang.AutoSize = true;
+            this.rdoLang.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.rdoLang.ForeColor = System.Drawing.Color.Yellow;
+            this.rdoLang.Location = new System.Drawing.Point(563, 39);
+            this.rdoLang.Name = "rdoLang";
+            this.rdoLang.Size = new System.Drawing.Size(87, 23);
+            this.rdoLang.TabIndex = 42;
+            this.rdoLang.Text = "Language";
+            this.rdoLang.UseVisualStyleBackColor = true;
+            this.rdoLang.CheckedChanged += new System.EventHandler(this.rdoLang_CheckedChanged);
+            // 
+            // rdoPlaylist
+            // 
+            this.rdoPlaylist.AutoSize = true;
+            this.rdoPlaylist.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.rdoPlaylist.ForeColor = System.Drawing.Color.Yellow;
+            this.rdoPlaylist.Location = new System.Drawing.Point(489, 39);
+            this.rdoPlaylist.Name = "rdoPlaylist";
+            this.rdoPlaylist.Size = new System.Drawing.Size(69, 23);
+            this.rdoPlaylist.TabIndex = 41;
+            this.rdoPlaylist.Text = "Playlist";
+            this.rdoPlaylist.UseVisualStyleBackColor = true;
+            this.rdoPlaylist.CheckedChanged += new System.EventHandler(this.rdoPlaylist_CheckedChanged);
+            // 
+            // rdoCategory
+            // 
+            this.rdoCategory.AutoSize = true;
+            this.rdoCategory.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.rdoCategory.ForeColor = System.Drawing.Color.Yellow;
+            this.rdoCategory.Location = new System.Drawing.Point(400, 38);
+            this.rdoCategory.Name = "rdoCategory";
+            this.rdoCategory.Size = new System.Drawing.Size(83, 23);
+            this.rdoCategory.TabIndex = 40;
+            this.rdoCategory.Text = "Category";
+            this.rdoCategory.UseVisualStyleBackColor = true;
+            this.rdoCategory.CheckedChanged += new System.EventHandler(this.rdoCategory_CheckedChanged);
             // 
             // panel9
             // 
+            this.panel9.Controls.Add(this.panel10);
             this.panel9.Controls.Add(this.rdoVideo);
             this.panel9.Controls.Add(this.rdoAudio);
             this.panel9.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel9.Location = new System.Drawing.Point(0, 0);
             this.panel9.Name = "panel9";
-            this.panel9.Size = new System.Drawing.Size(136, 42);
+            this.panel9.Size = new System.Drawing.Size(136, 65);
             this.panel9.TabIndex = 39;
+            // 
+            // panel10
+            // 
+            this.panel10.Controls.Add(this.rdoRoyalty);
+            this.panel10.Controls.Add(this.rdoCopyright);
+            this.panel10.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel10.Location = new System.Drawing.Point(0, 34);
+            this.panel10.Name = "panel10";
+            this.panel10.Size = new System.Drawing.Size(136, 31);
+            this.panel10.TabIndex = 42;
+            // 
+            // rdoRoyalty
+            // 
+            this.rdoRoyalty.AutoSize = true;
+            this.rdoRoyalty.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.rdoRoyalty.ForeColor = System.Drawing.Color.Yellow;
+            this.rdoRoyalty.Location = new System.Drawing.Point(71, 5);
+            this.rdoRoyalty.Name = "rdoRoyalty";
+            this.rdoRoyalty.Size = new System.Drawing.Size(42, 23);
+            this.rdoRoyalty.TabIndex = 36;
+            this.rdoRoyalty.Text = "RF";
+            this.rdoRoyalty.UseVisualStyleBackColor = true;
+            this.rdoRoyalty.CheckedChanged += new System.EventHandler(this.rdoRoyalty_CheckedChanged);
+            // 
+            // rdoCopyright
+            // 
+            this.rdoCopyright.AutoSize = true;
+            this.rdoCopyright.Checked = true;
+            this.rdoCopyright.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.rdoCopyright.ForeColor = System.Drawing.Color.Yellow;
+            this.rdoCopyright.Location = new System.Drawing.Point(4, 5);
+            this.rdoCopyright.Name = "rdoCopyright";
+            this.rdoCopyright.Size = new System.Drawing.Size(44, 23);
+            this.rdoCopyright.TabIndex = 35;
+            this.rdoCopyright.TabStop = true;
+            this.rdoCopyright.Text = "CR";
+            this.rdoCopyright.UseVisualStyleBackColor = true;
+            this.rdoCopyright.CheckedChanged += new System.EventHandler(this.rdoCopyright_CheckedChanged);
             // 
             // rdoVideo
             // 
@@ -246,7 +346,7 @@
             this.rdoTempo.AutoSize = true;
             this.rdoTempo.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.rdoTempo.ForeColor = System.Drawing.Color.Yellow;
-            this.rdoTempo.Location = new System.Drawing.Point(705, 9);
+            this.rdoTempo.Location = new System.Drawing.Point(666, 9);
             this.rdoTempo.Name = "rdoTempo";
             this.rdoTempo.Size = new System.Drawing.Size(68, 23);
             this.rdoTempo.TabIndex = 38;
@@ -259,7 +359,7 @@
             this.rdoGenre.AutoSize = true;
             this.rdoGenre.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.rdoGenre.ForeColor = System.Drawing.Color.Yellow;
-            this.rdoGenre.Location = new System.Drawing.Point(635, 9);
+            this.rdoGenre.Location = new System.Drawing.Point(596, 9);
             this.rdoGenre.Name = "rdoGenre";
             this.rdoGenre.Size = new System.Drawing.Size(64, 23);
             this.rdoGenre.TabIndex = 37;
@@ -275,7 +375,7 @@
             this.cmbAlbum.FormattingEnabled = true;
             this.cmbAlbum.Location = new System.Drawing.Point(140, 8);
             this.cmbAlbum.Name = "cmbAlbum";
-            this.cmbAlbum.Size = new System.Drawing.Size(256, 27);
+            this.cmbAlbum.Size = new System.Drawing.Size(218, 27);
             this.cmbAlbum.TabIndex = 36;
             this.cmbAlbum.Visible = false;
             this.cmbAlbum.SelectedIndexChanged += new System.EventHandler(this.cmbAlbum_SelectedIndexChanged);
@@ -285,7 +385,7 @@
             this.rdoAlbum.AutoSize = true;
             this.rdoAlbum.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.rdoAlbum.ForeColor = System.Drawing.Color.Yellow;
-            this.rdoAlbum.Location = new System.Drawing.Point(562, 9);
+            this.rdoAlbum.Location = new System.Drawing.Point(523, 9);
             this.rdoAlbum.Name = "rdoAlbum";
             this.rdoAlbum.Size = new System.Drawing.Size(67, 23);
             this.rdoAlbum.TabIndex = 35;
@@ -298,7 +398,7 @@
             this.rdoArtist.AutoSize = true;
             this.rdoArtist.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.rdoArtist.ForeColor = System.Drawing.Color.Yellow;
-            this.rdoArtist.Location = new System.Drawing.Point(497, 9);
+            this.rdoArtist.Location = new System.Drawing.Point(458, 9);
             this.rdoArtist.Name = "rdoArtist";
             this.rdoArtist.Size = new System.Drawing.Size(60, 23);
             this.rdoArtist.TabIndex = 34;
@@ -312,7 +412,7 @@
             this.rdoTitle.Checked = true;
             this.rdoTitle.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.rdoTitle.ForeColor = System.Drawing.Color.Yellow;
-            this.rdoTitle.Location = new System.Drawing.Point(439, 9);
+            this.rdoTitle.Location = new System.Drawing.Point(400, 9);
             this.rdoTitle.Name = "rdoTitle";
             this.rdoTitle.Size = new System.Drawing.Size(52, 23);
             this.rdoTitle.TabIndex = 33;
@@ -326,7 +426,7 @@
             this.picAddtoPlaylist.BackgroundImage = global::ManagementPanel.Properties.Resources.upload;
             this.picAddtoPlaylist.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.picAddtoPlaylist.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picAddtoPlaylist.Location = new System.Drawing.Point(869, 6);
+            this.picAddtoPlaylist.Location = new System.Drawing.Point(900, 6);
             this.picAddtoPlaylist.Name = "picAddtoPlaylist";
             this.picAddtoPlaylist.Size = new System.Drawing.Size(42, 29);
             this.picAddtoPlaylist.TabIndex = 31;
@@ -339,7 +439,7 @@
             this.picSearch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.picSearch.Cursor = System.Windows.Forms.Cursors.Hand;
             this.picSearch.Image = ((System.Drawing.Image)(resources.GetObject("picSearch.Image")));
-            this.picSearch.Location = new System.Drawing.Point(399, 7);
+            this.picSearch.Location = new System.Drawing.Point(362, 7);
             this.picSearch.Name = "picSearch";
             this.picSearch.Size = new System.Drawing.Size(34, 28);
             this.picSearch.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -357,7 +457,7 @@
             this.txtSearch.ForeColor = System.Drawing.Color.White;
             this.txtSearch.Location = new System.Drawing.Point(140, 8);
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(256, 25);
+            this.txtSearch.Size = new System.Drawing.Size(218, 25);
             this.txtSearch.TabIndex = 14;
             this.txtSearch.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtSearch.Enter += new System.EventHandler(this.txtSearch_Enter);
@@ -373,40 +473,41 @@
             this.dgPlaylist.AllowUserToResizeRows = false;
             this.dgPlaylist.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(51)))), ((int)(((byte)(45)))));
             this.dgPlaylist.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle64.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle64.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle64.Font = new System.Drawing.Font("Segoe UI", 11F);
-            dataGridViewCellStyle64.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle64.SelectionBackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle64.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle64.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgPlaylist.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle64;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Segoe UI", 11F);
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgPlaylist.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.dgPlaylist.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgPlaylist.Cursor = System.Windows.Forms.Cursors.Hand;
-            dataGridViewCellStyle65.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle65.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle65.Font = new System.Drawing.Font("Segoe UI", 11F);
-            dataGridViewCellStyle65.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle65.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(162)))), ((int)(((byte)(175)))));
-            dataGridViewCellStyle65.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle65.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgPlaylist.DefaultCellStyle = dataGridViewCellStyle65;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Segoe UI", 11F);
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(162)))), ((int)(((byte)(175)))));
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgPlaylist.DefaultCellStyle = dataGridViewCellStyle5;
             this.dgPlaylist.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgPlaylist.Location = new System.Drawing.Point(0, 0);
             this.dgPlaylist.Name = "dgPlaylist";
             this.dgPlaylist.ReadOnly = true;
-            dataGridViewCellStyle66.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle66.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle66.Font = new System.Drawing.Font("Segoe UI", 11F);
-            dataGridViewCellStyle66.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle66.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(162)))), ((int)(((byte)(175)))));
-            dataGridViewCellStyle66.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle66.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgPlaylist.RowHeadersDefaultCellStyle = dataGridViewCellStyle66;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Segoe UI", 11F);
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(162)))), ((int)(((byte)(175)))));
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgPlaylist.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.dgPlaylist.RowHeadersVisible = false;
             this.dgPlaylist.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgPlaylist.Size = new System.Drawing.Size(892, 224);
+            this.dgPlaylist.Size = new System.Drawing.Size(955, 224);
             this.dgPlaylist.TabIndex = 2;
+            this.dgPlaylist.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgPlaylist_DataError);
             this.dgPlaylist.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgPlaylist_KeyDown);
             // 
             // dgLocalPlaylist
@@ -417,43 +518,44 @@
             this.dgLocalPlaylist.AllowUserToResizeRows = false;
             this.dgLocalPlaylist.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(51)))), ((int)(((byte)(45)))));
             this.dgLocalPlaylist.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle67.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle67.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(84)))), ((int)(((byte)(83)))));
-            dataGridViewCellStyle67.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle67.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle67.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(84)))), ((int)(((byte)(83)))));
-            dataGridViewCellStyle67.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle67.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgLocalPlaylist.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle67;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(84)))), ((int)(((byte)(83)))));
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(84)))), ((int)(((byte)(83)))));
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgLocalPlaylist.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
             this.dgLocalPlaylist.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgLocalPlaylist.ColumnHeadersVisible = false;
             this.dgLocalPlaylist.Cursor = System.Windows.Forms.Cursors.Hand;
-            dataGridViewCellStyle68.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle68.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle68.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle68.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle68.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(131)))), ((int)(((byte)(154)))));
-            dataGridViewCellStyle68.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle68.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgLocalPlaylist.DefaultCellStyle = dataGridViewCellStyle68;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(131)))), ((int)(((byte)(154)))));
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgLocalPlaylist.DefaultCellStyle = dataGridViewCellStyle8;
             this.dgLocalPlaylist.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgLocalPlaylist.Location = new System.Drawing.Point(0, 0);
             this.dgLocalPlaylist.MultiSelect = false;
             this.dgLocalPlaylist.Name = "dgLocalPlaylist";
-            this.dgLocalPlaylist.ReadOnly = true;
-            dataGridViewCellStyle69.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle69.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle69.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle69.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle69.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(131)))), ((int)(((byte)(154)))));
-            dataGridViewCellStyle69.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle69.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgLocalPlaylist.RowHeadersDefaultCellStyle = dataGridViewCellStyle69;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(131)))), ((int)(((byte)(154)))));
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgLocalPlaylist.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.dgLocalPlaylist.RowHeadersVisible = false;
             this.dgLocalPlaylist.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.dgLocalPlaylist.Size = new System.Drawing.Size(356, 407);
             this.dgLocalPlaylist.TabIndex = 104;
             this.dgLocalPlaylist.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgLocalPlaylist_CellClick);
+            this.dgLocalPlaylist.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgLocalPlaylist_CellContentClick);
+            this.dgLocalPlaylist.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgLocalPlaylist_DataError);
             // 
             // picSavePlaylist
             // 
@@ -547,7 +649,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1270, 53);
+            this.panel1.Size = new System.Drawing.Size(1333, 53);
             this.panel1.TabIndex = 16;
             // 
             // label2
@@ -561,6 +663,7 @@
             this.label2.Size = new System.Drawing.Size(79, 19);
             this.label2.TabIndex = 232;
             this.label2.Text = "Media Type";
+            this.label2.Visible = false;
             // 
             // rdoSaveVideo
             // 
@@ -573,6 +676,7 @@
             this.rdoSaveVideo.TabIndex = 231;
             this.rdoSaveVideo.Text = "Video";
             this.rdoSaveVideo.UseVisualStyleBackColor = true;
+            this.rdoSaveVideo.Visible = false;
             // 
             // rdoSaveAudio
             // 
@@ -587,24 +691,64 @@
             this.rdoSaveAudio.TabStop = true;
             this.rdoSaveAudio.Text = "Audio";
             this.rdoSaveAudio.UseVisualStyleBackColor = true;
+            this.rdoSaveAudio.Visible = false;
             // 
             // panel8
             // 
+            this.panel8.Controls.Add(this.picSave);
+            this.panel8.Controls.Add(this.picUp);
+            this.panel8.Controls.Add(this.picDown);
             this.panel8.Controls.Add(this.picDeleteSongs);
             this.panel8.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel8.Location = new System.Drawing.Point(1219, 0);
+            this.panel8.Location = new System.Drawing.Point(1069, 0);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(47, 49);
+            this.panel8.Size = new System.Drawing.Size(260, 49);
             this.panel8.TabIndex = 229;
+            // 
+            // picSave
+            // 
+            this.picSave.BackgroundImage = global::ManagementPanel.Properties.Resources.Save2;
+            this.picSave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.picSave.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.picSave.Location = new System.Drawing.Point(118, 4);
+            this.picSave.Name = "picSave";
+            this.picSave.Size = new System.Drawing.Size(52, 40);
+            this.picSave.TabIndex = 231;
+            this.picSave.TabStop = false;
+            this.picSave.Click += new System.EventHandler(this.picSave_Click);
+            // 
+            // picUp
+            // 
+            this.picUp.BackgroundImage = global::ManagementPanel.Properties.Resources.upload;
+            this.picUp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.picUp.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.picUp.Location = new System.Drawing.Point(9, 6);
+            this.picUp.Name = "picUp";
+            this.picUp.Size = new System.Drawing.Size(47, 36);
+            this.picUp.TabIndex = 230;
+            this.picUp.TabStop = false;
+            this.picUp.Click += new System.EventHandler(this.picUp_Click);
+            // 
+            // picDown
+            // 
+            this.picDown.BackgroundImage = global::ManagementPanel.Properties.Resources.Down;
+            this.picDown.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.picDown.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.picDown.Location = new System.Drawing.Point(64, 6);
+            this.picDown.Name = "picDown";
+            this.picDown.Size = new System.Drawing.Size(47, 36);
+            this.picDown.TabIndex = 229;
+            this.picDown.TabStop = false;
+            this.picDown.Click += new System.EventHandler(this.picDown_Click);
             // 
             // picDeleteSongs
             // 
             this.picDeleteSongs.BackgroundImage = global::ManagementPanel.Properties.Resources._256;
             this.picDeleteSongs.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.picDeleteSongs.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picDeleteSongs.Location = new System.Drawing.Point(3, 14);
+            this.picDeleteSongs.Location = new System.Drawing.Point(189, 4);
             this.picDeleteSongs.Name = "picDeleteSongs";
-            this.picDeleteSongs.Size = new System.Drawing.Size(35, 30);
+            this.picDeleteSongs.Size = new System.Drawing.Size(52, 40);
             this.picDeleteSongs.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picDeleteSongs.TabIndex = 228;
             this.picDeleteSongs.TabStop = false;
@@ -701,38 +845,38 @@
             this.dgBestofPlaylist.AllowUserToResizeRows = false;
             this.dgBestofPlaylist.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(51)))), ((int)(((byte)(45)))));
             this.dgBestofPlaylist.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle70.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle70.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(84)))), ((int)(((byte)(83)))));
-            dataGridViewCellStyle70.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle70.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle70.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(84)))), ((int)(((byte)(83)))));
-            dataGridViewCellStyle70.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle70.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgBestofPlaylist.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle70;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(84)))), ((int)(((byte)(83)))));
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle10.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(84)))), ((int)(((byte)(83)))));
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgBestofPlaylist.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
             this.dgBestofPlaylist.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgBestofPlaylist.ColumnHeadersVisible = false;
             this.dgBestofPlaylist.Cursor = System.Windows.Forms.Cursors.Hand;
-            dataGridViewCellStyle71.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle71.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle71.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle71.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle71.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(131)))), ((int)(((byte)(154)))));
-            dataGridViewCellStyle71.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle71.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgBestofPlaylist.DefaultCellStyle = dataGridViewCellStyle71;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(131)))), ((int)(((byte)(154)))));
+            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgBestofPlaylist.DefaultCellStyle = dataGridViewCellStyle11;
             this.dgBestofPlaylist.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgBestofPlaylist.Location = new System.Drawing.Point(3, 3);
             this.dgBestofPlaylist.MultiSelect = false;
             this.dgBestofPlaylist.Name = "dgBestofPlaylist";
             this.dgBestofPlaylist.ReadOnly = true;
-            dataGridViewCellStyle72.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle72.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle72.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle72.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle72.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(131)))), ((int)(((byte)(154)))));
-            dataGridViewCellStyle72.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle72.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgBestofPlaylist.RowHeadersDefaultCellStyle = dataGridViewCellStyle72;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(131)))), ((int)(((byte)(154)))));
+            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgBestofPlaylist.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
             this.dgBestofPlaylist.RowHeadersVisible = false;
             this.dgBestofPlaylist.RowTemplate.Height = 30;
             this.dgBestofPlaylist.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
@@ -759,38 +903,38 @@
             this.dgLibrary.AllowUserToResizeRows = false;
             this.dgLibrary.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(51)))), ((int)(((byte)(45)))));
             this.dgLibrary.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle73.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle73.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(84)))), ((int)(((byte)(83)))));
-            dataGridViewCellStyle73.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle73.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle73.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(84)))), ((int)(((byte)(83)))));
-            dataGridViewCellStyle73.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle73.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgLibrary.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle73;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(84)))), ((int)(((byte)(83)))));
+            dataGridViewCellStyle13.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle13.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(84)))), ((int)(((byte)(83)))));
+            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgLibrary.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
             this.dgLibrary.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgLibrary.ColumnHeadersVisible = false;
             this.dgLibrary.Cursor = System.Windows.Forms.Cursors.Hand;
-            dataGridViewCellStyle74.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle74.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle74.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle74.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle74.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(131)))), ((int)(((byte)(154)))));
-            dataGridViewCellStyle74.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle74.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgLibrary.DefaultCellStyle = dataGridViewCellStyle74;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle14.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(131)))), ((int)(((byte)(154)))));
+            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgLibrary.DefaultCellStyle = dataGridViewCellStyle14;
             this.dgLibrary.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgLibrary.Location = new System.Drawing.Point(3, 3);
             this.dgLibrary.MultiSelect = false;
             this.dgLibrary.Name = "dgLibrary";
             this.dgLibrary.ReadOnly = true;
-            dataGridViewCellStyle75.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle75.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle75.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle75.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle75.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(131)))), ((int)(((byte)(154)))));
-            dataGridViewCellStyle75.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle75.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgLibrary.RowHeadersDefaultCellStyle = dataGridViewCellStyle75;
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle15.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle15.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(131)))), ((int)(((byte)(154)))));
+            dataGridViewCellStyle15.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgLibrary.RowHeadersDefaultCellStyle = dataGridViewCellStyle15;
             this.dgLibrary.RowHeadersVisible = false;
             this.dgLibrary.RowTemplate.Height = 30;
             this.dgLibrary.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
@@ -805,7 +949,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(374, 53);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(896, 228);
+            this.panel2.Size = new System.Drawing.Size(959, 228);
             this.panel2.TabIndex = 18;
             // 
             // panel3
@@ -816,15 +960,15 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(374, 281);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(896, 293);
+            this.panel3.Size = new System.Drawing.Size(959, 293);
             this.panel3.TabIndex = 19;
             // 
             // panMainNew
             // 
             this.panMainNew.Controls.Add(this.panNew);
-            this.panMainNew.Location = new System.Drawing.Point(308, 103);
+            this.panMainNew.Location = new System.Drawing.Point(778, 367);
             this.panMainNew.Name = "panMainNew";
-            this.panMainNew.Size = new System.Drawing.Size(311, 71);
+            this.panMainNew.Size = new System.Drawing.Size(308, 107);
             this.panMainNew.TabIndex = 25;
             this.panMainNew.Visible = false;
             this.panMainNew.VisibleChanged += new System.EventHandler(this.panMainNew_VisibleChanged);
@@ -1025,25 +1169,78 @@
             this.bgSplPlaylist.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgSplPlaylist_ProgressChanged);
             this.bgSplPlaylist.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgSplPlaylist_RunWorkerCompleted);
             // 
-            // rdoCategory
+            // bgSaveSequence
             // 
-            this.rdoCategory.AutoSize = true;
-            this.rdoCategory.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.rdoCategory.ForeColor = System.Drawing.Color.Yellow;
-            this.rdoCategory.Location = new System.Drawing.Point(780, 9);
-            this.rdoCategory.Name = "rdoCategory";
-            this.rdoCategory.Size = new System.Drawing.Size(83, 23);
-            this.rdoCategory.TabIndex = 40;
-            this.rdoCategory.Text = "Category";
-            this.rdoCategory.UseVisualStyleBackColor = true;
-            this.rdoCategory.CheckedChanged += new System.EventHandler(this.rdoCategory_CheckedChanged);
+            this.bgSaveSequence.WorkerReportsProgress = true;
+            this.bgSaveSequence.WorkerSupportsCancellation = true;
+            this.bgSaveSequence.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgSaveSequence_DoWork);
+            this.bgSaveSequence.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgSaveSequence_ProgressChanged);
+            this.bgSaveSequence.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgSaveSequence_RunWorkerCompleted);
+            // 
+            // panPopUp
+            // 
+            this.panPopUp.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panPopUp.Controls.Add(this.pictureBox1);
+            this.panPopUp.Controls.Add(this.lblPercentage);
+            this.panPopUp.Controls.Add(this.lblName);
+            this.panPopUp.Controls.Add(this.pBar);
+            this.panPopUp.Location = new System.Drawing.Point(1109, 367);
+            this.panPopUp.Name = "panPopUp";
+            this.panPopUp.Size = new System.Drawing.Size(517, 278);
+            this.panPopUp.TabIndex = 26;
+            this.panPopUp.Visible = false;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureBox1.Location = new System.Drawing.Point(206, 17);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(100, 96);
+            this.pictureBox1.TabIndex = 34;
+            this.pictureBox1.TabStop = false;
+            // 
+            // lblPercentage
+            // 
+            this.lblPercentage.BackColor = System.Drawing.Color.Transparent;
+            this.lblPercentage.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblPercentage.ForeColor = System.Drawing.Color.White;
+            this.lblPercentage.Location = new System.Drawing.Point(384, 123);
+            this.lblPercentage.Name = "lblPercentage";
+            this.lblPercentage.Size = new System.Drawing.Size(126, 19);
+            this.lblPercentage.TabIndex = 16;
+            this.lblPercentage.Text = "Data Importing";
+            this.lblPercentage.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblName
+            // 
+            this.lblName.AutoSize = true;
+            this.lblName.BackColor = System.Drawing.Color.Transparent;
+            this.lblName.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblName.ForeColor = System.Drawing.Color.White;
+            this.lblName.Location = new System.Drawing.Point(3, 122);
+            this.lblName.Name = "lblName";
+            this.lblName.Size = new System.Drawing.Size(103, 19);
+            this.lblName.TabIndex = 16;
+            this.lblName.Text = "Data Importing";
+            this.lblName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // pBar
+            // 
+            this.pBar.ForeColor = System.Drawing.Color.LightCyan;
+            this.pBar.Location = new System.Drawing.Point(-2, 144);
+            this.pBar.Name = "pBar";
+            this.pBar.Size = new System.Drawing.Size(516, 23);
+            this.pBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.pBar.TabIndex = 33;
             // 
             // frmSpecialPlaylistFormat
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(51)))), ((int)(((byte)(45)))));
-            this.ClientSize = new System.Drawing.Size(1270, 574);
+            this.ClientSize = new System.Drawing.Size(1333, 574);
+            this.Controls.Add(this.panPopUp);
             this.Controls.Add(this.panMainNew);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
@@ -1052,12 +1249,15 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "frmSpecialPlaylistFormat";
             this.Text = "Best of Playlist";
+            this.Load += new System.EventHandler(this.frmSpecialPlaylistFormat_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgCommanGrid)).EndInit();
             this.panel5.ResumeLayout(false);
             this.panel16.ResumeLayout(false);
             this.panel16.PerformLayout();
             this.panel9.ResumeLayout(false);
             this.panel9.PerformLayout();
+            this.panel10.ResumeLayout(false);
+            this.panel10.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picAddtoPlaylist)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSearch)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgPlaylist)).EndInit();
@@ -1066,6 +1266,9 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel8.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picSave)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picUp)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picDeleteSongs)).EndInit();
             this.panel7.ResumeLayout(false);
             this.tbcMain.ResumeLayout(false);
@@ -1082,6 +1285,9 @@
             this.panMainNew.ResumeLayout(false);
             this.panNew.ResumeLayout(false);
             this.panNew.PerformLayout();
+            this.panPopUp.ResumeLayout(false);
+            this.panPopUp.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1147,5 +1353,19 @@
         private System.Windows.Forms.RadioButton rdoSaveVideo;
         private System.Windows.Forms.RadioButton rdoSaveAudio;
         private System.Windows.Forms.RadioButton rdoCategory;
+        private System.Windows.Forms.RadioButton rdoPlaylist;
+        private System.Windows.Forms.Panel panel10;
+        private System.Windows.Forms.RadioButton rdoRoyalty;
+        private System.Windows.Forms.RadioButton rdoCopyright;
+        private System.Windows.Forms.PictureBox picUp;
+        private System.Windows.Forms.PictureBox picDown;
+        private System.Windows.Forms.PictureBox picSave;
+        private System.ComponentModel.BackgroundWorker bgSaveSequence;
+        private System.Windows.Forms.Panel panPopUp;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Label lblPercentage;
+        private System.Windows.Forms.Label lblName;
+        private System.Windows.Forms.ProgressBar pBar;
+        private System.Windows.Forms.RadioButton rdoLang;
     }
 }

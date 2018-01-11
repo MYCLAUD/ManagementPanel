@@ -18,13 +18,22 @@ namespace ManagementPanel
         Form ObjFormName;
         DateTimeFormatInfo fi = new DateTimeFormatInfo();
         gblClass objMainClass = new gblClass();
+
         CheckBox ClientCheckBox = null;
         bool IsClientCheckBoxClicked = false;
         int TotalCheckBoxes = 0;
         int TotalCheckedCheckBoxes = 0;
+
         Int32 ReturnSchId = 0;
         Int32 rtPschId = 0;
         string IsRecordModify = "No";
+
+
+        CheckBox PublishCheckBox = null;
+        bool IsPublishCheckBoxClicked = false;
+        int TotalCheckBoxesPublish = 0;
+        int TotalCheckedCheckBoxesPublish = 0;
+
         private frmMain mainForm = null;
         public frmSpecialPlaylists(Form callingForm)
         {
@@ -53,7 +62,7 @@ namespace ManagementPanel
             string strState = "";
             strState = "select max(Formatid) as Formatid, formatname from tbSpecialFormat group by formatname";
             objMainClass.fnFillComboBox(strState, cmbFormat, "FormatId", "FormatName", "");
-            objMainClass.fnFillComboBox(strState, cmbSchFormat, "FormatId", "FormatName", "");
+             
             objMainClass.fnFillComboBox(strState, cmbSearchFormat, "FormatId", "FormatName", "");
 
             strState = "";
@@ -70,6 +79,12 @@ namespace ManagementPanel
             AddClientCheckBox(dgToken);
             ClientCheckBox.KeyUp += new KeyEventHandler(ClientCheckBox_KeyUp);
             ClientCheckBox.MouseClick += new MouseEventHandler(ClientCheckBox_MouseClick);
+
+            AddPublishCheckBox(dgPublish);
+            PublishCheckBox.KeyUp += new KeyEventHandler(PublishCheckBox_KeyUp);
+            PublishCheckBox.MouseClick += new MouseEventHandler(PublishCheckBox_MouseClick);
+
+
             dtpStartTime.Value = Convert.ToDateTime(string.Format(fi, "{0:hh:mm tt}", DateTime.Now));
             dtpEndTime.Value = Convert.ToDateTime(string.Format(fi, "{0:hh:mm tt}", DateTime.Now));
 
@@ -82,7 +97,7 @@ namespace ManagementPanel
             panAddNew.Visible = false;
             panAssign.Visible = false;
 
-
+            InitilizePublishGrid();
 
 
         }
@@ -471,10 +486,19 @@ namespace ManagementPanel
                             StaticClass.constr.Close();
                         }
                     }
-                             
 
 
-                           
+
+                    if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
+                    StaticClass.constr.Open();
+                    SqlCommand cmdPublish = new SqlCommand();
+                    cmdPublish.Connection = StaticClass.constr;
+                    cmdPublish.CommandText = "update AMPlayerTokens set isPublish=0 where tokenid=" + Convert.ToInt32(dgToken.Rows[i].Cells["Id"].Value) + "";
+                    cmdPublish.ExecuteNonQuery();
+                    StaticClass.constr.Close();
+
+
+
 
 
 
@@ -711,91 +735,12 @@ namespace ManagementPanel
         private void cmbSearchDealer_Click(object sender, EventArgs e)
         {
             string str = "";
-            str = "select DFClientID,ClientName from DFClients where CountryCode is not null and DFClients.IsDealer=1 ";
-            str = str + " order by DFClientID desc ";
+            str = "select DFClientID, RIGHT(ClientName, LEN(ClientName) - 3) as ClientName from DFClients where CountryCode is not null and DFClients.IsDealer=1 ";
+            str = str + " order by RIGHT(ClientName, LEN(ClientName) - 3) ";
             objMainClass.fnFillComboBox(str, cmbSearchDealer, "DFClientID", "ClientName", "");
         }
-        private void InitilizeSchGrid()
-        {
-            if (dgSch.Rows.Count > 0)
-            {
-                dgSch.Rows.Clear();
-            }
-            if (dgSch.Columns.Count > 0)
-            {
-                dgSch.Columns.Clear();
-            }
-            //0
-            dgSch.Columns.Add("Id", "Id");
-            dgSch.Columns["Id"].Width = 0;
-            dgSch.Columns["Id"].Visible = false;
-            dgSch.Columns["Id"].ReadOnly = true;
-            //1
-            dgSch.Columns.Add("pName", "Playlist Name");
-            dgSch.Columns["pName"].Width = 200;
-            dgSch.Columns["pName"].Visible = true;
-            dgSch.Columns["pName"].ReadOnly = true;
-            dgSch.Columns["pName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-
-            dgSch.Columns.Add("sTime", "Start Time");
-            dgSch.Columns["sTime"].Width = 200;
-            dgSch.Columns["sTime"].Visible = true;
-            dgSch.Columns["sTime"].ReadOnly = true;
-            dgSch.Columns["sTime"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-
-            dgSch.Columns.Add("eTime", "End Time");
-            dgSch.Columns["eTime"].Width = 200;
-            dgSch.Columns["eTime"].Visible = true;
-            dgSch.Columns["eTime"].ReadOnly = true;
-            dgSch.Columns["eTime"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-
-            DataGridViewLinkColumn EditAdvt = new DataGridViewLinkColumn();
-            EditAdvt.HeaderText = "Edit";
-            EditAdvt.Text = "Edit";
-            EditAdvt.DataPropertyName = "Edit";
-            dgSch.Columns.Add(EditAdvt);
-            EditAdvt.UseColumnTextForLinkValue = true;
-            EditAdvt.Width = 70;
-            EditAdvt.Visible = false;
-            dgSch.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-
-            DataGridViewLinkColumn DeleteAdvt = new DataGridViewLinkColumn();
-            DeleteAdvt.HeaderText = "Delete";
-            DeleteAdvt.Text = "Delete";
-            DeleteAdvt.DataPropertyName = "Delete";
-            dgSch.Columns.Add(DeleteAdvt);
-            DeleteAdvt.UseColumnTextForLinkValue = true;
-            DeleteAdvt.Width = 70;
-            DeleteAdvt.Visible = false;
-            dgSch.Columns[5].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-        }
-        private void FillSchData()
-        {
-            string sQr = "";
-            sQr = "select tbSpecialPlaylistSchedule.pSchId,tbSpecialPlaylists.splPlaylistName,tbSpecialPlaylistSchedule.StartTime,tbSpecialPlaylistSchedule.EndTime ";
-            sQr = sQr + " from tbSpecialPlaylistSchedule  inner join tbSpecialPlaylists on tbSpecialPlaylists.splPlaylistid= tbSpecialPlaylistSchedule.splPlaylistid ";
-            sQr = sQr + " where tbSpecialPlaylistSchedule.FormatId= " + Convert.ToInt32(cmbFormat.SelectedValue) + " order by tbSpecialPlaylistSchedule.pSchId";
-
-            DataTable dtDetail = new DataTable();
-            InitilizeSchGrid();
-            dtDetail = objMainClass.fnFillDataTable(sQr);
-            if (dtDetail.Rows.Count > 0)
-            {
-                for (int i = 0; i <= dtDetail.Rows.Count - 1; i++)
-                {
-                    dgSch.Rows.Add();
-                    dgSch.Rows[dgSch.Rows.Count - 1].Cells["Id"].Value = dtDetail.Rows[i]["pSchId"];
-                    dgSch.Rows[dgSch.Rows.Count - 1].Cells["pName"].Value = dtDetail.Rows[i]["splPlaylistName"].ToString();
-                    dgSch.Rows[dgSch.Rows.Count - 1].Cells["sTime"].Value = string.Format(fi, "{0:hh:mm tt}", Convert.ToDateTime(dtDetail.Rows[i]["StartTime"]));
-                    dgSch.Rows[dgSch.Rows.Count - 1].Cells["eTime"].Value = string.Format(fi, "{0:hh:mm tt}", Convert.ToDateTime(dtDetail.Rows[i]["EndTime"]));
-                }
-            }
-            foreach (DataGridViewRow row in dgSch.Rows)
-            {
-                row.Height = 30;
-            }
-        }
-
+       
+      
         private void InitilizeSplGrid()
         {
             if (dgSpl.Rows.Count > 0)
@@ -833,11 +778,24 @@ namespace ManagementPanel
             dgSpl.Columns["pName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
 
-            dgSpl.Columns.Add("tNo", "Token No");
+            dgSpl.Columns.Add("tNo", "Token Code");
             dgSpl.Columns["tNo"].Width = 200;
             dgSpl.Columns["tNo"].Visible = true;
             dgSpl.Columns["tNo"].ReadOnly = true;
             dgSpl.Columns["tNo"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+            dgSpl.Columns.Add("plName", "Player Name");
+            dgSpl.Columns["plName"].Width = 200;
+            dgSpl.Columns["plName"].Visible = true;
+            dgSpl.Columns["plName"].ReadOnly = true;
+            dgSpl.Columns["plName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+            dgSpl.Columns.Add("locName", "Location");
+            dgSpl.Columns["locName"].Width = 200;
+            dgSpl.Columns["locName"].Visible = true;
+            dgSpl.Columns["locName"].ReadOnly = true;
+            dgSpl.Columns["locName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
 
             dgSpl.Columns.Add("sTime", "Start Time");
             dgSpl.Columns["sTime"].Width = 150;
@@ -876,6 +834,14 @@ namespace ManagementPanel
             DeleteAdvt.Width = 70;
             DeleteAdvt.Visible = true;
             dgSpl.Columns[8].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+
+            dgSpl.Columns.Add("TokenId", "TokenId");
+            dgSpl.Columns["TokenId"].Width = 0;
+            dgSpl.Columns["TokenId"].Visible = false;
+            dgSpl.Columns["TokenId"].ReadOnly = true;
+            dgSpl.Columns["TokenId"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+
         }
         private void FillSaveData()
         {
@@ -902,13 +868,18 @@ namespace ManagementPanel
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["fName"].Value = dtDetail.Rows[i]["FormatName"].ToString();
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["pName"].Value = dtDetail.Rows[i]["pName"].ToString();
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["tNo"].Value = dtDetail.Rows[i]["Tokenid"].ToString();
+                    dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["plName"].Value = dtDetail.Rows[i]["personname"].ToString();
+                    dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["locName"].Value = dtDetail.Rows[i]["Location"].ToString();
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["sTime"].Value = string.Format(fi, "{0:hh:mm tt}", Convert.ToDateTime(dtDetail.Rows[i]["StartTime"]));
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["eTime"].Value = string.Format(fi, "{0:hh:mm tt}", Convert.ToDateTime(dtDetail.Rows[i]["EndTime"]));
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["wDay"].Value = GetWeekName(Convert.ToInt32(dtDetail.Rows[i]["pSchId"]));
+                    dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["tokenid"].Value = dtDetail.Rows[i]["MainTokenid"].ToString();
 
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["cname"].Style.BackColor = Color.FromArgb(Convert.ToInt32(dtDetail.Rows[i]["R"]), Convert.ToInt32(dtDetail.Rows[i]["G"]), Convert.ToInt32(dtDetail.Rows[i]["B"]));
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["fname"].Style.BackColor = Color.FromArgb(Convert.ToInt32(dtDetail.Rows[i]["R"]), Convert.ToInt32(dtDetail.Rows[i]["G"]), Convert.ToInt32(dtDetail.Rows[i]["B"]));
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["pname"].Style.BackColor = Color.FromArgb(Convert.ToInt32(dtDetail.Rows[i]["R"]), Convert.ToInt32(dtDetail.Rows[i]["G"]), Convert.ToInt32(dtDetail.Rows[i]["B"]));
+                    dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["plname"].Style.BackColor = Color.FromArgb(Convert.ToInt32(dtDetail.Rows[i]["R"]), Convert.ToInt32(dtDetail.Rows[i]["G"]), Convert.ToInt32(dtDetail.Rows[i]["B"]));
+                    dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["locname"].Style.BackColor = Color.FromArgb(Convert.ToInt32(dtDetail.Rows[i]["R"]), Convert.ToInt32(dtDetail.Rows[i]["G"]), Convert.ToInt32(dtDetail.Rows[i]["B"]));
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["tNo"].Style.BackColor = Color.FromArgb(Convert.ToInt32(dtDetail.Rows[i]["R"]), Convert.ToInt32(dtDetail.Rows[i]["G"]), Convert.ToInt32(dtDetail.Rows[i]["B"]));
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["sTime"].Style.BackColor = Color.FromArgb(Convert.ToInt32(dtDetail.Rows[i]["R"]), Convert.ToInt32(dtDetail.Rows[i]["G"]), Convert.ToInt32(dtDetail.Rows[i]["B"]));
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["eTime"].Style.BackColor = Color.FromArgb(Convert.ToInt32(dtDetail.Rows[i]["R"]), Convert.ToInt32(dtDetail.Rows[i]["G"]), Convert.ToInt32(dtDetail.Rows[i]["B"]));
@@ -917,6 +888,8 @@ namespace ManagementPanel
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["cname"].Style.SelectionBackColor = Color.FromArgb(Convert.ToInt32(dtDetail.Rows[i]["R"]), Convert.ToInt32(dtDetail.Rows[i]["G"]), Convert.ToInt32(dtDetail.Rows[i]["B"]));
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["fname"].Style.SelectionBackColor = Color.FromArgb(Convert.ToInt32(dtDetail.Rows[i]["R"]), Convert.ToInt32(dtDetail.Rows[i]["G"]), Convert.ToInt32(dtDetail.Rows[i]["B"]));
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["pname"].Style.SelectionBackColor = Color.FromArgb(Convert.ToInt32(dtDetail.Rows[i]["R"]), Convert.ToInt32(dtDetail.Rows[i]["G"]), Convert.ToInt32(dtDetail.Rows[i]["B"]));
+                    dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["plname"].Style.SelectionBackColor = Color.FromArgb(Convert.ToInt32(dtDetail.Rows[i]["R"]), Convert.ToInt32(dtDetail.Rows[i]["G"]), Convert.ToInt32(dtDetail.Rows[i]["B"]));
+                    dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["locName"].Style.SelectionBackColor = Color.FromArgb(Convert.ToInt32(dtDetail.Rows[i]["R"]), Convert.ToInt32(dtDetail.Rows[i]["G"]), Convert.ToInt32(dtDetail.Rows[i]["B"]));
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["tNo"].Style.SelectionBackColor = Color.FromArgb(Convert.ToInt32(dtDetail.Rows[i]["R"]), Convert.ToInt32(dtDetail.Rows[i]["G"]), Convert.ToInt32(dtDetail.Rows[i]["B"]));
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["sTime"].Style.SelectionBackColor = Color.FromArgb(Convert.ToInt32(dtDetail.Rows[i]["R"]), Convert.ToInt32(dtDetail.Rows[i]["G"]), Convert.ToInt32(dtDetail.Rows[i]["B"]));
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["eTime"].Style.SelectionBackColor = Color.FromArgb(Convert.ToInt32(dtDetail.Rows[i]["R"]), Convert.ToInt32(dtDetail.Rows[i]["G"]), Convert.ToInt32(dtDetail.Rows[i]["B"]));
@@ -925,6 +898,8 @@ namespace ManagementPanel
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["cname"].Style.SelectionForeColor = Color.Black;
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["fname"].Style.SelectionForeColor = Color.Black;
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["pname"].Style.SelectionForeColor = Color.Black;
+                    dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["plname"].Style.SelectionForeColor = Color.Black;
+                    dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["locname"].Style.SelectionForeColor = Color.Black;
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["tNo"].Style.SelectionForeColor = Color.Black;
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["sTime"].Style.SelectionForeColor = Color.Black;
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["eTime"].Style.SelectionForeColor = Color.Black;
@@ -942,31 +917,31 @@ namespace ManagementPanel
         {
             if ((Convert.ToInt32(cmbSearchDealer.SelectedValue) != 0) && (Convert.ToInt32(cmbSearchFormat.SelectedValue) != 0) && (Convert.ToInt32(cmbSearchPlaylist.SelectedValue) != 0))
             {
-                return " where dfclientid= " + Convert.ToInt32(cmbSearchDealer.SelectedValue).ToString() + " and  formatid=" + Convert.ToInt32(cmbSearchFormat.SelectedValue).ToString() + " and splPlaylistid=" + Convert.ToInt32(cmbSearchPlaylist.SelectedValue).ToString() + " order by StartTime";
+                return " where dfclientid= " + Convert.ToInt32(cmbSearchDealer.SelectedValue).ToString() + " and  formatid=" + Convert.ToInt32(cmbSearchFormat.SelectedValue).ToString() + " and splPlaylistid=" + Convert.ToInt32(cmbSearchPlaylist.SelectedValue).ToString() + " order by tokenid, personname , StartTime";
             }
             if ((Convert.ToInt32(cmbSearchDealer.SelectedValue) != 0) && (Convert.ToInt32(cmbSearchFormat.SelectedValue) != 0) && (Convert.ToInt32(cmbSearchPlaylist.SelectedValue) == 0))
             {
-                return " where dfclientid= " + Convert.ToInt32(cmbSearchDealer.SelectedValue).ToString() + " and formatid=" + Convert.ToInt32(cmbSearchFormat.SelectedValue).ToString() + " order by StartTime";
+                return " where dfclientid= " + Convert.ToInt32(cmbSearchDealer.SelectedValue).ToString() + " and formatid=" + Convert.ToInt32(cmbSearchFormat.SelectedValue).ToString() + " order by  tokenid, personname ,  StartTime";
             }
             if ((Convert.ToInt32(cmbSearchDealer.SelectedValue) != 0) && (Convert.ToInt32(cmbSearchFormat.SelectedValue) == 0) && (Convert.ToInt32(cmbSearchPlaylist.SelectedValue) != 0))
             {
-                return " where dfclientid= " + Convert.ToInt32(cmbSearchDealer.SelectedValue).ToString() + " and splPlaylistid=" + Convert.ToInt32(cmbSearchPlaylist.SelectedValue).ToString() + " order by StartTime";
+                return " where dfclientid= " + Convert.ToInt32(cmbSearchDealer.SelectedValue).ToString() + " and splPlaylistid=" + Convert.ToInt32(cmbSearchPlaylist.SelectedValue).ToString() + " order by  tokenid, personname ,  StartTime";
             }
             if ((Convert.ToInt32(cmbSearchDealer.SelectedValue) == 0) && (Convert.ToInt32(cmbSearchFormat.SelectedValue) != 0) && (Convert.ToInt32(cmbSearchPlaylist.SelectedValue) != 0))
             {
-                return " where formatid=" + Convert.ToInt32(cmbSearchFormat.SelectedValue).ToString() + " and splPlaylistid=" + Convert.ToInt32(cmbSearchPlaylist.SelectedValue).ToString() + " order by StartTime";
+                return " where formatid=" + Convert.ToInt32(cmbSearchFormat.SelectedValue).ToString() + " and splPlaylistid=" + Convert.ToInt32(cmbSearchPlaylist.SelectedValue).ToString() + " order by   tokenid, personname , StartTime";
             }
             if ((Convert.ToInt32(cmbSearchDealer.SelectedValue) != 0) && (Convert.ToInt32(cmbSearchFormat.SelectedValue) == 0) && (Convert.ToInt32(cmbSearchPlaylist.SelectedValue) == 0))
             {
-                return " where dfclientid= " + Convert.ToInt32(cmbSearchDealer.SelectedValue).ToString() + " order by StartTime";
+                return " where dfclientid= " + Convert.ToInt32(cmbSearchDealer.SelectedValue).ToString() + " order by  tokenid,  personname , StartTime";
             }
             if ((Convert.ToInt32(cmbSearchDealer.SelectedValue) == 0) && (Convert.ToInt32(cmbSearchFormat.SelectedValue) != 0) && (Convert.ToInt32(cmbSearchPlaylist.SelectedValue) == 0))
             {
-                return " where formatid=" + Convert.ToInt32(cmbSearchFormat.SelectedValue).ToString() + " order by StartTime";
+                return " where formatid=" + Convert.ToInt32(cmbSearchFormat.SelectedValue).ToString() + " order by tokenid,   personname , StartTime";
             }
             if ((Convert.ToInt32(cmbSearchDealer.SelectedValue) == 0) && (Convert.ToInt32(cmbSearchFormat.SelectedValue) == 0) && (Convert.ToInt32(cmbSearchPlaylist.SelectedValue) != 0))
             {
-                return " where splPlaylistid=" + Convert.ToInt32(cmbSearchPlaylist.SelectedValue).ToString() + " order by StartTime";
+                return " where splPlaylistid=" + Convert.ToInt32(cmbSearchPlaylist.SelectedValue).ToString() + " order by tokenid,  personname ,  StartTime";
             }
             return "";
         }
@@ -1031,7 +1006,7 @@ namespace ManagementPanel
         private void dgSpl_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
-            if (e.ColumnIndex == 8)
+            if (e.ColumnIndex == 10)
             {
                 panSearch.Enabled = false;
                 panMenu.Enabled = false;
@@ -1048,7 +1023,7 @@ namespace ManagementPanel
                 dtpUpStartTime.Value = Convert.ToDateTime(string.Format(fi, "{0:hh:mm tt}", Convert.ToDateTime(dgSpl.Rows[e.RowIndex].Cells["stime"].Value)));
                 dtpUpEndTime.Value = Convert.ToDateTime(string.Format(fi, "{0:hh:mm tt}", Convert.ToDateTime(dgSpl.Rows[e.RowIndex].Cells["etime"].Value)));
             }
-            if (e.ColumnIndex == 9)
+            if (e.ColumnIndex == 11)
             {
                 DialogResult result;
                 result = MessageBox.Show("Are you sure to delete ?", "Management Panel", MessageBoxButtons.YesNo);
@@ -1310,125 +1285,13 @@ namespace ManagementPanel
             FillData();
             TotalCheckBoxes = dgToken.RowCount;
             TotalCheckedCheckBoxes = 0;
-            if (Convert.ToInt32(cmbSchFormat.SelectedValue) != 0)
-            {
-                TickTokenFormat();
-            }
+            
+             //   TickTokenFormat();
+            
 
         }
 
-        private void btnSchRefersh_Click(object sender, EventArgs e)
-        {
-            InitilizeGrid();
-
-        }
-
-        private void btnSchSave_Click(object sender, EventArgs e)
-        {
-            if (SubmitValidationSch() == false) return;
-            IsRecordModify = "No";
-            string str = " ";
-            str = " select * from tbSpecialPlaylistSchedule ";
-            //str = str + " where dfclientid= " + Convert.ToInt32(cmbDname.SelectedValue) + "  ";
-            str = str + " where formatid=" + Convert.ToInt32(cmbSchFormat.SelectedValue) + " ";
-
-            DataTable dtFormat = new DataTable();
-            dtFormat = objMainClass.fnFillDataTable(str);
-            //if (dtFormat.Rows.Count > 0)
-            //{
-            //    str = "";
-            //    for (int i = 0; i <= dtFormat.Rows.Count - 1; i++)
-            //    {
-            //        if (str == "")
-            //        {
-            //            str = dtFormat.Rows[i]["pSchid"].ToString();
-            //        }
-            //        else
-            //        {
-            //            str = str + "," + dtFormat.Rows[i]["pSchid"].ToString();
-            //        }
-
-            //    }
-
-            //    if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
-            //    StaticClass.constr.Open();
-            //    SqlCommand cmd1 = new SqlCommand();
-            //    cmd1.Connection = StaticClass.constr;
-            //    cmd1.CommandText = "delete from tbSpecialPlaylistSchedule_Token where pSchId in(" + str + ")";
-            //    cmd1.ExecuteNonQuery();
-            //    StaticClass.constr.Close();
-            //}
-
-            if (dtFormat.Rows.Count > 0)
-            {
-                for (int i = 0; i <= dtFormat.Rows.Count - 1; i++)
-                {
-                    SaveToken(Convert.ToInt32(dtFormat.Rows[i]["pSchid"]));
-                }
-                MessageBox.Show("Record is save", "Management Panel");
-                InitilizeGrid();
-            }
-
-
-
-        }
-
-        private Boolean SubmitValidationSch()
-        {
-            if (Convert.ToInt32(cmbDname.SelectedValue) == 0)
-            {
-                MessageBox.Show("Please select a dealer name", "Management Panel");
-                cmbDname.Focus();
-                return false;
-            }
-            if (Convert.ToInt32(cmbSchFormat.SelectedValue) == 0)
-            {
-                MessageBox.Show("Please select a format name", "Management Panel");
-                cmbSchFormat.Focus();
-                return false;
-            }
-
-            string str = " ";
-            //str = " SELECT TotalHour = isnull(SUM(DATEDIFF(MINUTE, '0:00:00', do_not_use))/60,0) from ( ";
-            //str = str + " select t.pSchid, convert(varchar, max(EndTime) - min(Starttime), 108) do_not_use ";
-            //str = str + " from tbSpecialPlaylistSchedule t where t.formatid=" + Convert.ToInt32(cmbSchFormat.SelectedValue) + "";
-            //str = str + " and t.dfclientid= " + Convert.ToInt32(cmbDname.SelectedValue) + " and t.pVersion = '" + cmbVersion.Text + "'  group by t.pSchid) as a";
-            str = "SELECT wid, TotalHour = isnull(SUM(DATEDIFF(MINUTE, '0:00:00', do_not_use))/60,0) from (  select t.pSchid,w.Wid, convert(varchar, max(EndTime) - min(Starttime), 108) do_not_use from tbSpecialPlaylistSchedule t ";
-            str = str + " inner join tbSpecialPlaylistSchedule_WeekDay w on w.pschId= t.pSchId";
-            str = str + " where t.formatid=" + Convert.ToInt32(cmbSchFormat.SelectedValue) + " and t.dfclientid= " + Convert.ToInt32(cmbDname.SelectedValue) + " ";
-            str = str + "  group by t.pSchid, w.Wid";
-            str = str + " ) as a group by  Wid";
-
-            DataTable dtHour = new DataTable();
-            dtHour = objMainClass.fnFillDataTable(str);
-
-            for (int iCtr = 0; (iCtr <= (dtHour.Rows.Count - 1)); iCtr++)
-            {
-                str = "";
-                if (Convert.ToInt32(dtHour.Rows[iCtr]["TotalHour"]) < TotalHr)
-                {
-                    str = "Find";
-                    break;
-                }
-            }
-
-
-            if (str == "Find")
-            {
-                MessageBox.Show("The selected format not covers the hours cycle", "Management Panel");
-                cmbSchFormat.Focus();
-                return false;
-            }
-            if (IsRecordModify == "No")
-            {
-                if (CheckGridValidationAdvt(dgToken) == false)
-                {
-                    MessageBox.Show("Please select a token no's from list", "Management Panel");
-                    return false;
-                }
-            }
-            return true;
-        }
+         
 
         private void cmbSearchFormat_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1461,11 +1324,7 @@ namespace ManagementPanel
                 IsClientCheckBoxClicked = true;
                 ClientCheckBox.Checked = false;
                 FillData();
-                if (Convert.ToInt32(cmbSchFormat.SelectedValue) != 0)
-                {
-                    TickTokenFormat();
-                    dgToken.EndEdit();
-                }
+                
             }
         }
 
@@ -1531,60 +1390,9 @@ namespace ManagementPanel
         int TotalHr = 0;
         private void cmbSchFormat_SelectedIndexChanged(object sender, EventArgs e)
         {
-            TickTokenFormat();
+            
         }
-        private void TickTokenFormat()
-        {
-            string Localstr = "";
-            DataTable dtCommon = new DataTable();
-            Localstr = "select * from tbSpecialFormat where formatid=" + Convert.ToInt32(cmbSchFormat.SelectedValue);
-            dtCommon = objMainClass.fnFillDataTable(Localstr);
-            if ((dtCommon.Rows.Count > 0))
-            {
-                if (Convert.ToBoolean(dtCommon.Rows[0]["Is24Hour"]) == true)
-                {
-                    TotalHr = 24;
-                }
-                else
-                {
-                    TotalHr = Convert.ToInt32(dtCommon.Rows[0]["TotalHour"]);
-                }
-            }
-            Localstr = "";
-            Localstr = "select distinct tbSpecialPlaylistSchedule_Token.TokenId, tbSpecialPlaylistSchedule_Token.IsAllToken  from tbSpecialPlaylistSchedule_Token ";
-            Localstr = Localstr + " inner join tbSpecialPlaylistSchedule on tbSpecialPlaylistSchedule.pschid =tbSpecialPlaylistSchedule_Token.pschid ";
-            Localstr = Localstr + " where tbSpecialPlaylistSchedule_Token.dfclientid=" + Convert.ToInt32(cmbDname.SelectedValue) + "  and tbSpecialPlaylistSchedule.Formatid=" + Convert.ToInt32(cmbSchFormat.SelectedValue) + "";
-            Localstr = Localstr + " and tbSpecialPlaylistSchedule_Token.TokenId != tbSpecialPlaylistSchedule_Token.IsAllToken ";
-            dtCommon = objMainClass.fnFillDataTable(Localstr);
-            if ((dtCommon.Rows.Count > 0))
-            {
-                DeSelectList();
-                ClientCheckBox.Checked = Convert.ToBoolean(dtCommon.Rows[0]["IsAllToken"]);
-                if (ClientCheckBox.Checked == false)
-                {
-                    for (int iCtr = 0; (iCtr <= (dtCommon.Rows.Count - 1)); iCtr++)
-                    {
-                        for (int i = 0; i < dgToken.Rows.Count; i++)
-                        {
-                            if (Convert.ToInt32(dgToken.Rows[i].Cells["Id"].Value) == Convert.ToInt32(dtCommon.Rows[iCtr]["TokenId"]))
-                            {
-                                dgToken.Rows[i].Cells[1].Value = true;
-                                IsRecordModify = "Yes";
-                            }
-                        }
-                    }
-                }
-                if (ClientCheckBox.Checked == true)
-                {
-                    TokenCheckBoxClick(ClientCheckBox);
-                    IsRecordModify = "Yes";
-                }
-            }
-            else
-            {
-                DeSelectList();
-            }
-        }
+         
         private void DeSelectList()
         {
             ClientCheckBox.Checked = false;
@@ -1663,73 +1471,7 @@ namespace ManagementPanel
             // objMainClass.fnFillComboBox(str, cmbSearchFormat, "FormatId", "FormatName", "");
         }
 
-        private void dgSch_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex < 0) return;
-            if (e.ColumnIndex == 4)
-            {
-                ClearData();
-                string Localstr = "";
-                DataTable dtDetail;
-                DataTable dtWeek;
-                Localstr = " select * from tbSpecialPlaylistSchedule ";
-                Localstr = Localstr + "	where pschid = " + Convert.ToInt32(dgSch.Rows[e.RowIndex].Cells["ID"].Value);
-                dtDetail = objMainClass.fnFillDataTable(Localstr);
-                if ((dtDetail.Rows.Count > 0))
-                {
-
-                    btnSave.Text = "Update";
-                    ReturnSchId = Convert.ToInt32(dtDetail.Rows[0]["pSchId"]);
-
-                    cmbFormat.SelectedValue = Convert.ToInt32(dtDetail.Rows[0]["formatId"]);
-                    cmbSplPlaylist.SelectedValue = Convert.ToInt32(dtDetail.Rows[0]["splPlaylistId"]);
-
-                    dtpStartTime.Value = Convert.ToDateTime(string.Format(fi, "{0:hh:mm tt}", Convert.ToDateTime(dtDetail.Rows[0]["StartTime"])));
-                    dtpEndTime.Value = Convert.ToDateTime(string.Format(fi, "{0:hh:mm tt}", Convert.ToDateTime(dtDetail.Rows[0]["EndTime"])));
-
-
-                    Localstr = "";
-                    Localstr = "select distinct wId as WeekId,IsAllWeek from tbSpecialPlaylistSchedule_Weekday  where pschid=" + ReturnSchId + " and wId != IsAllWeek";
-                    dtWeek = objMainClass.fnFillDataTable(Localstr);
-                    if ((dtWeek.Rows.Count > 0))
-                    {
-                        chkAll.Checked = Convert.ToBoolean(dtWeek.Rows[0]["IsAllWeek"]);
-                        for (int iCtr = 0; (iCtr <= (dtWeek.Rows.Count - 1)); iCtr++)
-                        {
-                            if (Convert.ToByte(dtWeek.Rows[iCtr]["WeekId"]) == 1)
-                            {
-                                chkMon.Checked = true;
-                            }
-                            if (Convert.ToByte(dtWeek.Rows[iCtr]["WeekId"]) == 2)
-                            {
-                                chkTue.Checked = true;
-                            }
-                            if (Convert.ToByte(dtWeek.Rows[iCtr]["WeekId"]) == 3)
-                            {
-                                chkWed.Checked = true;
-                            }
-                            if (Convert.ToByte(dtWeek.Rows[iCtr]["WeekId"]) == 4)
-                            {
-                                chkThu.Checked = true;
-                            }
-                            if (Convert.ToByte(dtWeek.Rows[iCtr]["WeekId"]) == 5)
-                            {
-                                chkFri.Checked = true;
-                            }
-                            if (Convert.ToByte(dtWeek.Rows[iCtr]["WeekId"]) == 6)
-                            {
-                                chkSat.Checked = true;
-                            }
-                            if (Convert.ToByte(dtWeek.Rows[iCtr]["WeekId"]) == 7)
-                            {
-                                chkSun.Checked = true;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
+        
         private void btnBack_Click(object sender, EventArgs e)
         {
             ReturnSchId = 0;
@@ -1740,6 +1482,15 @@ namespace ManagementPanel
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
+            if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
+            StaticClass.constr.Open();
+            SqlCommand cmdPublish = new SqlCommand();
+            cmdPublish.Connection = StaticClass.constr;
+            cmdPublish.CommandText = "update AMPlayerTokens set isPublish=0 where tokenid=" + Convert.ToInt32(dgSpl.Rows[dgSpl.CurrentCell.RowIndex].Cells["tokenid"].Value) + "";
+            cmdPublish.ExecuteNonQuery();
+            StaticClass.constr.Close();
+
+            
             UpdateMainData();
             FillSaveData();
             ReturnSchId = 0;
@@ -1950,9 +1701,9 @@ namespace ManagementPanel
         private void cmbDname_Click(object sender, EventArgs e)
         {
             string str = "";
-            str = "select DFClientID,ClientName from DFClients where CountryCode is not null and DFClients.IsDealer=1 ";
+            str = "select DFClientID,RIGHT(ClientName, LEN(ClientName) - 3) as ClientName from DFClients where CountryCode is not null and DFClients.IsDealer=1 ";
             str = str + " and DFClientID in (select distinct clientid from AMPlayerTokens) ";
-            str = str + " order by DFClientID desc ";
+            str = str + " order by RIGHT(ClientName, LEN(ClientName) - 3) ";
             objMainClass.fnFillComboBox(str, cmbDname, "DFClientID", "ClientName", "");
         }
 
@@ -1963,6 +1714,279 @@ namespace ManagementPanel
             FillSaveData();
 
 
+        }
+
+        private void cmbPublishCustomer_Click(object sender, EventArgs e)
+        {
+            string str = "";
+            str = "select DFClientID,RIGHT(ClientName, LEN(ClientName) - 3) as ClientName from DFClients where CountryCode is not null and DFClients.IsDealer=1 ";
+            str = str + " order by RIGHT(ClientName, LEN(ClientName) - 3) ";
+            objMainClass.fnFillComboBox(str, cmbPublishCustomer, "DFClientID", "ClientName", "");
+        }
+
+        private void InitilizePublishGrid()
+        {
+            if (dgPublish.Rows.Count > 0)
+            {
+                dgPublish.Rows.Clear();
+            }
+            if (dgPublish.Columns.Count > 0)
+            {
+                dgPublish.Columns.Clear();
+            }
+            dgPublish.Dock = DockStyle.Fill;
+            //0
+            dgPublish.Columns.Add("Id", "Id");
+            dgPublish.Columns["Id"].Width = 0;
+            dgPublish.Columns["Id"].Visible = false;
+            dgPublish.Columns["Id"].ReadOnly = true;
+            //1
+            DataGridViewCheckBoxColumn chk = new DataGridViewCheckBoxColumn();
+            chk.HeaderText = "";
+            chk.DataPropertyName = "IsChecked";
+            dgPublish.Columns.Add(chk);
+            chk.Width = 50;
+            chk.Visible = true;
+            dgPublish.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+
+            DataGridViewCheckBoxColumn chkDelete = new DataGridViewCheckBoxColumn();
+            chkDelete.HeaderText = "Delete Songs";
+            chkDelete.DataPropertyName = "IsChecked";
+            dgPublish.Columns.Add(chkDelete);
+            chkDelete.Width = 150;
+            chkDelete.Visible = true;
+            dgPublish.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+
+
+            //2
+            dgPublish.Columns.Add("tNo", "Token No");
+            dgPublish.Columns["tNo"].Width = 200;
+            dgPublish.Columns["tNo"].Visible = true;
+            dgPublish.Columns["tNo"].ReadOnly = true;
+            dgPublish.Columns["tNo"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+            dgPublish.Columns.Add("pName", "Name");
+            dgPublish.Columns["pName"].Width = 250;
+            dgPublish.Columns["pName"].Visible = true;
+            dgPublish.Columns["pName"].ReadOnly = true;
+            dgPublish.Columns["pName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+            dgPublish.Columns.Add("loc", "Location");
+            dgPublish.Columns["loc"].Width = 150;
+            dgPublish.Columns["loc"].Visible = true;
+            dgPublish.Columns["loc"].ReadOnly = true;
+            dgPublish.Columns["loc"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+            dgPublish.Columns.Add("cName", "City");
+            dgPublish.Columns["cName"].Width = 150;
+            dgPublish.Columns["cName"].Visible = true;
+            dgPublish.Columns["cName"].ReadOnly = true;
+            dgPublish.Columns["cName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+            dgPublish.Columns.Add("sName", "State");
+            dgPublish.Columns["sName"].Width = 150;
+            dgPublish.Columns["sName"].Visible = true;
+            dgPublish.Columns["sName"].ReadOnly = true;
+            dgPublish.Columns["sName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+            dgPublish.Columns.Add("coName", "Country");
+            dgPublish.Columns["coName"].Width = 150;
+            dgPublish.Columns["coName"].Visible = true;
+            dgPublish.Columns["coName"].ReadOnly = true;
+            dgPublish.Columns["coName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+            dgPublish.Columns.Add("ver", "Type");
+            dgPublish.Columns["ver"].Width = 100;
+            dgPublish.Columns["ver"].Visible = true;
+            dgPublish.Columns["ver"].ReadOnly = true;
+            dgPublish.Columns["ver"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+             
+            dgPublish.Columns.Add("uId", "uId");
+            dgPublish.Columns["uId"].Width = 0;
+            dgPublish.Columns["uId"].Visible = false;
+            dgPublish.Columns["uId"].ReadOnly = true;
+
+        }
+
+        private void cmbPublishCustomer_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Convert.ToInt32(cmbPublishCustomer.SelectedValue) == 0)
+            {
+                InitilizePublishGrid();
+                return;
+            }
+            IsPublishCheckBoxClicked = true;
+            PublishCheckBox.Checked = false;
+            FillPublishData();
+            TotalCheckBoxesPublish = dgPublish.RowCount;
+            TotalCheckedCheckBoxesPublish = 0;
+        }
+        private void FillPublishData()
+        {
+            string sQr = "";
+
+            sQr = "GetPublishTokenInfo " + Convert.ToInt32(cmbPublishCustomer.SelectedValue);
+
+            DataTable dtDetail = new DataTable();
+            InitilizePublishGrid();
+            dtDetail = objMainClass.fnFillDataTable(sQr);
+            if (dtDetail.Rows.Count > 0)
+            {
+                for (int i = 0; i <= dtDetail.Rows.Count - 1; i++)
+                {
+                    dgPublish.Rows.Add();
+                    dgPublish.Rows[dgPublish.Rows.Count - 1].Cells["Id"].Value = dtDetail.Rows[i]["tokenid"];
+                    dgPublish.Rows[dgPublish.Rows.Count - 1].Cells[1].Value = 1;
+                    dgPublish.Rows[dgPublish.Rows.Count - 1].Cells[2].Value = 0;
+                    dgPublish.Rows[dgPublish.Rows.Count - 1].Cells["tNo"].Value = dtDetail.Rows[i]["tNo"].ToString();
+                    dgPublish.Rows[dgPublish.Rows.Count - 1].Cells["pName"].Value = dtDetail.Rows[i]["PersonName"].ToString();
+                    dgPublish.Rows[dgPublish.Rows.Count - 1].Cells["loc"].Value = dtDetail.Rows[i]["Location"].ToString();
+                    dgPublish.Rows[dgPublish.Rows.Count - 1].Cells["cName"].Value = dtDetail.Rows[i]["CityName"].ToString();
+                    dgPublish.Rows[dgPublish.Rows.Count - 1].Cells["sName"].Value = dtDetail.Rows[i]["StateName"].ToString();
+                    dgPublish.Rows[dgPublish.Rows.Count - 1].Cells["coName"].Value = dtDetail.Rows[i]["CountryName"].ToString();
+                    if (Convert.ToBoolean(dtDetail.Rows[i]["IsStore"]) == true)
+                    {
+                        dgPublish.Rows[dgPublish.Rows.Count - 1].Cells["ver"].Value = "Store";
+                    }
+                    else
+                    {
+                        dgPublish.Rows[dgPublish.Rows.Count - 1].Cells["ver"].Value = "Stream";
+                    }
+                    dgPublish.Rows[dgPublish.Rows.Count - 1].Cells["uId"].Value = dtDetail.Rows[i]["userid"].ToString();
+
+                }
+            }
+            
+
+
+        }
+
+
+        private void PublishCheckBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Space)
+                PublishCheckBoxClick((CheckBox)sender);
+        }
+        private void PublishCheckBox_MouseClick(object sender, MouseEventArgs e)
+        {
+
+            PublishCheckBoxClick((CheckBox)sender);
+        }
+        private void PublishCheckBoxClick(CheckBox HCheckBox)
+        {
+            IsPublishCheckBoxClicked = true;
+
+            foreach (DataGridViewRow Row in dgPublish.Rows)
+                ((DataGridViewCheckBoxCell)Row.Cells[1]).Value = HCheckBox.Checked;
+
+            dgPublish.RefreshEdit();
+
+            TotalCheckedCheckBoxesPublish = HCheckBox.Checked ? TotalCheckBoxesPublish : 0;
+
+            IsPublishCheckBoxClicked = false;
+        }
+
+
+        private void dgPublish_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (!IsPublishCheckBoxClicked)
+                RowCheckBoxClickPublish((DataGridViewCheckBoxCell)dgPublish[e.ColumnIndex, e.RowIndex]);
+        }
+
+        private void dgPublish_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (dgPublish.CurrentCell is DataGridViewCheckBoxCell)
+                dgPublish.CommitEdit(DataGridViewDataErrorContexts.Commit);
+        }
+
+        private void dgPublish_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+                    if (e.RowIndex == -1 && e.ColumnIndex == 1)
+               ResetHeaderCheckBoxLocationPublish(e.ColumnIndex, e.RowIndex);
+        }
+
+
+        private void AddPublishCheckBox(DataGridView dgPublish)
+        {
+            PublishCheckBox = new CheckBox();
+            PublishCheckBox.Size = new Size(15, 15);
+            //Add the CheckBox into the DataGridView
+            dgPublish.Controls.Add(PublishCheckBox);
+
+        }
+        private void ResetHeaderCheckBoxLocationPublish(int ColumnIndex, int RowIndex)
+        {
+            //Get the column header cell bounds
+            Rectangle oRectangle = this.dgPublish.GetCellDisplayRectangle(ColumnIndex, RowIndex, true);
+
+            Point oPoint = new Point();
+
+            oPoint.X = oRectangle.Location.X + (oRectangle.Width - PublishCheckBox.Width) / 2 + 1;
+            oPoint.Y = oRectangle.Location.Y + (oRectangle.Height - PublishCheckBox.Height) / 2 + 1;
+
+            //Change the location of the CheckBox to make it stay on the header
+            PublishCheckBox.Location = oPoint;
+        }
+
+        private void RowCheckBoxClickPublish(DataGridViewCheckBoxCell RCheckBox)
+        {
+            if (RCheckBox != null)
+            {
+                //Modifiy Counter;            
+                if ((bool)RCheckBox.Value && TotalCheckedCheckBoxesPublish < TotalCheckBoxesPublish)
+                    TotalCheckedCheckBoxesPublish++;
+                else if (TotalCheckedCheckBoxesPublish > 0)
+                    TotalCheckedCheckBoxesPublish--;
+
+                //Change state of the header CheckBox.
+                if (TotalCheckedCheckBoxesPublish < TotalCheckBoxesPublish)
+                    PublishCheckBox.Checked = false;
+                else if (TotalCheckedCheckBoxesPublish == TotalCheckBoxesPublish)
+                    PublishCheckBox.Checked = true;
+            }
+        }
+
+        private void btnPublish_Click(object sender, EventArgs e)
+        {
+            if (Convert.ToInt32(cmbPublishCustomer.SelectedValue) == 0)
+            {
+                MessageBox.Show("Please select a customer name", "Management Panel");
+                cmbPublishCustomer.Focus();
+                return  ;
+            }
+            if (CheckGridValidationAdvt(dgPublish) == false)
+            {
+                MessageBox.Show("Please select token no's from list", "Management Panel");
+                return  ;
+            }
+
+            for (int i = 0; i < dgPublish.Rows.Count; i++)
+            {
+
+                if (Convert.ToBoolean(dgPublish.Rows[i].Cells[2].Value) == true)
+                {
+                    if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
+                    StaticClass.constr.Open();
+                    SqlCommand cmd1 = new SqlCommand();
+                    cmd1.Connection = StaticClass.constr;
+                    cmd1.CommandText = "update AMPlayerTokens set IsDeleteSong=1 where tokenid=" + Convert.ToInt32(dgPublish.Rows[i].Cells["Id"].Value) + "";
+                    cmd1.ExecuteNonQuery();
+                    StaticClass.constr.Close();
+                }
+
+                if (Convert.ToBoolean(dgPublish.Rows[i].Cells[1].Value) == true)
+                {
+                    if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
+                    StaticClass.constr.Open();
+                    SqlCommand cmd1 = new SqlCommand();
+                    cmd1.Connection = StaticClass.constr;
+                    cmd1.CommandText = "update AMPlayerTokens set isPublish=1,IsPublishUpdate=0 where tokenid=" + Convert.ToInt32(dgPublish.Rows[i].Cells["Id"].Value) + "";
+                    cmd1.ExecuteNonQuery();
+                    StaticClass.constr.Close();
+                }
+            }
+            InitilizePublishGrid();
         }
     }
 }

@@ -249,12 +249,12 @@ namespace ManagementPanel
         private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             /////////////// Create Directory ////////////////////////////
-            string DirPath = "ftp://85.195.82.94:21/AMMusicFiles/PlayerUpdate/Ver" + UpdateId + ".0";
+            string DirPath = "ftp://37.61.214.210:21/AMMusicFiles/PlayerUpdate/Ver" + UpdateId + ".0";
             FtpWebRequest request ;
             request = (FtpWebRequest)FtpWebRequest.Create(new Uri(DirPath));
 
             request.Method = WebRequestMethods.Ftp.MakeDirectory;
-            request.Credentials = new NetworkCredential("harish", "Mohali123");
+            request.Credentials = new NetworkCredential("ftpTalwinder", "Roop!@#123");
             request.KeepAlive = true;
             request.UseBinary = true;
             request.UsePassive = false;
@@ -267,9 +267,9 @@ namespace ManagementPanel
             //////////////////////////////////////////////////////////////
 
             string filename = TempPath;
-            string ftpServerIP = "85.195.82.94:21/AMMusicFiles/PlayerUpdate/Ver" + UpdateId + ".0";
-            string ftpUserName = "harish";
-            string ftpPassword = "Mohali123";
+            string ftpServerIP = "37.61.214.210:21/AMMusicFiles/PlayerUpdate/Ver" + UpdateId + ".0";
+            string ftpUserName = "ftpTalwinder";
+            string ftpPassword = "Roop!@#123";
 
             FileInfo objFile = new FileInfo(filename);
             FtpWebRequest objFTPRequest;

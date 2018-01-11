@@ -14,16 +14,17 @@ namespace ManagementPanel
         static void Main()
         {
             gblClass objMainClass = new gblClass();
-            //if (objMainClass.CheckForInternetConnection() == false)
+            //if (objMainClass.CheckForInternetConnection() == false)  
             //{
             //    MessageBox.Show("Please check your Internet connection.", "music player");
             //    return;
             //}
+            
 
 
-            StaticClass.constr = new SqlConnection("Data Source=85.195.82.94;database=EU4YPlayerDB;uid=sa;password=phoh7Aiheeki");
-            //StaticClass.constr = new SqlConnection("Data Source=208.91.199.99;database=AlenkaMyClaud;uid=Alenka;password=Alenka@Myclaud123");
-
+           StaticClass.constr = new SqlConnection("Data Source=85.195.82.94;database=MyClaud;uid=sa;password=phoh7Aiheeki");
+          //StaticClass.constr = new SqlConnection("Data Source=85.195.82.94;database=AlenkaMyClaud;uid=sa;password=phoh7Aiheeki");
+            //dbTostTonicAlenka
             //StaticClass.constrOnline = new SqlConnection("Data Source=184.168.194.68;database=Eu4yadmin;uid=chandan;password=chandan@123");
 
             Application.EnableVisualStyles();
@@ -32,4 +33,4 @@ namespace ManagementPanel
         }
     }
 }
- 
+  

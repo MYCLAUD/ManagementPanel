@@ -77,17 +77,24 @@ namespace ManagementPanel
                 txtAppStreamName.Focus();
                 return false;
             }
-            else if (txtAppStreamLink.Text == "")
+              if (txtAppStreamLink.Text == "")
             {
                 MessageBox.Show("The stream link cannot be empty", "Management Panel");
                 txtAppStreamLink.Focus();
                 return false;
             }
 
-            else if (txtPath.Text == "")
+             if (txtPath.Text == "")
             {
                 MessageBox.Show("Image path cannot be blank", "Management Panel");
                 txtPath.Focus();
+                return false;
+            }
+            
+            if (Convert.ToInt32(cmbCustomer.SelectedValue) == 0)
+            {
+                MessageBox.Show("The customer name cannot be empty", "Management Panel");
+                cmbCustomer.Focus();
                 return false;
             }
             return true;
@@ -97,7 +104,7 @@ namespace ManagementPanel
 
             if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
             StaticClass.constr.Open();
-            SqlCommand cmd = new SqlCommand("sp_AppOnlineStream_Save", StaticClass.constr);
+            SqlCommand cmd = new SqlCommand("sp_AppStream_Save", StaticClass.constr);
             cmd.CommandType = CommandType.StoredProcedure;
 
             cmd.Parameters.Add(new SqlParameter("@StreamId", SqlDbType.BigInt));
@@ -109,9 +116,10 @@ namespace ManagementPanel
             cmd.Parameters.Add(new SqlParameter("@StreamLink", SqlDbType.VarChar));
             cmd.Parameters["@StreamLink"].Value = txtAppStreamLink.Text;
 
-            cmd.Parameters.Add(new SqlParameter("@ImgPath", SqlDbType.VarChar));
-            cmd.Parameters["@ImgPath"].Value = txtPath.Text;
+            
 
+            cmd.Parameters.Add(new SqlParameter("@dfclientid", SqlDbType.BigInt));
+            cmd.Parameters["@dfclientid"].Value = Convert.ToInt32(cmbCustomer.SelectedValue);
 
             try
             {
@@ -147,6 +155,7 @@ namespace ManagementPanel
             btnAppRefersh.Enabled = true;
             btnAppSave.Enabled = true;
             btnAppSave.Text = "Save";
+            cmbCustomer.SelectedValue=0;
         }
         private void InitilizeAppStreamGrid()
         {
@@ -176,6 +185,7 @@ namespace ManagementPanel
             Column_Img.Width = 70;
             Column_Img.ImageLayout = DataGridViewImageCellLayout.Zoom;
             dgAppStream.Columns["Column_Img"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            Column_Img.Visible = true;
 
             dgAppStream.Columns.Add("StreamName", "Stream Name");
             dgAppStream.Columns["StreamName"].Width = 950;
@@ -214,7 +224,7 @@ namespace ManagementPanel
             string str;
             int iCtr;
             DataTable dtDetail;
-            str = "Select * from  tblOnlineStreaming_App   order by  StreamNameApp";
+            str = "Select * from  tbStreaming_App where dfclientid = " + Convert.ToInt32(cmbSearchCustomer.SelectedValue) + "  order by  StreamNameapp";
             dtDetail = objMainClass.fnFillDataTable(str);
             Image image;
             InitilizeAppStreamGrid();
@@ -225,8 +235,8 @@ namespace ManagementPanel
                 {
                     dgAppStream.Rows.Add();
                     dgAppStream.Rows[dgAppStream.Rows.Count - 1].Cells["Streamid"].Value = dtDetail.Rows[iCtr]["StreamId"];
-                    dgAppStream.Rows[dgAppStream.Rows.Count - 1].Cells["StreamLink"].Value = dtDetail.Rows[iCtr]["StreamLinkApp"];
-                    dgAppStream.Rows[dgAppStream.Rows.Count - 1].Cells["StreamName"].Value = dtDetail.Rows[iCtr]["StreamNameApp"];
+                    dgAppStream.Rows[dgAppStream.Rows.Count - 1].Cells["StreamLink"].Value = dtDetail.Rows[iCtr]["StreamLinkapp"];
+                    dgAppStream.Rows[dgAppStream.Rows.Count - 1].Cells["StreamName"].Value = dtDetail.Rows[iCtr]["StreamNameapp"];
                     dgAppStream.Rows[dgAppStream.Rows.Count - 1].Cells["ImgPath"].Value = dtDetail.Rows[iCtr]["ImgPath"];
 
 
@@ -246,10 +256,7 @@ namespace ManagementPanel
                     dgAppStream.Rows[dgAppStream.Rows.Count - 1].Cells["StreamName"].Style.Font = new Font("Segoe UI", 12, System.Drawing.FontStyle.Regular);
 
                 }
-                foreach (DataGridViewRow row in dgAppStream.Rows)
-                {
-                    row.Height = 65;
-                }
+                
 
             }
 
@@ -304,7 +311,7 @@ namespace ManagementPanel
             StaticClass.constr.Open();
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = StaticClass.constr;
-            cmd.CommandText = "update tblOnlineStreaming_App set ImgPath='http://85.195.82.94/AppStreamPic/" + NewFileName + objFile.Extension + "' where StreamId=" + NewFileName;
+            cmd.CommandText = "update tbStreaming_App set ImgPath='http://85.195.82.94/AppStreamPic/" + NewFileName + objFile.Extension + "' where StreamId=" + NewFileName;
             cmd.ExecuteNonQuery();
             StaticClass.constr.Close();
             ClearAppFelids();
@@ -317,7 +324,14 @@ namespace ManagementPanel
 
         private void frmMoblieAppStreams_Load(object sender, EventArgs e)
         {
-            FillStreamAppData(0);
+            string str = "";
+            str = "select DFClientID,RIGHT(ClientName, LEN(ClientName) - 3) as ClientName from DFClients where CountryCode is not null and DFClients.IsDealer=1 ";
+            str = str + " and DFClientID in (select distinct clientid from AMPlayerTokens) ";
+            str = str + " order by RIGHT(ClientName, LEN(ClientName) - 3) ";
+            objMainClass.fnFillComboBox(str, cmbCustomer, "DFClientID", "ClientName", "");
+            objMainClass.fnFillComboBox(str, cmbSearchCustomer, "DFClientID", "ClientName", "");
+
+            cmbSearchCustomer.SelectedValue = 6;
         }
 
         private void dgAppStream_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -331,6 +345,7 @@ namespace ManagementPanel
                 txtAppStreamLink.Text = dgAppStream.Rows[e.RowIndex].Cells["StreamLink"].Value.ToString();
                 txtAppStreamName.Text = dgAppStream.Rows[e.RowIndex].Cells["StreamName"].Value.ToString();
                 txtPath.Text = dgAppStream.Rows[e.RowIndex].Cells["ImgPath"].Value.ToString();
+                cmbCustomer.SelectedValue = cmbSearchCustomer.SelectedValue;
             }
             if (e.ColumnIndex == 6)
             {
@@ -343,7 +358,7 @@ namespace ManagementPanel
                     StaticClass.constr.Open();
                     SqlCommand cmd = new SqlCommand();
                     cmd.Connection = StaticClass.constr;
-                    cmd.CommandText = "delete from tblOnlineStreaming_App where streamid=" + Convert.ToInt32(dgAppStream.Rows[e.RowIndex].Cells["Streamid"].Value);
+                    cmd.CommandText = "delete from tbStreaming_App where streamid=" + Convert.ToInt32(dgAppStream.Rows[e.RowIndex].Cells["Streamid"].Value);
                     cmd.ExecuteNonQuery();
                     StaticClass.constr.Close();
                     ClearAppFelids();
@@ -351,5 +366,27 @@ namespace ManagementPanel
             }
         }
 
+        private void cmbCustomer_Click(object sender, EventArgs e)
+        {
+            string str = "";
+            str = "select DFClientID,RIGHT(ClientName, LEN(ClientName) - 3) as ClientName from DFClients where CountryCode is not null and DFClients.IsDealer=1 ";
+            str = str + " and DFClientID in (select distinct clientid from AMPlayerTokens) ";
+            str = str + " order by RIGHT(ClientName, LEN(ClientName) - 3) ";
+            objMainClass.fnFillComboBox(str, cmbCustomer, "DFClientID", "ClientName", "");
+        }
+
+        private void cmbSearchCustomer_Click(object sender, EventArgs e)
+        {
+            string str = "";
+            str = "select DFClientID,RIGHT(ClientName, LEN(ClientName) - 3) as ClientName from DFClients where CountryCode is not null and DFClients.IsDealer=1 ";
+            str = str + " and DFClientID in (select distinct clientid from AMPlayerTokens) ";
+            str = str + " order by RIGHT(ClientName, LEN(ClientName) - 3) ";
+            objMainClass.fnFillComboBox(str, cmbSearchCustomer, "DFClientID", "ClientName", "");
+        }
+
+        private void cmbSearchCustomer_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FillStreamAppData(0);
+        }
     }
 }

@@ -40,6 +40,7 @@ namespace ManagementPanel
 
         private void btnStart_Click(object sender, EventArgs e)
         {
+            
             if (rdoAudio.Checked == true)
             {
                 mType = ".mp3";
@@ -50,6 +51,8 @@ namespace ManagementPanel
                 mType = ".mp4";
                 mediaType = "Video";
             }
+            goto skipThis;
+
             if (StaticClass.constr.State == ConnectionState.Open) { StaticClass.constr.Close(); }
             StaticClass.constr.Open();
             SqlCommand cmdOnline = new SqlCommand();
@@ -131,14 +134,18 @@ namespace ManagementPanel
                         dgExcel.Columns[6].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                         dgExcel.Columns[7].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
                         dgExcel.Columns[8].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                        dgExcel.Columns[9].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                        dgExcel.Columns[10].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                        dgExcel.Columns[11].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
 
                     }
                 }
             }
             #endregion
 
-            if (dgExcel.ColumnCount != 9)
+            if (dgExcel.ColumnCount != 12)
             {
+               
                 MessageBox.Show("Selected excel file is not a correct file", "Direct Upload");
                 dgExcel.DataSource = null;
                 return;
@@ -197,10 +204,47 @@ namespace ManagementPanel
                 dgExcel.DataSource = null;
                 return;
             }
+            if (dgExcel.Columns[9].Name.ToLower() != "language")
+            {
+                MessageBox.Show("Language column is not match with sequence", "Direct Upload");
+                dgExcel.DataSource = null;
+                return;
+            }
+            if (dgExcel.Columns[10].Name.ToLower() != "isroyaltyfree")
+            {
+                MessageBox.Show("isRoyaltyfree column is not match with sequence", "Direct Upload");
+                dgExcel.DataSource = null;
+                return;
+            }
+            if (dgExcel.Columns[11].Name.ToLower() != "isrc")
+            {
+                MessageBox.Show("ISRC column is not match with sequence", "Direct Upload");
+                dgExcel.DataSource = null;
+                return;
+            }
             panControls.Enabled = false;
             panPopUp.Visible = true;
             lblName.Text = "Copy excel sheet in database";
             bgWorker.RunWorkerAsync();
+
+
+
+        skipThis:
+
+
+            pBar.Value = 0;
+            DataTable dtDetail = new DataTable();
+            string str = "select count(*) from tbAlenkaMedia ";
+            dtDetail = fnFillDataTable(str);
+            if ((dtDetail.Rows.Count > 0))
+            {
+                iSize_M = Convert.ToInt32(dtDetail.Rows[0][0].ToString());
+            }
+            panPopUp.Visible = true;
+            lblName.Text = "Finding songs and implement song id";
+            bgWorkerStep2.RunWorkerAsync();
+
+
         }
 
         private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -211,36 +255,38 @@ namespace ManagementPanel
             foreach (DataGridViewRow row in dgExcel.Rows)
             {
 
-                using (SqlCommand cmd = new SqlCommand("INSERT INTO tbAlenkaMedia(Title, Album, Artist,Genre, Tempo, Filename,Year,time,category) VALUES(@Title, @Album, @Artist,@Genre, @Tempo, @Filename,@Year,@time,@category)", StaticClass.constr))
-                    {
+                using (SqlCommand cmd = new SqlCommand("INSERT INTO tbAlenkaMedia(Title, Album, Artist,Genre, Tempo, Filename,Year,time,category,language,isRoyaltyfree,isrc) VALUES(@Title, @Album, @Artist,@Genre, @Tempo, @Filename,@Year,@time,@category,@language,@isRoyaltyfree,@isrc)", StaticClass.constr))
+                {
 
-                        byte[] byteBuffer = new byte[iSize];
-                        if ((row.Cells[0].Value.ToString() != "") && (row.Cells[1].Value.ToString() != "") && (row.Cells[2].Value.ToString() != ""))
-                        {
-                            cmd.Parameters.AddWithValue("@Title", row.Cells[0].Value);
-                            cmd.Parameters.AddWithValue("@Album", row.Cells[1].Value);
-                            cmd.Parameters.AddWithValue("@Artist", row.Cells[2].Value);
-                            cmd.Parameters.AddWithValue("@Genre", row.Cells[4].Value);
-                            cmd.Parameters.AddWithValue("@Tempo", row.Cells[5].Value);
-                            cmd.Parameters.AddWithValue("@Filename", row.Cells[6].Value);
-                            cmd.Parameters.AddWithValue("@Year", row.Cells[7].Value);
+                    byte[] byteBuffer = new byte[iSize];
+                    if ((row.Cells[0].Value.ToString() != "") && (row.Cells[1].Value.ToString() != "") && (row.Cells[2].Value.ToString() != ""))
+                    {
+                        cmd.Parameters.AddWithValue("@Title", row.Cells[0].Value);
+                        cmd.Parameters.AddWithValue("@Album", row.Cells[1].Value);
+                        cmd.Parameters.AddWithValue("@Artist", row.Cells[2].Value);
+                        cmd.Parameters.AddWithValue("@Genre", row.Cells[4].Value);
+                        cmd.Parameters.AddWithValue("@Tempo", row.Cells[5].Value);
+                        cmd.Parameters.AddWithValue("@Filename", row.Cells[6].Value);
+                        cmd.Parameters.AddWithValue("@Year", row.Cells[7].Value);
                         cmd.Parameters.AddWithValue("@time", row.Cells[3].Value);
                         cmd.Parameters.AddWithValue("@category", row.Cells[8].Value);
-
+                        cmd.Parameters.AddWithValue("@language", row.Cells[9].Value);
+                        cmd.Parameters.AddWithValue("@isRoyaltyfree", row.Cells[10].Value);
+                        cmd.Parameters.AddWithValue("@isrc", row.Cells[11].Value);
                         if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
-                            StaticClass.constr.Open();
-                            cmd.ExecuteNonQuery();
-                            StaticClass.constr.Close();
+                        StaticClass.constr.Open();
+                        cmd.ExecuteNonQuery();
+                        StaticClass.constr.Close();
 
-                        }
-                        iRunningByteTotal = iRunningByteTotal + 1;
-                        double dIndex = (double)(iRunningByteTotal);
-                        double dTotal = (double)byteBuffer.Length;
-                        double dProgressPercentage = (dIndex / dTotal);
-                        int iProgressPercentage = (int)(dProgressPercentage * 100);
-                        bgWorker.ReportProgress(iProgressPercentage);
                     }
-                
+                    iRunningByteTotal = iRunningByteTotal + 1;
+                    double dIndex = (double)(iRunningByteTotal);
+                    double dTotal = (double)byteBuffer.Length;
+                    double dProgressPercentage = (dIndex / dTotal);
+                    int iProgressPercentage = (int)(dProgressPercentage * 100);
+                    bgWorker.ReportProgress(iProgressPercentage);
+                }
+
             }
         }
 
@@ -278,11 +324,11 @@ namespace ManagementPanel
                     for (int iGen = 0; (iGen <= (dtGenre.Rows.Count - 1)); iGen++)
                     {
 
-                        str = "select * from tbAlenkaGenre where genre ='" + dtGenre.Rows[iGen]["genre"].ToString().Trim() + "' ";
+                        str = "select * from tbGenre where genre ='" + dtGenre.Rows[iGen]["genre"].ToString().Trim() + "' ";
                         dtGenreId = fnFillDataTable(str);
                         if (dtGenreId.Rows.Count > 0)
                         {
-                            GenreId = Convert.ToInt32(dtGenreId.Rows[0]["AlenkaGenreId"].ToString());
+                            GenreId = Convert.ToInt32(dtGenreId.Rows[0]["GenreId"].ToString());
                         }
                         else
                         {
@@ -351,9 +397,9 @@ namespace ManagementPanel
 
                                     cmd.Parameters.Add(new SqlParameter("@titleSubcategoryid", SqlDbType.VarChar));
                                     cmd.Parameters["@titleSubcategoryid"].Value = "22";
-
+                                    
                                     cmd.Parameters.Add(new SqlParameter("@Time", SqlDbType.VarChar));
-                                    cmd.Parameters["@Time"].Value = duration.ToString(@"hh\:mm\:ss");
+                                    cmd.Parameters["@Time"].Value =string.Format("{0:hh:mm:ss}", dtDetail.Rows[iCtr]["time"].ToString());
 
                                     cmd.Parameters.Add(new SqlParameter("@AlbumLabel", SqlDbType.VarChar));
                                     cmd.Parameters["@AlbumLabel"].Value = "0";
@@ -364,15 +410,15 @@ namespace ManagementPanel
                                     cmd.Parameters.Add(new SqlParameter("@titleYear", SqlDbType.Int));
                                     cmd.Parameters["@titleYear"].Value = dtDetail.Rows[iCtr]["ayear"];
 
-                                    cmd.Parameters.Add(new SqlParameter("@AlenkaGenreId", SqlDbType.Int));
-                                    cmd.Parameters["@AlenkaGenreId"].Value = GenreId;
+                                    cmd.Parameters.Add(new SqlParameter("@GenreId", SqlDbType.Int));
+                                    cmd.Parameters["@GenreId"].Value = GenreId;
 
-                                    cmd.Parameters.Add(new SqlParameter("@AlenkaTempo", SqlDbType.VarChar));
-                                    cmd.Parameters["@AlenkaTempo"].Value = dtDetail.Rows[iCtr]["aTempo"];
+                                    cmd.Parameters.Add(new SqlParameter("@tempo", SqlDbType.VarChar));
+                                    cmd.Parameters["@tempo"].Value = dtDetail.Rows[iCtr]["aTempo"];
 
 
-                                    cmd.Parameters.Add(new SqlParameter("@AlenkaCategory", SqlDbType.VarChar));
-                                    cmd.Parameters["@AlenkaCategory"].Value = dtDetail.Rows[iCtr]["aCategory"];
+                                    cmd.Parameters.Add(new SqlParameter("@acategory", SqlDbType.VarChar));
+                                    cmd.Parameters["@acategory"].Value = dtDetail.Rows[iCtr]["aCategory"];
 
                                     Title_Id = Convert.ToInt32(cmd.ExecuteScalar());
                                     //  MessageBox.Show(Title_Id.ToString());
@@ -397,7 +443,7 @@ namespace ManagementPanel
                                         //StaticClass.constr.Open();
                                         //cmd = new SqlCommand();
                                         //cmd.Connection = StaticClass.constr;
-                                        //cmd.CommandText = "update titles set AlenkaGenreId =" + GenreId + " where titleid=" + Title_Id + "";
+                                        //cmd.CommandText = "update titles set GenreId =" + GenreId + " where titleid=" + Title_Id + "";
                                         //cmd.ExecuteNonQuery();
                                         //StaticClass.constr.Close();
                                     }
@@ -486,11 +532,11 @@ namespace ManagementPanel
                     for (int iGen = 0; (iGen <= (dtGenre.Rows.Count - 1)); iGen++)
                     {
 
-                        str = "select * from tbAlenkaGenre where genre ='" + dtGenre.Rows[iGen]["genre"].ToString().Trim() + "' ";
+                        str = "select * from tbGenre where genre ='" + dtGenre.Rows[iGen]["genre"].ToString().Trim() + "' ";
                         dtGenreId = fnFillDataTable(str);
                         if (dtGenreId.Rows.Count > 0)
                         {
-                            GenreId = Convert.ToInt32(dtGenreId.Rows[0]["AlenkaGenreId"].ToString());
+                            GenreId = Convert.ToInt32(dtGenreId.Rows[0]["GenreId"].ToString());
                         }
                         else
                         {
@@ -504,7 +550,7 @@ namespace ManagementPanel
                         }
 
                       //  MessageBox.Show(GenreId.ToString() + " 2");
-                        str = "select *,isnull(tempo,0) as aTempo,isnull(year,0) as ayear, isnull(Category,'') as aCategory  from tbAlenkaMedia where genre='" + dtGenre.Rows[iGen]["genre"].ToString().Trim() + "'";
+                        str = "select *,isnull(tempo,0) as aTempo,isnull(year,0) as ayear, isnull(Category,'') as aCategory , isnull(language,'') as lang, isnull(isRoyaltyfree,0) as isRF, isnull(isrc,'') as isr, titlecategoryid, titleSubcategoryid from tbAlenkaMedia where genre='" + dtGenre.Rows[iGen]["genre"].ToString().Trim() + "' order by titleid ";
                         dtDetail = fnFillDataTable(str);
                        // MessageBox.Show(dtDetail.Rows.Count.ToString() + " 3");
                         if ((dtDetail.Rows.Count > 0))
@@ -555,13 +601,13 @@ namespace ManagementPanel
                                     cmd.Parameters["@AlbumName"].Value = dtDetail.Rows[iCtr]["Album"].ToString();
 
                                     cmd.Parameters.Add(new SqlParameter("@titlecategoryid", SqlDbType.BigInt));
-                                    cmd.Parameters["@titlecategoryid"].Value = Convert.ToInt32("4");
+                                    cmd.Parameters["@titlecategoryid"].Value = Convert.ToInt32(dtDetail.Rows[iCtr]["titlecategoryid"].ToString());
 
                                     cmd.Parameters.Add(new SqlParameter("@titleSubcategoryid", SqlDbType.VarChar));
-                                    cmd.Parameters["@titleSubcategoryid"].Value = "22";
-
+                                    cmd.Parameters["@titleSubcategoryid"].Value = dtDetail.Rows[iCtr]["titleSubcategoryid"].ToString();
+                                    
                                     cmd.Parameters.Add(new SqlParameter("@Time", SqlDbType.VarChar));
-                                    cmd.Parameters["@Time"].Value ="00:" + string.Format("{0:hh:mm}", dtDetail.Rows[iCtr]["time"]);
+                                    cmd.Parameters["@Time"].Value ="00:" + string.Format("{0:mm:ss}", dtDetail.Rows[iCtr]["time"]);
 
                                     cmd.Parameters.Add(new SqlParameter("@AlbumLabel", SqlDbType.VarChar));
                                     cmd.Parameters["@AlbumLabel"].Value = "0";
@@ -572,18 +618,27 @@ namespace ManagementPanel
                                     cmd.Parameters.Add(new SqlParameter("@titleYear", SqlDbType.Int));
                                     cmd.Parameters["@titleYear"].Value = dtDetail.Rows[iCtr]["ayear"];
 
-                                    cmd.Parameters.Add(new SqlParameter("@AlenkaGenreId", SqlDbType.Int));
-                                    cmd.Parameters["@AlenkaGenreId"].Value = GenreId;
+                                    cmd.Parameters.Add(new SqlParameter("@GenreId", SqlDbType.Int));
+                                    cmd.Parameters["@GenreId"].Value = GenreId;
 
-                                    cmd.Parameters.Add(new SqlParameter("@AlenkaTempo", SqlDbType.VarChar));
-                                    cmd.Parameters["@AlenkaTempo"].Value = dtDetail.Rows[iCtr]["aTempo"];
+                                    cmd.Parameters.Add(new SqlParameter("@tempo", SqlDbType.VarChar));
+                                    cmd.Parameters["@tempo"].Value = dtDetail.Rows[iCtr]["aTempo"];
 
                                     
                                     cmd.Parameters.Add(new SqlParameter("@mType", SqlDbType.VarChar));
                                     cmd.Parameters["@mType"].Value = mediaType;
 
-                                    cmd.Parameters.Add(new SqlParameter("@AlenkaCategory", SqlDbType.VarChar));
-                                    cmd.Parameters["@AlenkaCategory"].Value = dtDetail.Rows[iCtr]["aCategory"];
+                                    cmd.Parameters.Add(new SqlParameter("@acategory", SqlDbType.VarChar));
+                                    cmd.Parameters["@acategory"].Value = dtDetail.Rows[iCtr]["aCategory"];
+
+                                    cmd.Parameters.Add(new SqlParameter("@language", SqlDbType.VarChar));
+                                    cmd.Parameters["@language"].Value = dtDetail.Rows[iCtr]["lang"];
+
+                                    cmd.Parameters.Add(new SqlParameter("@isRF", SqlDbType.VarChar));
+                                    cmd.Parameters["@isRF"].Value = dtDetail.Rows[iCtr]["isRF"];
+
+                                    cmd.Parameters.Add(new SqlParameter("@isrc", SqlDbType.VarChar));
+                                    cmd.Parameters["@isrc"].Value = dtDetail.Rows[iCtr]["isr"];
 
                                     Title_Id = Convert.ToInt32(cmd.ExecuteScalar());
                                   //  MessageBox.Show(Title_Id.ToString());
@@ -608,7 +663,7 @@ namespace ManagementPanel
                                         //StaticClass.constr.Open();
                                         //cmd = new SqlCommand();
                                         //cmd.Connection = StaticClass.constr;
-                                        //cmd.CommandText = "update titles set AlenkaGenreId =" + GenreId + " where titleid=" + Title_Id + "";
+                                        //cmd.CommandText = "update titles set GenreId =" + GenreId + " where titleid=" + Title_Id + "";
                                         //cmd.ExecuteNonQuery();
                                         //StaticClass.constr.Close();
                                     }

@@ -34,10 +34,10 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSpecialPlaylists));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSpecialPlaylists));
             this.panel4 = new System.Windows.Forms.Panel();
             this.dgSpl = new System.Windows.Forms.DataGridView();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -50,7 +50,6 @@
             this.label6 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.dgToken = new System.Windows.Forms.DataGridView();
-            this.dgSch = new System.Windows.Forms.DataGridView();
             this.panel2 = new System.Windows.Forms.Panel();
             this.btnNew = new System.Windows.Forms.Button();
             this.cmbFormat = new System.Windows.Forms.ComboBox();
@@ -75,11 +74,11 @@
             this.chkSun = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
+            this.dgPublish = new System.Windows.Forms.DataGridView();
             this.panel5 = new System.Windows.Forms.Panel();
-            this.cmbSchFormat = new System.Windows.Forms.ComboBox();
-            this.btnSchSave = new System.Windows.Forms.Button();
-            this.btnSchRefersh = new System.Windows.Forms.Button();
-            this.label11 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.cmbPublishCustomer = new System.Windows.Forms.ComboBox();
+            this.btnPublish = new System.Windows.Forms.Button();
             this.panMainNew = new System.Windows.Forms.Panel();
             this.panNew = new System.Windows.Forms.Panel();
             this.label28 = new System.Windows.Forms.Label();
@@ -98,12 +97,8 @@
             this.txtName = new System.Windows.Forms.TextBox();
             this.lblCaption = new System.Windows.Forms.Label();
             this.panEdit = new System.Windows.Forms.Panel();
-            this.label26 = new System.Windows.Forms.Label();
-            this.label25 = new System.Windows.Forms.Label();
-            this.label24 = new System.Windows.Forms.Label();
-            this.label23 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
             this.panel7 = new System.Windows.Forms.Panel();
+            this.label5 = new System.Windows.Forms.Label();
             this.txtPlaylist = new System.Windows.Forms.TextBox();
             this.txtFormat = new System.Windows.Forms.TextBox();
             this.txtCustomer = new System.Windows.Forms.TextBox();
@@ -116,6 +111,11 @@
             this.label16 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
+            this.label26 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
             this.panMenu = new System.Windows.Forms.Panel();
             this.btnMenuAssign = new System.Windows.Forms.Button();
             this.btnMenuSearch = new System.Windows.Forms.Button();
@@ -128,9 +128,9 @@
             this.panel3.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgToken)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgSch)).BeginInit();
             this.panel2.SuspendLayout();
             this.panel6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgPublish)).BeginInit();
             this.panel5.SuspendLayout();
             this.panMainNew.SuspendLayout();
             this.panNew.SuspendLayout();
@@ -305,7 +305,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 116);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1258, 192);
+            this.panel1.Size = new System.Drawing.Size(1037, 160);
             this.panel1.TabIndex = 2;
             // 
             // dgToken
@@ -347,54 +347,12 @@
             this.dgToken.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.dgToken.RowHeadersVisible = false;
             this.dgToken.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgToken.Size = new System.Drawing.Size(1254, 188);
+            this.dgToken.Size = new System.Drawing.Size(1033, 156);
             this.dgToken.TabIndex = 6;
             this.dgToken.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgToken_CellClick);
             this.dgToken.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgToken_CellPainting);
             this.dgToken.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgToken_CellValueChanged);
             this.dgToken.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgToken_CurrentCellDirtyStateChanged);
-            // 
-            // dgSch
-            // 
-            this.dgSch.AllowUserToAddRows = false;
-            this.dgSch.AllowUserToDeleteRows = false;
-            this.dgSch.AllowUserToResizeColumns = false;
-            this.dgSch.AllowUserToResizeRows = false;
-            this.dgSch.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(51)))), ((int)(((byte)(45)))));
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = System.Drawing.Color.Gray;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Segoe UI", 11F);
-            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.Gray;
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgSch.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
-            this.dgSch.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgSch.Cursor = System.Windows.Forms.Cursors.Hand;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Segoe UI", 11F);
-            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(162)))), ((int)(((byte)(175)))));
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgSch.DefaultCellStyle = dataGridViewCellStyle8;
-            this.dgSch.GridColor = System.Drawing.Color.Gainsboro;
-            this.dgSch.Location = new System.Drawing.Point(11, 3);
-            this.dgSch.Name = "dgSch";
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Segoe UI", 11F);
-            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(162)))), ((int)(((byte)(175)))));
-            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgSch.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
-            this.dgSch.RowHeadersVisible = false;
-            this.dgSch.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgSch.Size = new System.Drawing.Size(31, 50);
-            this.dgSch.TabIndex = 7;
-            this.dgSch.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgSch_CellClick);
             // 
             // panel2
             // 
@@ -424,7 +382,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1258, 116);
+            this.panel2.Size = new System.Drawing.Size(1037, 116);
             this.panel2.TabIndex = 1;
             // 
             // btnNew
@@ -725,85 +683,113 @@
             // panel6
             // 
             this.panel6.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel6.Controls.Add(this.dgSch);
+            this.panel6.Controls.Add(this.dgPublish);
             this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel6.Location = new System.Drawing.Point(0, 63);
+            this.panel6.Location = new System.Drawing.Point(0, 54);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(1081, 222);
+            this.panel6.Size = new System.Drawing.Size(799, 192);
             this.panel6.TabIndex = 3;
+            // 
+            // dgPublish
+            // 
+            this.dgPublish.AllowUserToAddRows = false;
+            this.dgPublish.AllowUserToDeleteRows = false;
+            this.dgPublish.AllowUserToResizeColumns = false;
+            this.dgPublish.AllowUserToResizeRows = false;
+            this.dgPublish.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(51)))), ((int)(((byte)(45)))));
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.Color.Gray;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Segoe UI", 11F);
+            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.Gray;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgPublish.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            this.dgPublish.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgPublish.Cursor = System.Windows.Forms.Cursors.Hand;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Segoe UI", 11F);
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(162)))), ((int)(((byte)(175)))));
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgPublish.DefaultCellStyle = dataGridViewCellStyle8;
+            this.dgPublish.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgPublish.GridColor = System.Drawing.Color.Gainsboro;
+            this.dgPublish.Location = new System.Drawing.Point(0, 0);
+            this.dgPublish.Name = "dgPublish";
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Segoe UI", 11F);
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(162)))), ((int)(((byte)(175)))));
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgPublish.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            this.dgPublish.RowHeadersVisible = false;
+            this.dgPublish.RowTemplate.Height = 30;
+            this.dgPublish.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgPublish.Size = new System.Drawing.Size(795, 188);
+            this.dgPublish.TabIndex = 7;
+            this.dgPublish.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgPublish_CellPainting);
+            this.dgPublish.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgPublish_CellValueChanged);
+            this.dgPublish.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgPublish_CurrentCellDirtyStateChanged);
             // 
             // panel5
             // 
             this.panel5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel5.Controls.Add(this.cmbSchFormat);
-            this.panel5.Controls.Add(this.btnSchSave);
-            this.panel5.Controls.Add(this.btnSchRefersh);
-            this.panel5.Controls.Add(this.label11);
+            this.panel5.Controls.Add(this.label4);
+            this.panel5.Controls.Add(this.cmbPublishCustomer);
+            this.panel5.Controls.Add(this.btnPublish);
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel5.Location = new System.Drawing.Point(0, 0);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(1081, 63);
+            this.panel5.Size = new System.Drawing.Size(799, 54);
             this.panel5.TabIndex = 2;
             // 
-            // cmbSchFormat
+            // label4
             // 
-            this.cmbSchFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSchFormat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbSchFormat.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbSchFormat.FormattingEnabled = true;
-            this.cmbSchFormat.Location = new System.Drawing.Point(521, 9);
-            this.cmbSchFormat.Name = "cmbSchFormat";
-            this.cmbSchFormat.Size = new System.Drawing.Size(230, 25);
-            this.cmbSchFormat.TabIndex = 215;
-            this.cmbSchFormat.SelectedIndexChanged += new System.EventHandler(this.cmbSchFormat_SelectedIndexChanged);
+            this.label4.AutoSize = true;
+            this.label4.BackColor = System.Drawing.Color.Transparent;
+            this.label4.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.label4.ForeColor = System.Drawing.Color.White;
+            this.label4.Location = new System.Drawing.Point(7, 17);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(109, 19);
+            this.label4.TabIndex = 218;
+            this.label4.Text = "Customer Name";
             // 
-            // btnSchSave
+            // cmbPublishCustomer
             // 
-            this.btnSchSave.BackColor = System.Drawing.Color.Transparent;
-            this.btnSchSave.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnSchSave.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
-            this.btnSchSave.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray;
-            this.btnSchSave.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DimGray;
-            this.btnSchSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSchSave.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSchSave.ForeColor = System.Drawing.Color.Yellow;
-            this.btnSchSave.Location = new System.Drawing.Point(763, 7);
-            this.btnSchSave.Name = "btnSchSave";
-            this.btnSchSave.Size = new System.Drawing.Size(95, 38);
-            this.btnSchSave.TabIndex = 209;
-            this.btnSchSave.Text = "Save";
-            this.btnSchSave.UseVisualStyleBackColor = false;
-            this.btnSchSave.Click += new System.EventHandler(this.btnSchSave_Click);
+            this.cmbPublishCustomer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbPublishCustomer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbPublishCustomer.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbPublishCustomer.FormattingEnabled = true;
+            this.cmbPublishCustomer.Location = new System.Drawing.Point(127, 14);
+            this.cmbPublishCustomer.Name = "cmbPublishCustomer";
+            this.cmbPublishCustomer.Size = new System.Drawing.Size(292, 25);
+            this.cmbPublishCustomer.TabIndex = 217;
+            this.cmbPublishCustomer.SelectedIndexChanged += new System.EventHandler(this.cmbPublishCustomer_SelectedIndexChanged);
+            this.cmbPublishCustomer.Click += new System.EventHandler(this.cmbPublishCustomer_Click);
             // 
-            // btnSchRefersh
+            // btnPublish
             // 
-            this.btnSchRefersh.BackColor = System.Drawing.Color.Transparent;
-            this.btnSchRefersh.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnSchRefersh.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
-            this.btnSchRefersh.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray;
-            this.btnSchRefersh.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DimGray;
-            this.btnSchRefersh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSchRefersh.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSchRefersh.ForeColor = System.Drawing.Color.Yellow;
-            this.btnSchRefersh.Location = new System.Drawing.Point(864, 7);
-            this.btnSchRefersh.Name = "btnSchRefersh";
-            this.btnSchRefersh.Size = new System.Drawing.Size(95, 38);
-            this.btnSchRefersh.TabIndex = 204;
-            this.btnSchRefersh.Text = "Refersh";
-            this.btnSchRefersh.UseVisualStyleBackColor = false;
-            this.btnSchRefersh.Click += new System.EventHandler(this.btnSchRefersh_Click);
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.BackColor = System.Drawing.Color.Transparent;
-            this.label11.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.label11.ForeColor = System.Drawing.Color.White;
-            this.label11.Location = new System.Drawing.Point(462, 11);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(53, 19);
-            this.label11.TabIndex = 188;
-            this.label11.Text = "Format";
+            this.btnPublish.BackColor = System.Drawing.Color.Transparent;
+            this.btnPublish.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnPublish.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
+            this.btnPublish.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray;
+            this.btnPublish.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DimGray;
+            this.btnPublish.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPublish.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPublish.ForeColor = System.Drawing.Color.Yellow;
+            this.btnPublish.Location = new System.Drawing.Point(425, 8);
+            this.btnPublish.Name = "btnPublish";
+            this.btnPublish.Size = new System.Drawing.Size(135, 36);
+            this.btnPublish.TabIndex = 209;
+            this.btnPublish.Text = "Publish";
+            this.btnPublish.UseVisualStyleBackColor = false;
+            this.btnPublish.Click += new System.EventHandler(this.btnPublish_Click);
             // 
             // panMainNew
             // 
@@ -1026,63 +1012,16 @@
             this.panEdit.Controls.Add(this.label24);
             this.panEdit.Controls.Add(this.label23);
             this.panEdit.Controls.Add(this.label22);
-            this.panEdit.Location = new System.Drawing.Point(25, 129);
+            this.panEdit.Location = new System.Drawing.Point(-20, 293);
             this.panEdit.Name = "panEdit";
             this.panEdit.Size = new System.Drawing.Size(872, 243);
             this.panEdit.TabIndex = 108;
             this.panEdit.Visible = false;
             // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.BackColor = System.Drawing.Color.Transparent;
-            this.label26.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.label26.ForeColor = System.Drawing.Color.Yellow;
-            this.label26.Location = new System.Drawing.Point(16, 17);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(150, 21);
-            this.label26.TabIndex = 137;
-            this.label26.Text = "Modify Playlist Time";
-            // 
-            // label25
-            // 
-            this.label25.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(11)))), ((int)(((byte)(65)))), ((int)(((byte)(66)))));
-            this.label25.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.label25.Location = new System.Drawing.Point(12, 230);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(848, 13);
-            this.label25.TabIndex = 6;
-            // 
-            // label24
-            // 
-            this.label24.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(11)))), ((int)(((byte)(65)))), ((int)(((byte)(66)))));
-            this.label24.Dock = System.Windows.Forms.DockStyle.Right;
-            this.label24.Location = new System.Drawing.Point(860, 13);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(12, 230);
-            this.label24.TabIndex = 5;
-            // 
-            // label23
-            // 
-            this.label23.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(11)))), ((int)(((byte)(65)))), ((int)(((byte)(66)))));
-            this.label23.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label23.Location = new System.Drawing.Point(0, 13);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(12, 230);
-            this.label23.TabIndex = 4;
-            // 
-            // label22
-            // 
-            this.label22.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(11)))), ((int)(((byte)(65)))), ((int)(((byte)(66)))));
-            this.label22.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label22.Location = new System.Drawing.Point(0, 0);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(872, 13);
-            this.label22.TabIndex = 3;
-            // 
             // panel7
             // 
             this.panel7.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel7.Controls.Add(this.label5);
             this.panel7.Controls.Add(this.txtPlaylist);
             this.panel7.Controls.Add(this.txtFormat);
             this.panel7.Controls.Add(this.txtCustomer);
@@ -1095,10 +1034,23 @@
             this.panel7.Controls.Add(this.label16);
             this.panel7.Controls.Add(this.label18);
             this.panel7.Controls.Add(this.label19);
-            this.panel7.Location = new System.Drawing.Point(40, 48);
+            this.panel7.Location = new System.Drawing.Point(40, 53);
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(806, 150);
             this.panel7.TabIndex = 2;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.BackColor = System.Drawing.Color.Transparent;
+            this.label5.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.label5.ForeColor = System.Drawing.Color.White;
+            this.label5.Location = new System.Drawing.Point(328, 102);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(91, 19);
+            this.label5.TabIndex = 211;
+            this.label5.Text = "Playlist Name";
+            this.label5.Visible = false;
             // 
             // txtPlaylist
             // 
@@ -1247,6 +1199,54 @@
             this.label19.TabIndex = 189;
             this.label19.Text = "End Time";
             // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.BackColor = System.Drawing.Color.Transparent;
+            this.label26.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.label26.ForeColor = System.Drawing.Color.Yellow;
+            this.label26.Location = new System.Drawing.Point(16, 17);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(150, 21);
+            this.label26.TabIndex = 137;
+            this.label26.Text = "Modify Playlist Time";
+            // 
+            // label25
+            // 
+            this.label25.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(11)))), ((int)(((byte)(65)))), ((int)(((byte)(66)))));
+            this.label25.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.label25.Location = new System.Drawing.Point(12, 230);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(848, 13);
+            this.label25.TabIndex = 6;
+            // 
+            // label24
+            // 
+            this.label24.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(11)))), ((int)(((byte)(65)))), ((int)(((byte)(66)))));
+            this.label24.Dock = System.Windows.Forms.DockStyle.Right;
+            this.label24.Location = new System.Drawing.Point(860, 13);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(12, 230);
+            this.label24.TabIndex = 5;
+            // 
+            // label23
+            // 
+            this.label23.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(11)))), ((int)(((byte)(65)))), ((int)(((byte)(66)))));
+            this.label23.Dock = System.Windows.Forms.DockStyle.Left;
+            this.label23.Location = new System.Drawing.Point(0, 13);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(12, 230);
+            this.label23.TabIndex = 4;
+            // 
+            // label22
+            // 
+            this.label22.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(11)))), ((int)(((byte)(65)))), ((int)(((byte)(66)))));
+            this.label22.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label22.Location = new System.Drawing.Point(0, 0);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(872, 13);
+            this.label22.TabIndex = 3;
+            // 
             // panMenu
             // 
             this.panMenu.BackColor = System.Drawing.SystemColors.Control;
@@ -1257,7 +1257,7 @@
             this.panMenu.Dock = System.Windows.Forms.DockStyle.Top;
             this.panMenu.Location = new System.Drawing.Point(0, 0);
             this.panMenu.Name = "panMenu";
-            this.panMenu.Size = new System.Drawing.Size(1270, 46);
+            this.panMenu.Size = new System.Drawing.Size(1034, 46);
             this.panMenu.TabIndex = 109;
             // 
             // btnMenuAssign
@@ -1274,7 +1274,7 @@
             this.btnMenuAssign.Name = "btnMenuAssign";
             this.btnMenuAssign.Size = new System.Drawing.Size(172, 37);
             this.btnMenuAssign.TabIndex = 16;
-            this.btnMenuAssign.Text = "Assign Format";
+            this.btnMenuAssign.Text = "Publish";
             this.btnMenuAssign.UseVisualStyleBackColor = false;
             this.btnMenuAssign.Visible = false;
             this.btnMenuAssign.Click += new System.EventHandler(this.btnMenuAssign_Click);
@@ -1328,18 +1328,18 @@
             // 
             this.panAddNew.Controls.Add(this.panel1);
             this.panAddNew.Controls.Add(this.panel2);
-            this.panAddNew.Location = new System.Drawing.Point(0, 211);
+            this.panAddNew.Location = new System.Drawing.Point(0, 109);
             this.panAddNew.Name = "panAddNew";
-            this.panAddNew.Size = new System.Drawing.Size(1258, 308);
+            this.panAddNew.Size = new System.Drawing.Size(1037, 276);
             this.panAddNew.TabIndex = 111;
             // 
             // panAssign
             // 
             this.panAssign.Controls.Add(this.panel6);
             this.panAssign.Controls.Add(this.panel5);
-            this.panAssign.Location = new System.Drawing.Point(127, 47);
+            this.panAssign.Location = new System.Drawing.Point(589, 109);
             this.panAssign.Name = "panAssign";
-            this.panAssign.Size = new System.Drawing.Size(1081, 285);
+            this.panAssign.Size = new System.Drawing.Size(799, 246);
             this.panAssign.TabIndex = 112;
             // 
             // frmSpecialPlaylists
@@ -1347,13 +1347,13 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(51)))), ((int)(((byte)(45)))));
-            this.ClientSize = new System.Drawing.Size(1270, 574);
+            this.ClientSize = new System.Drawing.Size(1034, 574);
+            this.Controls.Add(this.panEdit);
+            this.Controls.Add(this.panAssign);
             this.Controls.Add(this.panAddNew);
             this.Controls.Add(this.panSearch);
-            this.Controls.Add(this.panAssign);
             this.Controls.Add(this.panMainNew);
             this.Controls.Add(this.panMenu);
-            this.Controls.Add(this.panEdit);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "frmSpecialPlaylists";
             this.Text = "Special Playlists";
@@ -1366,10 +1366,10 @@
             this.panel3.PerformLayout();
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgToken)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgSch)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.panel6.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgPublish)).EndInit();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
             this.panMainNew.ResumeLayout(false);
@@ -1417,10 +1417,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Panel panel6;
         private System.Windows.Forms.Panel panel5;
-        private System.Windows.Forms.ComboBox cmbSchFormat;
-        private System.Windows.Forms.Button btnSchSave;
-        private System.Windows.Forms.Button btnSchRefersh;
-        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Button btnPublish;
         private System.Windows.Forms.DataGridView dgToken;
         private System.Windows.Forms.Panel panMainNew;
         private System.Windows.Forms.Panel panNew;
@@ -1429,7 +1426,6 @@
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.Label lblCaption;
-        private System.Windows.Forms.DataGridView dgSch;
         private System.Windows.Forms.ComboBox cmbDname;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label9;
@@ -1474,5 +1470,9 @@
         private System.Windows.Forms.TextBox txtCustomer;
         private System.Windows.Forms.TextBox txtPlaylist;
         private System.Windows.Forms.TextBox txtFormat;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ComboBox cmbPublishCustomer;
+        private System.Windows.Forms.DataGridView dgPublish;
+        private System.Windows.Forms.Label label5;
     }
 }

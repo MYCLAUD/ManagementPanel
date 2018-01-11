@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnCopyData = new System.Windows.Forms.Button();
             this.btnDirectUpload = new System.Windows.Forms.Button();
             this.label25 = new System.Windows.Forms.Label();
             this.btnManagementPlaylists = new System.Windows.Forms.Button();
@@ -58,6 +59,15 @@
             this.cmbMusicType = new System.Windows.Forms.ComboBox();
             this.lblOpenType = new System.Windows.Forms.Label();
             this.panLinks = new System.Windows.Forms.Panel();
+            this.lblDealer = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.lblAmmy = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.lblVideo = new System.Windows.Forms.Label();
+            this.lblCLOGG = new System.Windows.Forms.Label();
+            this.lblCROGG = new System.Windows.Forms.Label();
+            this.lblSF = new System.Windows.Forms.Label();
+            this.cmbClientName = new System.Windows.Forms.ComboBox();
             this.label42 = new System.Windows.Forms.Label();
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.label43 = new System.Windows.Forms.Label();
@@ -75,15 +85,19 @@
             this.panSingleUsers = new System.Windows.Forms.Panel();
             this.panManagementDealers = new System.Windows.Forms.Panel();
             this.panStreaming = new System.Windows.Forms.Panel();
+            this.btnOtherUser = new System.Windows.Forms.Button();
+            this.btnAssignMobileStream = new System.Windows.Forms.Button();
+            this.btnAssignStream = new System.Windows.Forms.Button();
             this.btnChangeMiddleImg = new System.Windows.Forms.Button();
             this.btnMobileAppStream = new System.Windows.Forms.Button();
             this.btnDotNetStream = new System.Windows.Forms.Button();
             this.panManagementPlaylists = new System.Windows.Forms.Panel();
+            this.btnSeparation = new System.Windows.Forms.Button();
+            this.btnCustomerContents = new System.Windows.Forms.Button();
             this.panAdvt = new System.Windows.Forms.Panel();
             this.btnAdvt = new System.Windows.Forms.Button();
             this.btnPrayer = new System.Windows.Forms.Button();
             this.lblButtonName = new System.Windows.Forms.Label();
-            this.cmbClientName = new System.Windows.Forms.ComboBox();
             this.panel1.SuspendLayout();
             this.panTokenOption.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -99,6 +113,7 @@
             // 
             this.panel1.AutoScroll = true;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.btnCopyData);
             this.panel1.Controls.Add(this.btnDirectUpload);
             this.panel1.Controls.Add(this.label25);
             this.panel1.Controls.Add(this.btnManagementPlaylists);
@@ -111,8 +126,27 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1274, 72);
+            this.panel1.Size = new System.Drawing.Size(1099, 72);
             this.panel1.TabIndex = 0;
+            // 
+            // btnCopyData
+            // 
+            this.btnCopyData.BackColor = System.Drawing.Color.Transparent;
+            this.btnCopyData.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnCopyData.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCopyData.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
+            this.btnCopyData.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray;
+            this.btnCopyData.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DimGray;
+            this.btnCopyData.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCopyData.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.btnCopyData.ForeColor = System.Drawing.Color.Yellow;
+            this.btnCopyData.Location = new System.Drawing.Point(1110, 5);
+            this.btnCopyData.Name = "btnCopyData";
+            this.btnCopyData.Size = new System.Drawing.Size(153, 45);
+            this.btnCopyData.TabIndex = 27;
+            this.btnCopyData.Text = "Copy Data";
+            this.btnCopyData.UseVisualStyleBackColor = false;
+            this.btnCopyData.Click += new System.EventHandler(this.btnCopyData_Click);
             // 
             // btnDirectUpload
             // 
@@ -125,7 +159,7 @@
             this.btnDirectUpload.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDirectUpload.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.btnDirectUpload.ForeColor = System.Drawing.Color.Yellow;
-            this.btnDirectUpload.Location = new System.Drawing.Point(1109, 4);
+            this.btnDirectUpload.Location = new System.Drawing.Point(1269, 5);
             this.btnDirectUpload.Name = "btnDirectUpload";
             this.btnDirectUpload.Size = new System.Drawing.Size(153, 45);
             this.btnDirectUpload.TabIndex = 26;
@@ -135,9 +169,9 @@
             // 
             // label25
             // 
-            this.label25.Location = new System.Drawing.Point(1268, 22);
+            this.label25.Location = new System.Drawing.Point(1428, 23);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(33, 10);
+            this.label25.Size = new System.Drawing.Size(42, 10);
             this.label25.TabIndex = 25;
             // 
             // btnManagementPlaylists
@@ -281,12 +315,13 @@
             this.btnTokenExpiryDate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnTokenExpiryDate.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.btnTokenExpiryDate.ForeColor = System.Drawing.Color.Black;
-            this.btnTokenExpiryDate.Location = new System.Drawing.Point(462, 4);
+            this.btnTokenExpiryDate.Location = new System.Drawing.Point(696, 2);
             this.btnTokenExpiryDate.Name = "btnTokenExpiryDate";
             this.btnTokenExpiryDate.Size = new System.Drawing.Size(144, 37);
             this.btnTokenExpiryDate.TabIndex = 13;
             this.btnTokenExpiryDate.Text = "License Expiry";
             this.btnTokenExpiryDate.UseVisualStyleBackColor = false;
+            this.btnTokenExpiryDate.Visible = false;
             this.btnTokenExpiryDate.Click += new System.EventHandler(this.btnTokenExpiryDate_Click);
             // 
             // btnTokenSettings
@@ -299,12 +334,13 @@
             this.btnTokenSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnTokenSettings.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.btnTokenSettings.ForeColor = System.Drawing.Color.Black;
-            this.btnTokenSettings.Location = new System.Drawing.Point(312, 4);
+            this.btnTokenSettings.Location = new System.Drawing.Point(546, 2);
             this.btnTokenSettings.Name = "btnTokenSettings";
             this.btnTokenSettings.Size = new System.Drawing.Size(144, 37);
             this.btnTokenSettings.TabIndex = 5;
             this.btnTokenSettings.Text = "Token Settings";
             this.btnTokenSettings.UseVisualStyleBackColor = false;
+            this.btnTokenSettings.Visible = false;
             this.btnTokenSettings.Click += new System.EventHandler(this.btnTokenSettings_Click);
             // 
             // btnTokenGeneration
@@ -317,11 +353,11 @@
             this.btnTokenGeneration.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnTokenGeneration.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.btnTokenGeneration.ForeColor = System.Drawing.Color.Black;
-            this.btnTokenGeneration.Location = new System.Drawing.Point(162, 4);
+            this.btnTokenGeneration.Location = new System.Drawing.Point(224, 4);
             this.btnTokenGeneration.Name = "btnTokenGeneration";
-            this.btnTokenGeneration.Size = new System.Drawing.Size(144, 37);
+            this.btnTokenGeneration.Size = new System.Drawing.Size(206, 37);
             this.btnTokenGeneration.TabIndex = 4;
-            this.btnTokenGeneration.Text = "Token Generation";
+            this.btnTokenGeneration.Text = "Prayer Timing Copy";
             this.btnTokenGeneration.UseVisualStyleBackColor = false;
             this.btnTokenGeneration.Click += new System.EventHandler(this.btnTokenGeneration_Click);
             // 
@@ -337,9 +373,9 @@
             this.btnRegistration.ForeColor = System.Drawing.Color.Black;
             this.btnRegistration.Location = new System.Drawing.Point(12, 4);
             this.btnRegistration.Name = "btnRegistration";
-            this.btnRegistration.Size = new System.Drawing.Size(144, 37);
+            this.btnRegistration.Size = new System.Drawing.Size(206, 37);
             this.btnRegistration.TabIndex = 3;
-            this.btnRegistration.Text = "Client Registration";
+            this.btnRegistration.Text = "Playlist Schedule Copy";
             this.btnRegistration.UseVisualStyleBackColor = false;
             this.btnRegistration.Click += new System.EventHandler(this.btnRegistration_Click);
             // 
@@ -354,12 +390,13 @@
             this.btnStreamShedule.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnStreamShedule.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.btnStreamShedule.ForeColor = System.Drawing.Color.Black;
-            this.btnStreamShedule.Location = new System.Drawing.Point(190, 4);
+            this.btnStreamShedule.Location = new System.Drawing.Point(950, -1);
             this.btnStreamShedule.Name = "btnStreamShedule";
-            this.btnStreamShedule.Size = new System.Drawing.Size(172, 37);
+            this.btnStreamShedule.Size = new System.Drawing.Size(19, 37);
             this.btnStreamShedule.TabIndex = 22;
             this.btnStreamShedule.Text = "Stream Scheduling";
             this.btnStreamShedule.UseVisualStyleBackColor = false;
+            this.btnStreamShedule.Visible = false;
             this.btnStreamShedule.Click += new System.EventHandler(this.btnStreamShedule_Click);
             // 
             // btnSpecialEvents
@@ -373,12 +410,13 @@
             this.btnSpecialEvents.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSpecialEvents.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.btnSpecialEvents.ForeColor = System.Drawing.Color.Black;
-            this.btnSpecialEvents.Location = new System.Drawing.Point(436, 3);
+            this.btnSpecialEvents.Location = new System.Drawing.Point(858, 3);
             this.btnSpecialEvents.Name = "btnSpecialEvents";
             this.btnSpecialEvents.Size = new System.Drawing.Size(206, 37);
             this.btnSpecialEvents.TabIndex = 21;
             this.btnSpecialEvents.Text = "Special Events";
             this.btnSpecialEvents.UseVisualStyleBackColor = false;
+            this.btnSpecialEvents.Visible = false;
             this.btnSpecialEvents.Click += new System.EventHandler(this.button1_Click);
             // 
             // btnBestoff
@@ -415,7 +453,7 @@
             this.btnAdvertisementControl.Name = "btnAdvertisementControl";
             this.btnAdvertisementControl.Size = new System.Drawing.Size(206, 37);
             this.btnAdvertisementControl.TabIndex = 18;
-            this.btnAdvertisementControl.Text = "Customer Playlists";
+            this.btnAdvertisementControl.Text = "Playlist Library";
             this.btnAdvertisementControl.UseVisualStyleBackColor = false;
             this.btnAdvertisementControl.Click += new System.EventHandler(this.btnAdvertisementControl_Click);
             // 
@@ -566,6 +604,14 @@
             // panLinks
             // 
             this.panLinks.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panLinks.Controls.Add(this.lblDealer);
+            this.panLinks.Controls.Add(this.label4);
+            this.panLinks.Controls.Add(this.lblAmmy);
+            this.panLinks.Controls.Add(this.label3);
+            this.panLinks.Controls.Add(this.lblVideo);
+            this.panLinks.Controls.Add(this.lblCLOGG);
+            this.panLinks.Controls.Add(this.lblCROGG);
+            this.panLinks.Controls.Add(this.lblSF);
             this.panLinks.Controls.Add(this.cmbClientName);
             this.panLinks.Controls.Add(this.label42);
             this.panLinks.Controls.Add(this.txtPassword);
@@ -581,11 +627,132 @@
             this.panLinks.Controls.Add(this.label18);
             this.panLinks.Controls.Add(this.label5);
             this.panLinks.Controls.Add(this.label1);
-            this.panLinks.Location = new System.Drawing.Point(183, 326);
+            this.panLinks.Location = new System.Drawing.Point(163, 332);
             this.panLinks.Name = "panLinks";
-            this.panLinks.Size = new System.Drawing.Size(1085, 397);
+            this.panLinks.Size = new System.Drawing.Size(1105, 349);
             this.panLinks.TabIndex = 69;
             this.panLinks.Visible = false;
+            // 
+            // lblDealer
+            // 
+            this.lblDealer.AutoSize = true;
+            this.lblDealer.BackColor = System.Drawing.Color.Transparent;
+            this.lblDealer.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lblDealer.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDealer.ForeColor = System.Drawing.Color.White;
+            this.lblDealer.Location = new System.Drawing.Point(349, 198);
+            this.lblDealer.Name = "lblDealer";
+            this.lblDealer.Size = new System.Drawing.Size(76, 20);
+            this.lblDealer.TabIndex = 177;
+            this.lblDealer.Text = "Click Here";
+            this.lblDealer.Click += new System.EventHandler(this.lblDealer_Click);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.BackColor = System.Drawing.Color.Transparent;
+            this.label4.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.Color.Yellow;
+            this.label4.Location = new System.Drawing.Point(307, 163);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(80, 20);
+            this.label4.TabIndex = 176;
+            this.label4.Text = "Dealer Exe";
+            // 
+            // lblAmmy
+            // 
+            this.lblAmmy.AutoSize = true;
+            this.lblAmmy.BackColor = System.Drawing.Color.Transparent;
+            this.lblAmmy.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lblAmmy.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAmmy.ForeColor = System.Drawing.Color.White;
+            this.lblAmmy.Location = new System.Drawing.Point(54, 198);
+            this.lblAmmy.Name = "lblAmmy";
+            this.lblAmmy.Size = new System.Drawing.Size(76, 20);
+            this.lblAmmy.TabIndex = 175;
+            this.lblAmmy.Text = "Click Here";
+            this.lblAmmy.Click += new System.EventHandler(this.lblAmmy_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.BackColor = System.Drawing.Color.Transparent;
+            this.label3.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.Yellow;
+            this.label3.Location = new System.Drawing.Point(12, 163);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(108, 20);
+            this.label3.TabIndex = 174;
+            this.label3.Text = "Ammy Remote";
+            // 
+            // lblVideo
+            // 
+            this.lblVideo.AutoSize = true;
+            this.lblVideo.BackColor = System.Drawing.Color.Transparent;
+            this.lblVideo.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lblVideo.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblVideo.ForeColor = System.Drawing.Color.White;
+            this.lblVideo.Location = new System.Drawing.Point(349, 56);
+            this.lblVideo.Name = "lblVideo";
+            this.lblVideo.Size = new System.Drawing.Size(76, 20);
+            this.lblVideo.TabIndex = 173;
+            this.lblVideo.Text = "Click Here";
+            this.lblVideo.Click += new System.EventHandler(this.lblVideo_Click);
+            // 
+            // lblCLOGG
+            // 
+            this.lblCLOGG.AutoSize = true;
+            this.lblCLOGG.BackColor = System.Drawing.Color.Transparent;
+            this.lblCLOGG.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lblCLOGG.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCLOGG.ForeColor = System.Drawing.Color.White;
+            this.lblCLOGG.Location = new System.Drawing.Point(349, 129);
+            this.lblCLOGG.Name = "lblCLOGG";
+            this.lblCLOGG.Size = new System.Drawing.Size(76, 20);
+            this.lblCLOGG.TabIndex = 173;
+            this.lblCLOGG.Text = "Click Here";
+            this.lblCLOGG.Click += new System.EventHandler(this.lblCLOGG_Click);
+            // 
+            // lblCROGG
+            // 
+            this.lblCROGG.AutoSize = true;
+            this.lblCROGG.BackColor = System.Drawing.Color.Transparent;
+            this.lblCROGG.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lblCROGG.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCROGG.ForeColor = System.Drawing.Color.White;
+            this.lblCROGG.Location = new System.Drawing.Point(54, 129);
+            this.lblCROGG.Name = "lblCROGG";
+            this.lblCROGG.Size = new System.Drawing.Size(76, 20);
+            this.lblCROGG.TabIndex = 173;
+            this.lblCROGG.Text = "Click Here";
+            this.lblCROGG.Click += new System.EventHandler(this.lblCROGG_Click);
+            // 
+            // lblSF
+            // 
+            this.lblSF.AutoSize = true;
+            this.lblSF.BackColor = System.Drawing.Color.Transparent;
+            this.lblSF.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lblSF.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSF.ForeColor = System.Drawing.Color.White;
+            this.lblSF.Location = new System.Drawing.Point(54, 56);
+            this.lblSF.Name = "lblSF";
+            this.lblSF.Size = new System.Drawing.Size(76, 20);
+            this.lblSF.TabIndex = 172;
+            this.lblSF.Text = "Click Here";
+            this.lblSF.Click += new System.EventHandler(this.lblSF_Click);
+            // 
+            // cmbClientName
+            // 
+            this.cmbClientName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbClientName.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbClientName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbClientName.FormattingEnabled = true;
+            this.cmbClientName.Location = new System.Drawing.Point(172, 273);
+            this.cmbClientName.Name = "cmbClientName";
+            this.cmbClientName.Size = new System.Drawing.Size(305, 25);
+            this.cmbClientName.TabIndex = 167;
+            this.cmbClientName.SelectedIndexChanged += new System.EventHandler(this.cmbClientName_SelectedIndexChanged);
+            this.cmbClientName.Click += new System.EventHandler(this.cmbClientName_Click);
             // 
             // label42
             // 
@@ -594,7 +761,7 @@
             this.label42.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label42.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label42.ForeColor = System.Drawing.Color.White;
-            this.label42.Location = new System.Drawing.Point(60, 322);
+            this.label42.Location = new System.Drawing.Point(53, 337);
             this.label42.Name = "label42";
             this.label42.Size = new System.Drawing.Size(70, 20);
             this.label42.TabIndex = 166;
@@ -603,7 +770,7 @@
             // txtPassword
             // 
             this.txtPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F);
-            this.txtPassword.Location = new System.Drawing.Point(178, 321);
+            this.txtPassword.Location = new System.Drawing.Point(171, 336);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.ReadOnly = true;
             this.txtPassword.Size = new System.Drawing.Size(306, 23);
@@ -616,7 +783,7 @@
             this.label43.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label43.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label43.ForeColor = System.Drawing.Color.White;
-            this.label43.Location = new System.Drawing.Point(60, 293);
+            this.label43.Location = new System.Drawing.Point(53, 308);
             this.label43.Name = "label43";
             this.label43.Size = new System.Drawing.Size(90, 20);
             this.label43.TabIndex = 164;
@@ -625,7 +792,7 @@
             // txtLogin
             // 
             this.txtLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F);
-            this.txtLogin.Location = new System.Drawing.Point(178, 292);
+            this.txtLogin.Location = new System.Drawing.Point(171, 307);
             this.txtLogin.Name = "txtLogin";
             this.txtLogin.ReadOnly = true;
             this.txtLogin.Size = new System.Drawing.Size(306, 23);
@@ -638,7 +805,7 @@
             this.label41.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label41.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label41.ForeColor = System.Drawing.Color.White;
-            this.label41.Location = new System.Drawing.Point(60, 261);
+            this.label41.Location = new System.Drawing.Point(53, 276);
             this.label41.Name = "label41";
             this.label41.Size = new System.Drawing.Size(116, 20);
             this.label41.TabIndex = 161;
@@ -650,7 +817,7 @@
             this.label40.BackColor = System.Drawing.Color.Transparent;
             this.label40.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label40.ForeColor = System.Drawing.Color.Yellow;
-            this.label40.Location = new System.Drawing.Point(30, 235);
+            this.label40.Location = new System.Drawing.Point(11, 248);
             this.label40.Name = "label40";
             this.label40.Size = new System.Drawing.Size(167, 20);
             this.label40.TabIndex = 154;
@@ -658,59 +825,31 @@
             // 
             // label35
             // 
-            this.label35.AutoSize = true;
-            this.label35.BackColor = System.Drawing.Color.Transparent;
-            this.label35.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.label35.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label35.ForeColor = System.Drawing.Color.White;
-            this.label35.Location = new System.Drawing.Point(60, 137);
+            this.label35.Location = new System.Drawing.Point(0, 0);
             this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(76, 20);
-            this.label35.TabIndex = 152;
-            this.label35.Text = "Click Here";
-            this.label35.Click += new System.EventHandler(this.label35_Click);
+            this.label35.Size = new System.Drawing.Size(100, 23);
+            this.label35.TabIndex = 168;
             // 
             // label33
             // 
-            this.label33.AutoSize = true;
-            this.label33.BackColor = System.Drawing.Color.Transparent;
-            this.label33.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.label33.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label33.ForeColor = System.Drawing.Color.White;
-            this.label33.Location = new System.Drawing.Point(60, 70);
+            this.label33.Location = new System.Drawing.Point(0, 0);
             this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(76, 20);
-            this.label33.TabIndex = 150;
-            this.label33.Text = "Click Here";
-            this.label33.Click += new System.EventHandler(this.label33_Click);
+            this.label33.Size = new System.Drawing.Size(100, 23);
+            this.label33.TabIndex = 169;
             // 
             // label21
             // 
-            this.label21.AutoSize = true;
-            this.label21.BackColor = System.Drawing.Color.Transparent;
-            this.label21.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.label21.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label21.ForeColor = System.Drawing.Color.White;
-            this.label21.Location = new System.Drawing.Point(383, 201);
+            this.label21.Location = new System.Drawing.Point(0, 0);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(73, 20);
-            this.label21.TabIndex = 0;
-            this.label21.Text = "Click here";
-            this.label21.Click += new System.EventHandler(this.label21_Click);
+            this.label21.Size = new System.Drawing.Size(100, 23);
+            this.label21.TabIndex = 170;
             // 
             // label19
             // 
-            this.label19.AutoSize = true;
-            this.label19.BackColor = System.Drawing.Color.Transparent;
-            this.label19.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.label19.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label19.ForeColor = System.Drawing.Color.White;
-            this.label19.Location = new System.Drawing.Point(60, 201);
+            this.label19.Location = new System.Drawing.Point(0, 0);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(73, 20);
-            this.label19.TabIndex = 0;
-            this.label19.Text = "Click here";
-            this.label19.Click += new System.EventHandler(this.label19_Click);
+            this.label19.Size = new System.Drawing.Size(100, 23);
+            this.label19.TabIndex = 171;
             // 
             // label20
             // 
@@ -718,11 +857,11 @@
             this.label20.BackColor = System.Drawing.Color.Transparent;
             this.label20.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label20.ForeColor = System.Drawing.Color.Yellow;
-            this.label20.Location = new System.Drawing.Point(344, 172);
+            this.label20.Location = new System.Drawing.Point(333, 23);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(109, 20);
+            this.label20.Size = new System.Drawing.Size(92, 20);
             this.label20.TabIndex = 0;
-            this.label20.Text = "Unquie id exe:-";
+            this.label20.Text = "Video Player";
             // 
             // label18
             // 
@@ -730,11 +869,11 @@
             this.label18.BackColor = System.Drawing.Color.Transparent;
             this.label18.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label18.ForeColor = System.Drawing.Color.Yellow;
-            this.label18.Location = new System.Drawing.Point(30, 172);
+            this.label18.Location = new System.Drawing.Point(333, 94);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(132, 20);
+            this.label18.Size = new System.Drawing.Size(187, 20);
             this.label18.TabIndex = 0;
-            this.label18.Text = "Ammy admin exe :";
+            this.label18.Text = "Copyleft Local Player(Ogg)";
             // 
             // label5
             // 
@@ -742,11 +881,11 @@
             this.label5.BackColor = System.Drawing.Color.Transparent;
             this.label5.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.Yellow;
-            this.label5.Location = new System.Drawing.Point(30, 109);
+            this.label5.Location = new System.Drawing.Point(12, 94);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(438, 20);
+            this.label5.Size = new System.Drawing.Size(196, 20);
             this.label5.TabIndex = 0;
-            this.label5.Text = "Player setup for windowXp(Also compatible for upper version\'s) :";
+            this.label5.Text = "Copyright Local Player(Ogg)";
             // 
             // label1
             // 
@@ -754,11 +893,11 @@
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.Yellow;
-            this.label1.Location = new System.Drawing.Point(30, 38);
+            this.label1.Location = new System.Drawing.Point(12, 23);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(297, 20);
+            this.label1.Size = new System.Drawing.Size(162, 20);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Player setup for window7 or upper version:-";
+            this.label1.Text = "Store && Forward Player";
             // 
             // panSingleUsers
             // 
@@ -771,7 +910,7 @@
             this.panSingleUsers.Dock = System.Windows.Forms.DockStyle.Top;
             this.panSingleUsers.Location = new System.Drawing.Point(0, 72);
             this.panSingleUsers.Name = "panSingleUsers";
-            this.panSingleUsers.Size = new System.Drawing.Size(1274, 46);
+            this.panSingleUsers.Size = new System.Drawing.Size(1099, 46);
             this.panSingleUsers.TabIndex = 71;
             this.panSingleUsers.Visible = false;
             // 
@@ -784,7 +923,7 @@
             this.panManagementDealers.Dock = System.Windows.Forms.DockStyle.Top;
             this.panManagementDealers.Location = new System.Drawing.Point(0, 118);
             this.panManagementDealers.Name = "panManagementDealers";
-            this.panManagementDealers.Size = new System.Drawing.Size(1274, 46);
+            this.panManagementDealers.Size = new System.Drawing.Size(1099, 46);
             this.panManagementDealers.TabIndex = 72;
             this.panManagementDealers.Visible = false;
             // 
@@ -792,6 +931,9 @@
             // 
             this.panStreaming.BackColor = System.Drawing.SystemColors.Control;
             this.panStreaming.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panStreaming.Controls.Add(this.btnOtherUser);
+            this.panStreaming.Controls.Add(this.btnAssignMobileStream);
+            this.panStreaming.Controls.Add(this.btnAssignStream);
             this.panStreaming.Controls.Add(this.btnChangeMiddleImg);
             this.panStreaming.Controls.Add(this.btnMobileAppStream);
             this.panStreaming.Controls.Add(this.btnDotNetStream);
@@ -799,9 +941,66 @@
             this.panStreaming.Dock = System.Windows.Forms.DockStyle.Top;
             this.panStreaming.Location = new System.Drawing.Point(0, 164);
             this.panStreaming.Name = "panStreaming";
-            this.panStreaming.Size = new System.Drawing.Size(1274, 46);
+            this.panStreaming.Size = new System.Drawing.Size(1099, 46);
             this.panStreaming.TabIndex = 73;
             this.panStreaming.Visible = false;
+            // 
+            // btnOtherUser
+            // 
+            this.btnOtherUser.BackColor = System.Drawing.Color.Transparent;
+            this.btnOtherUser.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnOtherUser.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnOtherUser.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow;
+            this.btnOtherUser.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.Control;
+            this.btnOtherUser.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
+            this.btnOtherUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnOtherUser.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.btnOtherUser.ForeColor = System.Drawing.Color.Black;
+            this.btnOtherUser.Location = new System.Drawing.Point(906, 3);
+            this.btnOtherUser.Name = "btnOtherUser";
+            this.btnOtherUser.Size = new System.Drawing.Size(168, 37);
+            this.btnOtherUser.TabIndex = 28;
+            this.btnOtherUser.Text = "Other User Stream URL";
+            this.btnOtherUser.UseVisualStyleBackColor = false;
+            this.btnOtherUser.Click += new System.EventHandler(this.btnOtherUser_Click);
+            // 
+            // btnAssignMobileStream
+            // 
+            this.btnAssignMobileStream.BackColor = System.Drawing.Color.Transparent;
+            this.btnAssignMobileStream.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnAssignMobileStream.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnAssignMobileStream.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow;
+            this.btnAssignMobileStream.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.Control;
+            this.btnAssignMobileStream.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
+            this.btnAssignMobileStream.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAssignMobileStream.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.btnAssignMobileStream.ForeColor = System.Drawing.Color.Black;
+            this.btnAssignMobileStream.Location = new System.Drawing.Point(525, 3);
+            this.btnAssignMobileStream.Name = "btnAssignMobileStream";
+            this.btnAssignMobileStream.Size = new System.Drawing.Size(203, 37);
+            this.btnAssignMobileStream.TabIndex = 27;
+            this.btnAssignMobileStream.Text = "Assign Moblie App Streams";
+            this.btnAssignMobileStream.UseVisualStyleBackColor = false;
+            this.btnAssignMobileStream.Click += new System.EventHandler(this.btnAssignMobileStream_Click);
+            // 
+            // btnAssignStream
+            // 
+            this.btnAssignStream.BackColor = System.Drawing.Color.Transparent;
+            this.btnAssignStream.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnAssignStream.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnAssignStream.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow;
+            this.btnAssignStream.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.Control;
+            this.btnAssignStream.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
+            this.btnAssignStream.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAssignStream.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.btnAssignStream.ForeColor = System.Drawing.Color.Black;
+            this.btnAssignStream.Location = new System.Drawing.Point(166, 3);
+            this.btnAssignStream.Name = "btnAssignStream";
+            this.btnAssignStream.Size = new System.Drawing.Size(188, 37);
+            this.btnAssignStream.TabIndex = 26;
+            this.btnAssignStream.Text = "Assign Customer Streams";
+            this.btnAssignStream.UseVisualStyleBackColor = false;
+            this.btnAssignStream.Click += new System.EventHandler(this.btnAssignStream_Click);
             // 
             // btnChangeMiddleImg
             // 
@@ -814,9 +1013,9 @@
             this.btnChangeMiddleImg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChangeMiddleImg.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.btnChangeMiddleImg.ForeColor = System.Drawing.Color.Black;
-            this.btnChangeMiddleImg.Location = new System.Drawing.Point(546, 4);
+            this.btnChangeMiddleImg.Location = new System.Drawing.Point(734, 3);
             this.btnChangeMiddleImg.Name = "btnChangeMiddleImg";
-            this.btnChangeMiddleImg.Size = new System.Drawing.Size(172, 37);
+            this.btnChangeMiddleImg.Size = new System.Drawing.Size(167, 37);
             this.btnChangeMiddleImg.TabIndex = 25;
             this.btnChangeMiddleImg.Text = "Change Middle Image";
             this.btnChangeMiddleImg.UseVisualStyleBackColor = false;
@@ -833,9 +1032,9 @@
             this.btnMobileAppStream.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMobileAppStream.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.btnMobileAppStream.ForeColor = System.Drawing.Color.Black;
-            this.btnMobileAppStream.Location = new System.Drawing.Point(368, 4);
+            this.btnMobileAppStream.Location = new System.Drawing.Point(360, 3);
             this.btnMobileAppStream.Name = "btnMobileAppStream";
-            this.btnMobileAppStream.Size = new System.Drawing.Size(172, 37);
+            this.btnMobileAppStream.Size = new System.Drawing.Size(159, 37);
             this.btnMobileAppStream.TabIndex = 24;
             this.btnMobileAppStream.Text = "Moblie App Streams";
             this.btnMobileAppStream.UseVisualStyleBackColor = false;
@@ -854,7 +1053,7 @@
             this.btnDotNetStream.ForeColor = System.Drawing.Color.Black;
             this.btnDotNetStream.Location = new System.Drawing.Point(11, 3);
             this.btnDotNetStream.Name = "btnDotNetStream";
-            this.btnDotNetStream.Size = new System.Drawing.Size(172, 37);
+            this.btnDotNetStream.Size = new System.Drawing.Size(148, 37);
             this.btnDotNetStream.TabIndex = 23;
             this.btnDotNetStream.Text = ".Net Player Streams";
             this.btnDotNetStream.UseVisualStyleBackColor = false;
@@ -864,15 +1063,57 @@
             // 
             this.panManagementPlaylists.BackColor = System.Drawing.SystemColors.Control;
             this.panManagementPlaylists.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panManagementPlaylists.Controls.Add(this.btnSeparation);
+            this.panManagementPlaylists.Controls.Add(this.btnCustomerContents);
             this.panManagementPlaylists.Controls.Add(this.btnBestoff);
             this.panManagementPlaylists.Controls.Add(this.btnAdvertisementControl);
             this.panManagementPlaylists.Controls.Add(this.btnSpecialEvents);
             this.panManagementPlaylists.Dock = System.Windows.Forms.DockStyle.Top;
             this.panManagementPlaylists.Location = new System.Drawing.Point(0, 210);
             this.panManagementPlaylists.Name = "panManagementPlaylists";
-            this.panManagementPlaylists.Size = new System.Drawing.Size(1274, 46);
+            this.panManagementPlaylists.Size = new System.Drawing.Size(1099, 46);
             this.panManagementPlaylists.TabIndex = 74;
             this.panManagementPlaylists.Visible = false;
+            // 
+            // btnSeparation
+            // 
+            this.btnSeparation.BackColor = System.Drawing.Color.Transparent;
+            this.btnSeparation.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnSeparation.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSeparation.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow;
+            this.btnSeparation.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.Control;
+            this.btnSeparation.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
+            this.btnSeparation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSeparation.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.btnSeparation.ForeColor = System.Drawing.Color.Black;
+            this.btnSeparation.Location = new System.Drawing.Point(435, 3);
+            this.btnSeparation.Name = "btnSeparation";
+            this.btnSeparation.Size = new System.Drawing.Size(206, 37);
+            this.btnSeparation.TabIndex = 23;
+            this.btnSeparation.Text = "Separation";
+            this.btnSeparation.UseVisualStyleBackColor = false;
+            this.btnSeparation.Visible = false;
+            this.btnSeparation.Click += new System.EventHandler(this.btnSeparation_Click);
+            // 
+            // btnCustomerContents
+            // 
+            this.btnCustomerContents.BackColor = System.Drawing.Color.Transparent;
+            this.btnCustomerContents.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnCustomerContents.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCustomerContents.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow;
+            this.btnCustomerContents.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.Control;
+            this.btnCustomerContents.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
+            this.btnCustomerContents.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCustomerContents.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.btnCustomerContents.ForeColor = System.Drawing.Color.Black;
+            this.btnCustomerContents.Location = new System.Drawing.Point(646, 3);
+            this.btnCustomerContents.Name = "btnCustomerContents";
+            this.btnCustomerContents.Size = new System.Drawing.Size(206, 37);
+            this.btnCustomerContents.TabIndex = 22;
+            this.btnCustomerContents.Text = "Customer Content";
+            this.btnCustomerContents.UseVisualStyleBackColor = false;
+            this.btnCustomerContents.Visible = false;
+            this.btnCustomerContents.Click += new System.EventHandler(this.btnCustomerContents_Click);
             // 
             // panAdvt
             // 
@@ -883,7 +1124,7 @@
             this.panAdvt.Dock = System.Windows.Forms.DockStyle.Top;
             this.panAdvt.Location = new System.Drawing.Point(0, 256);
             this.panAdvt.Name = "panAdvt";
-            this.panAdvt.Size = new System.Drawing.Size(1274, 46);
+            this.panAdvt.Size = new System.Drawing.Size(1099, 46);
             this.panAdvt.TabIndex = 76;
             this.panAdvt.Visible = false;
             // 
@@ -933,25 +1174,12 @@
             this.lblButtonName.Text = "label44";
             this.lblButtonName.Visible = false;
             // 
-            // cmbClientName
-            // 
-            this.cmbClientName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbClientName.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbClientName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbClientName.FormattingEnabled = true;
-            this.cmbClientName.Location = new System.Drawing.Point(179, 258);
-            this.cmbClientName.Name = "cmbClientName";
-            this.cmbClientName.Size = new System.Drawing.Size(305, 25);
-            this.cmbClientName.TabIndex = 167;
-            this.cmbClientName.SelectedIndexChanged += new System.EventHandler(this.cmbClientName_SelectedIndexChanged);
-            this.cmbClientName.Click += new System.EventHandler(this.cmbClientName_Click);
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(51)))), ((int)(((byte)(45)))));
-            this.ClientSize = new System.Drawing.Size(1274, 672);
+            this.ClientSize = new System.Drawing.Size(1099, 602);
             this.Controls.Add(this.panLinks);
             this.Controls.Add(this.lblButtonName);
             this.Controls.Add(this.panAdvt);
@@ -1044,5 +1272,19 @@
         private System.Windows.Forms.Label lblButtonName;
         private System.Windows.Forms.Button btnDirectUpload;
         private System.Windows.Forms.ComboBox cmbClientName;
+        private System.Windows.Forms.Button btnCustomerContents;
+        private System.Windows.Forms.Button btnCopyData;
+        private System.Windows.Forms.Button btnSeparation;
+        private System.Windows.Forms.Label lblSF;
+        private System.Windows.Forms.Label lblCROGG;
+        private System.Windows.Forms.Label lblCLOGG;
+        private System.Windows.Forms.Label lblVideo;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lblAmmy;
+        private System.Windows.Forms.Button btnAssignStream;
+        private System.Windows.Forms.Button btnAssignMobileStream;
+        private System.Windows.Forms.Label lblDealer;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button btnOtherUser;
     }
 }

@@ -24,34 +24,27 @@ namespace ManagementPanel
         public frmOnlineStreaming()
         {
             InitializeComponent();
-            cmbAdminCode.Text = "MyClaud000";
-            cmbSearchAdminCode.Text = "MyClaud000";
+            
 
         }
         private void btnUnload_Click(object sender, EventArgs e)
         {
             this.Hide();
         }
-        private void FillTitleCategory()
-        {
-            string str = "select * from tblTitleCategory order by TitleCategoryid";
-            objMainClass.fnFillComboBox(str, cmbTitleCategory, "TitleCategoryid", "TitleCategoryName");
-            objMainClass.fnFillComboBox(str, cmbSearchCategoryName, "TitleCategoryid", "TitleCategoryName");
-        }
+        
         private void FillStreamData(Int32 TitleCategoryId)
         {
-            string str;
-            int iCtr;
-            DataTable dtDetail;
-            if (TitleCategoryId == 0)
+                string str;
+                int iCtr;
+                DataTable dtDetail= new DataTable();
+            if (cmbSearchLinence.Text == "")
             {
-                str = "Select * from  tblOnlineStreaming where dealercode!='CLAudio000' and  dealercode='" + cmbSearchAdminCode.Text + "' order by titlecategoryId, StreamName";
+                str = "Select * from  tbStreaming where dfclientid = " + Convert.ToInt32(cmbSearchCustomer.SelectedValue) + "   order by  StreamName";
             }
             else
             {
-                str = "Select * from  tblOnlineStreaming where dealercode!='CLAudio000' and titlecategoryId = " + TitleCategoryId + " and dealercode='" + cmbSearchAdminCode.Text + "' order by titlecategoryId, StreamName";
+                str = "Select * from  tbStreaming where dealercode='" + cmbSearchLinence.Text + "' and  dfclientid = " + Convert.ToInt32(cmbSearchCustomer.SelectedValue) + "   order by  StreamName";
             }
-
             dtDetail = objMainClass.fnFillDataTable(str);
 
             InitilizeStreamGrid();
@@ -106,7 +99,7 @@ namespace ManagementPanel
             dgStream.Columns["TitleCatId"].Visible = false;
             dgStream.Columns["TitleCatId"].ReadOnly = true;
 
-            dgStream.Columns.Add("AdminCode", "Admin Code");
+            dgStream.Columns.Add("AdminCode", "Licence Type");
             dgStream.Columns["AdminCode"].Width = 150;
             dgStream.Columns["AdminCode"].Visible = true;
             dgStream.Columns["AdminCode"].ReadOnly = true;
@@ -135,15 +128,15 @@ namespace ManagementPanel
 
         private void frmOnlineStreaming_Load(object sender, EventArgs e)
         {
-            FillTitleCategory();
-            FillStreamData(0);
-           
+            string str = "";
+            str = "select DFClientID,RIGHT(ClientName, LEN(ClientName) - 3) as ClientName from DFClients where CountryCode is not null and DFClients.IsDealer=1 ";
+            str = str + " and DFClientID in (select distinct clientid from AMPlayerTokens) ";
+            str = str + " order by RIGHT(ClientName, LEN(ClientName) - 3) ";
+            objMainClass.fnFillComboBox(str, cmbCustomer, "DFClientID", "ClientName", "");
+
         }
 
-        private void cmbSearchCategoryName_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            FillStreamData(Convert.ToInt32(cmbSearchCategoryName.SelectedValue));
-        }
+        
 
         private void btnRefersh_Click(object sender, EventArgs e)
         {
@@ -153,11 +146,12 @@ namespace ManagementPanel
         {
             txtStreamName.Text = "";
             txtStreamLink.Text = "";
-            FillTitleCategory();
+            cmbpType.Text = "";
             FillStreamData(0);
             SaveType = "Save";
-            cmbAdminCode.Text = "MyClaud000";
+             
             ModifyStreamId = 0;
+            cmbCustomer.SelectedValue = 0;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -187,11 +181,13 @@ namespace ManagementPanel
             cmd.Parameters["@StreamLink"].Value = txtStreamLink.Text;
 
             cmd.Parameters.Add(new SqlParameter("@titlecategoryId", SqlDbType.BigInt));
-            cmd.Parameters["@titlecategoryId"].Value = Convert.ToInt32(cmbTitleCategory.SelectedValue);
+            cmd.Parameters["@titlecategoryId"].Value = "1";
 
             cmd.Parameters.Add(new SqlParameter("@DealerCode", SqlDbType.VarChar));
-            cmd.Parameters["@DealerCode"].Value = cmbAdminCode.Text;
+            cmd.Parameters["@DealerCode"].Value = cmbpType.Text;
 
+            cmd.Parameters.Add(new SqlParameter("@dfclientid", SqlDbType.BigInt));
+            cmd.Parameters["@dfclientid"].Value = Convert.ToInt32(cmbCustomer.SelectedValue);
 
             try
             {
@@ -214,19 +210,25 @@ namespace ManagementPanel
                 txtStreamName.Focus();
                 return false;
             }
-            else if (txtStreamLink.Text == "")
+             if (txtStreamLink.Text == "")
             {
                 MessageBox.Show("The stream link cannot be empty", "Management Panel");
                 txtStreamLink.Focus();
                 return false;
             }
-
-            else if (Convert.ToInt32(cmbTitleCategory.SelectedValue) == 0)
+            if (cmbpType.Text == "")
             {
-                MessageBox.Show("Select a title category", "Management Panel");
-                cmbTitleCategory.Focus();
+                MessageBox.Show("The licence type cannot be empty", "Management Panel");
+                cmbpType.Focus();
                 return false;
             }
+            if (Convert.ToInt32(cmbCustomer.SelectedValue) == 0)
+            {
+                MessageBox.Show("The customer name cannot be empty", "Management Panel");
+                cmbCustomer.Focus();
+                return false;
+            }
+
             return true;
         }
 
@@ -239,8 +241,8 @@ namespace ManagementPanel
                 ModifyStreamId = Convert.ToInt32(dgStream.Rows[e.RowIndex].Cells[0].Value);
                 txtStreamLink.Text = dgStream.Rows[e.RowIndex].Cells[1].Value.ToString();
                 txtStreamName.Text = dgStream.Rows[e.RowIndex].Cells[2].Value.ToString();
-                cmbAdminCode.Text = dgStream.Rows[e.RowIndex].Cells[4].Value.ToString();
-                cmbTitleCategory.SelectedValue = dgStream.Rows[e.RowIndex].Cells[3].Value;
+                cmbpType.Text = dgStream.Rows[e.RowIndex].Cells["AdminCode"].Value.ToString();
+                cmbCustomer.SelectedValue = cmbSearchCustomer.SelectedValue;
             }
             if (e.ColumnIndex == 6)
             {
@@ -253,7 +255,7 @@ namespace ManagementPanel
                     StaticClass.constr.Open();
                     SqlCommand cmd = new SqlCommand();
                     cmd.Connection = StaticClass.constr;
-                    cmd.CommandText = "delete from tblOnlineStreaming where streamid=" + Convert.ToInt32(dgStream.Rows[e.RowIndex].Cells[0].Value);
+                    cmd.CommandText = "delete from tbStreaming where streamid=" + Convert.ToInt32(dgStream.Rows[e.RowIndex].Cells[0].Value);
                     cmd.ExecuteNonQuery();
                     StaticClass.constr.Close();
                     ClearFelids();
@@ -261,18 +263,7 @@ namespace ManagementPanel
             }
         }
 
-        private void cmbSearchAdminCode_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (Convert.ToInt32(cmbSearchCategoryName.SelectedValue) == 0)
-            {
-                FillStreamData(0);
-            }
-            else
-            {
-                FillStreamData(Convert.ToInt32(cmbSearchCategoryName.SelectedValue));
-            }
-        }
-
+       
        
  
    
@@ -280,6 +271,34 @@ namespace ManagementPanel
         private void tbcMain_SelectedIndexChanged(object sender, EventArgs e)
         {
             
+        }
+
+        private void cmbCustomer_Click(object sender, EventArgs e)
+        {
+            string str = "";
+            str = "select DFClientID,RIGHT(ClientName, LEN(ClientName) - 3) as ClientName from DFClients where CountryCode is not null and DFClients.IsDealer=1 ";
+            str = str + " and DFClientID in (select distinct clientid from AMPlayerTokens) ";
+            str = str + " order by RIGHT(ClientName, LEN(ClientName) - 3) ";
+            objMainClass.fnFillComboBox(str, cmbCustomer, "DFClientID", "ClientName", "");
+        }
+
+        private void cmbSearchCustomer_Click(object sender, EventArgs e)
+        {
+            string str = "";
+            str = "select DFClientID,RIGHT(ClientName, LEN(ClientName) - 3) as ClientName from DFClients where CountryCode is not null and DFClients.IsDealer=1 ";
+            str = str + " and DFClientID in (select distinct clientid from AMPlayerTokens) ";
+            str = str + " order by RIGHT(ClientName, LEN(ClientName) - 3) ";
+            objMainClass.fnFillComboBox(str, cmbSearchCustomer, "DFClientID", "ClientName", "");
+        }
+
+        private void cmbSearchCustomer_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FillStreamData(0);
+        }
+
+        private void cmbSearchLinence_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FillStreamData(0);
         }
     }
 }

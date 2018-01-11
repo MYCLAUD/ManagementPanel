@@ -157,7 +157,7 @@ namespace ManagementPanel
         {
             if (Convert.ToInt32(cmbCountryName.SelectedValue) == 0) return;
             string strState = "";
-            strState = "select * from tbState where countryId= " + Convert.ToInt32(cmbCountryName.SelectedValue);
+            strState = "select * from tbState where countryId= " + Convert.ToInt32(cmbCountryName.SelectedValue) + " order by StateName";
             objMainClass.fnFillComboBox(strState, cmbStateName, "stateid", "StateName", "");
         }
 
@@ -165,7 +165,7 @@ namespace ManagementPanel
         {
             if (Convert.ToInt32(cmbStateName.SelectedValue) == 0) return;
             string strCity = "";
-            strCity = "select * from tbCity where countryId= " + Convert.ToInt32(cmbCountryName.SelectedValue) + " and stateid =" + Convert.ToInt32(cmbStateName.SelectedValue);
+            strCity = "select * from tbCity where countryId= " + Convert.ToInt32(cmbCountryName.SelectedValue) + " and stateid =" + Convert.ToInt32(cmbStateName.SelectedValue)+ " order by CityName ";
             objMainClass.fnFillComboBox(strCity, cmbCityName, "Cityid", "CityName", "");
         }
 
@@ -367,10 +367,10 @@ namespace ManagementPanel
             dgSpl.Columns["fName"].Width = 200;
             dgSpl.Columns["fName"].Visible = true;
             dgSpl.Columns["fName"].ReadOnly = true;
-            dgSpl.Columns["fName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dgSpl.Columns["fName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
 
             dgSpl.Columns.Add("pName", "Playlist Name");
-            dgSpl.Columns["pName"].Width = 200;
+            dgSpl.Columns["pName"].Width = 400;
             dgSpl.Columns["pName"].Visible = true;
             dgSpl.Columns["pName"].ReadOnly = true;
             dgSpl.Columns["pName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
@@ -379,13 +379,13 @@ namespace ManagementPanel
             dgSpl.Columns["sTime"].Width = 200;
             dgSpl.Columns["sTime"].Visible = true;
             dgSpl.Columns["sTime"].ReadOnly = true;
-            dgSpl.Columns["sTime"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dgSpl.Columns["sTime"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
 
             dgSpl.Columns.Add("eTime", "End Time");
             dgSpl.Columns["eTime"].Width = 200;
             dgSpl.Columns["eTime"].Visible = true;
             dgSpl.Columns["eTime"].ReadOnly = true;
-            dgSpl.Columns["eTime"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dgSpl.Columns["eTime"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
 
             dgSpl.Columns.Add("wDay", "Week Day");
             dgSpl.Columns["wDay"].Width = 200;
@@ -402,7 +402,13 @@ namespace ManagementPanel
             EditAdvt.Width = 70;
             EditAdvt.Visible = true;
             dgSpl.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-           
+
+            dgSpl.Columns.Add("TokenId", "TokenId");
+            dgSpl.Columns["TokenId"].Width = 0;
+            dgSpl.Columns["TokenId"].Visible = false;
+            dgSpl.Columns["TokenId"].ReadOnly = true;
+
+
         }
         private void FillPlaylist()
         {
@@ -422,6 +428,7 @@ namespace ManagementPanel
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["cName"].Value = dtDetail.Rows[i]["cName"].ToString();
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["fName"].Value = dtDetail.Rows[i]["FormatName"].ToString();
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["pName"].Value = dtDetail.Rows[i]["pName"].ToString();
+                    dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["tokenid"].Value = dtDetail.Rows[i]["MainTokenid"].ToString();
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["sTime"].Value = string.Format(fi, "{0:hh:mm tt}", Convert.ToDateTime(dtDetail.Rows[i]["StartTime"]));
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["eTime"].Value = string.Format(fi, "{0:hh:mm tt}", Convert.ToDateTime(dtDetail.Rows[i]["EndTime"]));
                     dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["wDay"].Value = GetWeekName(Convert.ToInt32(dtDetail.Rows[i]["pSchId"]));
@@ -517,6 +524,9 @@ namespace ManagementPanel
                     rdoStore.Checked = Convert.ToBoolean(dtDetail.Rows[i]["Store"]);
                     rdoStream.Checked = Convert.ToBoolean(dtDetail.Rows[i]["Stream"]);
                     dtpExpiryDate.Value = Convert.ToDateTime(string.Format("{0:dd/MMM/yyyy}", dtDetail.Rows[i]["cDate"]));
+
+                    txtDeviceId.Text = dtDetail.Rows[i]["deviceId"].ToString();
+
                     if (Convert.ToBoolean(dtDetail.Rows[i]["IsStopControl"]) == true)
                     {
                         rdoControl.Checked = true;
@@ -581,6 +591,14 @@ namespace ManagementPanel
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
+            if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
+            StaticClass.constr.Open();
+            SqlCommand cmdPublish = new SqlCommand();
+            cmdPublish.Connection = StaticClass.constr;
+            cmdPublish.CommandText = "update AMPlayerTokens set isPublish=0 where tokenid=" + Convert.ToInt32(dgSpl.Rows[dgSpl.CurrentCell.RowIndex].Cells["tokenid"].Value) + "";
+            cmdPublish.ExecuteNonQuery();
+            StaticClass.constr.Close();
+
             UpdateMainData();
             FillPlaylist();
             ReturnSchId = 0;

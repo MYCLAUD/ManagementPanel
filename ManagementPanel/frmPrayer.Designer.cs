@@ -584,7 +584,7 @@
             this.btnRefersh.Name = "btnRefersh";
             this.btnRefersh.Size = new System.Drawing.Size(95, 38);
             this.btnRefersh.TabIndex = 14;
-            this.btnRefersh.Text = "Refersh";
+            this.btnRefersh.Text = "Refresh";
             this.btnRefersh.UseVisualStyleBackColor = false;
             this.btnRefersh.Click += new System.EventHandler(this.btnRefersh_Click);
             // 

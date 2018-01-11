@@ -106,30 +106,16 @@
             this.panState = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.dgState = new System.Windows.Forms.DataGridView();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.cmbCountryName = new System.Windows.Forms.ComboBox();
-            this.label6 = new System.Windows.Forms.Label();
             this.panCity = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
             this.dgCity = new System.Windows.Forms.DataGridView();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.cmbStateName = new System.Windows.Forms.ComboBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.cmbCityCountry = new System.Windows.Forms.ComboBox();
-            this.label7 = new System.Windows.Forms.Label();
             this.panDealer = new System.Windows.Forms.Panel();
             this.panel8 = new System.Windows.Forms.Panel();
             this.dgDealer = new System.Windows.Forms.DataGridView();
-            this.panel6 = new System.Windows.Forms.Panel();
-            this.cmbDealerCountry = new System.Windows.Forms.ComboBox();
-            this.label4 = new System.Windows.Forms.Label();
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
             this.panToken = new System.Windows.Forms.Panel();
             this.panel13 = new System.Windows.Forms.Panel();
             this.dgToken = new System.Windows.Forms.DataGridView();
-            this.panel14 = new System.Windows.Forms.Panel();
-            this.cmbDealer = new System.Windows.Forms.ComboBox();
-            this.label8 = new System.Windows.Forms.Label();
             this.OpenDialog = new System.Windows.Forms.OpenFileDialog();
             this.bgAdvtWorker = new System.ComponentModel.BackgroundWorker();
             this.panel12 = new System.Windows.Forms.Panel();
@@ -157,20 +143,16 @@
             this.panState.SuspendLayout();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgState)).BeginInit();
-            this.panel2.SuspendLayout();
             this.panCity.SuspendLayout();
             this.panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgCity)).BeginInit();
-            this.panel4.SuspendLayout();
             this.panDealer.SuspendLayout();
             this.panel8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgDealer)).BeginInit();
-            this.panel6.SuspendLayout();
             this.tlpMain.SuspendLayout();
             this.panToken.SuspendLayout();
             this.panel13.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgToken)).BeginInit();
-            this.panel14.SuspendLayout();
             this.panel12.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgAdvt)).BeginInit();
             this.panel11.SuspendLayout();
@@ -543,7 +525,7 @@
             this.btnRefersh.Name = "btnRefersh";
             this.btnRefersh.Size = new System.Drawing.Size(95, 38);
             this.btnRefersh.TabIndex = 196;
-            this.btnRefersh.Text = "Refersh";
+            this.btnRefersh.Text = "Refresh";
             this.btnRefersh.UseVisualStyleBackColor = false;
             this.btnRefersh.Click += new System.EventHandler(this.btnRefersh_Click);
             // 
@@ -1001,6 +983,7 @@
             this.dgCountry.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgCountry.Size = new System.Drawing.Size(155, 116);
             this.dgCountry.TabIndex = 4;
+            this.dgCountry.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgCountry_CellContentClick);
             this.dgCountry.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgCountry_CellPainting);
             this.dgCountry.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgCountry_CellValueChanged);
             this.dgCountry.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgCountry_CurrentCellDirtyStateChanged);
@@ -1010,7 +993,6 @@
             this.panState.BackColor = System.Drawing.Color.Transparent;
             this.panState.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panState.Controls.Add(this.panel3);
-            this.panState.Controls.Add(this.panel2);
             this.panState.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panState.Location = new System.Drawing.Point(232, 3);
             this.panState.Name = "panState";
@@ -1022,9 +1004,9 @@
             // 
             this.panel3.Controls.Add(this.dgState);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel3.Location = new System.Drawing.Point(0, 62);
+            this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(196, 123);
+            this.panel3.Size = new System.Drawing.Size(196, 185);
             this.panel3.TabIndex = 7;
             // 
             // dgState
@@ -1068,51 +1050,16 @@
             this.dgState.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgState.Size = new System.Drawing.Size(155, 116);
             this.dgState.TabIndex = 5;
+            this.dgState.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgState_CellContentClick);
             this.dgState.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgState_CellPainting);
             this.dgState.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgState_CellValueChanged);
             this.dgState.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgState_CurrentCellDirtyStateChanged);
-            // 
-            // panel2
-            // 
-            this.panel2.Controls.Add(this.cmbCountryName);
-            this.panel2.Controls.Add(this.label6);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(0, 0);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(196, 62);
-            this.panel2.TabIndex = 6;
-            // 
-            // cmbCountryName
-            // 
-            this.cmbCountryName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.cmbCountryName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.cmbCountryName.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbCountryName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbCountryName.FormattingEnabled = true;
-            this.cmbCountryName.Location = new System.Drawing.Point(8, 27);
-            this.cmbCountryName.Name = "cmbCountryName";
-            this.cmbCountryName.Size = new System.Drawing.Size(177, 25);
-            this.cmbCountryName.TabIndex = 189;
-            this.cmbCountryName.SelectedIndexChanged += new System.EventHandler(this.cmbCountryName_SelectedIndexChanged);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.BackColor = System.Drawing.Color.Transparent;
-            this.label6.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(5, 4);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(99, 19);
-            this.label6.TabIndex = 188;
-            this.label6.Text = "Country Name";
             // 
             // panCity
             // 
             this.panCity.BackColor = System.Drawing.Color.Transparent;
             this.panCity.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panCity.Controls.Add(this.panel5);
-            this.panCity.Controls.Add(this.panel4);
             this.panCity.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panCity.Location = new System.Drawing.Point(438, 3);
             this.panCity.Name = "panCity";
@@ -1124,9 +1071,9 @@
             // 
             this.panel5.Controls.Add(this.dgCity);
             this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel5.Location = new System.Drawing.Point(0, 122);
+            this.panel5.Location = new System.Drawing.Point(0, 0);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(196, 63);
+            this.panel5.Size = new System.Drawing.Size(196, 185);
             this.panel5.TabIndex = 8;
             // 
             // dgCity
@@ -1175,74 +1122,11 @@
             this.dgCity.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgCity_CellValueChanged);
             this.dgCity.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgCity_CurrentCellDirtyStateChanged);
             // 
-            // panel4
-            // 
-            this.panel4.Controls.Add(this.cmbStateName);
-            this.panel4.Controls.Add(this.label9);
-            this.panel4.Controls.Add(this.cmbCityCountry);
-            this.panel4.Controls.Add(this.label7);
-            this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel4.Location = new System.Drawing.Point(0, 0);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(196, 122);
-            this.panel4.TabIndex = 7;
-            // 
-            // cmbStateName
-            // 
-            this.cmbStateName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.cmbStateName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.cmbStateName.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbStateName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbStateName.FormattingEnabled = true;
-            this.cmbStateName.Location = new System.Drawing.Point(8, 78);
-            this.cmbStateName.Name = "cmbStateName";
-            this.cmbStateName.Size = new System.Drawing.Size(166, 25);
-            this.cmbStateName.TabIndex = 191;
-            this.cmbStateName.SelectedIndexChanged += new System.EventHandler(this.cmbStateName_SelectedIndexChanged);
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.BackColor = System.Drawing.Color.Transparent;
-            this.label9.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(5, 55);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(80, 19);
-            this.label9.TabIndex = 190;
-            this.label9.Text = "State Name";
-            // 
-            // cmbCityCountry
-            // 
-            this.cmbCityCountry.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.cmbCityCountry.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.cmbCityCountry.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbCityCountry.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbCityCountry.FormattingEnabled = true;
-            this.cmbCityCountry.Location = new System.Drawing.Point(8, 27);
-            this.cmbCityCountry.Name = "cmbCityCountry";
-            this.cmbCityCountry.Size = new System.Drawing.Size(166, 25);
-            this.cmbCityCountry.TabIndex = 189;
-            this.cmbCityCountry.SelectedIndexChanged += new System.EventHandler(this.cmbCityCountry_SelectedIndexChanged);
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.BackColor = System.Drawing.Color.Transparent;
-            this.label7.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(5, 4);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(99, 19);
-            this.label7.TabIndex = 188;
-            this.label7.Text = "Country Name";
-            // 
             // panDealer
             // 
             this.panDealer.BackColor = System.Drawing.Color.Transparent;
             this.panDealer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panDealer.Controls.Add(this.panel8);
-            this.panDealer.Controls.Add(this.panel6);
             this.panDealer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panDealer.Location = new System.Drawing.Point(644, 3);
             this.panDealer.Name = "panDealer";
@@ -1254,9 +1138,9 @@
             // 
             this.panel8.Controls.Add(this.dgDealer);
             this.panel8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel8.Location = new System.Drawing.Point(0, 62);
+            this.panel8.Location = new System.Drawing.Point(0, 0);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(196, 123);
+            this.panel8.Size = new System.Drawing.Size(196, 185);
             this.panel8.TabIndex = 8;
             // 
             // dgDealer
@@ -1300,45 +1184,10 @@
             this.dgDealer.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgDealer.Size = new System.Drawing.Size(155, 116);
             this.dgDealer.TabIndex = 5;
+            this.dgDealer.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgDealer_CellContentClick);
             this.dgDealer.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgDealer_CellPainting);
             this.dgDealer.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgDealer_CellValueChanged);
             this.dgDealer.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgDealer_CurrentCellDirtyStateChanged);
-            // 
-            // panel6
-            // 
-            this.panel6.Controls.Add(this.cmbDealerCountry);
-            this.panel6.Controls.Add(this.label4);
-            this.panel6.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel6.Location = new System.Drawing.Point(0, 0);
-            this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(196, 62);
-            this.panel6.TabIndex = 7;
-            this.panel6.Visible = false;
-            // 
-            // cmbDealerCountry
-            // 
-            this.cmbDealerCountry.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.cmbDealerCountry.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.cmbDealerCountry.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbDealerCountry.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbDealerCountry.FormattingEnabled = true;
-            this.cmbDealerCountry.Location = new System.Drawing.Point(8, 27);
-            this.cmbDealerCountry.Name = "cmbDealerCountry";
-            this.cmbDealerCountry.Size = new System.Drawing.Size(170, 25);
-            this.cmbDealerCountry.TabIndex = 189;
-            this.cmbDealerCountry.SelectedIndexChanged += new System.EventHandler(this.cmbDealerCountry_SelectedIndexChanged);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.BackColor = System.Drawing.Color.Transparent;
-            this.label4.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(5, 5);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(99, 19);
-            this.label4.TabIndex = 188;
-            this.label4.Text = "Country Name";
             // 
             // tlpMain
             // 
@@ -1367,7 +1216,6 @@
             // 
             this.panToken.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panToken.Controls.Add(this.panel13);
-            this.panToken.Controls.Add(this.panel14);
             this.panToken.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panToken.Location = new System.Drawing.Point(850, 3);
             this.panToken.Name = "panToken";
@@ -1379,9 +1227,9 @@
             // 
             this.panel13.Controls.Add(this.dgToken);
             this.panel13.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel13.Location = new System.Drawing.Point(0, 62);
+            this.panel13.Location = new System.Drawing.Point(0, 0);
             this.panel13.Name = "panel13";
-            this.panel13.Size = new System.Drawing.Size(393, 123);
+            this.panel13.Size = new System.Drawing.Size(393, 185);
             this.panel13.TabIndex = 9;
             // 
             // dgToken
@@ -1429,41 +1277,6 @@
             this.dgToken.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgToken_CellPainting);
             this.dgToken.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgToken_CellValueChanged);
             this.dgToken.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgToken_CurrentCellDirtyStateChanged);
-            // 
-            // panel14
-            // 
-            this.panel14.Controls.Add(this.cmbDealer);
-            this.panel14.Controls.Add(this.label8);
-            this.panel14.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel14.Location = new System.Drawing.Point(0, 0);
-            this.panel14.Name = "panel14";
-            this.panel14.Size = new System.Drawing.Size(393, 62);
-            this.panel14.TabIndex = 8;
-            // 
-            // cmbDealer
-            // 
-            this.cmbDealer.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.cmbDealer.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.cmbDealer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbDealer.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbDealer.FormattingEnabled = true;
-            this.cmbDealer.Location = new System.Drawing.Point(8, 27);
-            this.cmbDealer.Name = "cmbDealer";
-            this.cmbDealer.Size = new System.Drawing.Size(182, 25);
-            this.cmbDealer.TabIndex = 189;
-            this.cmbDealer.SelectedIndexChanged += new System.EventHandler(this.cmbDealer_SelectedIndexChanged);
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.BackColor = System.Drawing.Color.Transparent;
-            this.label8.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.label8.ForeColor = System.Drawing.Color.White;
-            this.label8.Location = new System.Drawing.Point(5, 3);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(88, 19);
-            this.label8.TabIndex = 188;
-            this.label8.Text = "Dealer Name";
             // 
             // OpenDialog
             // 
@@ -1732,24 +1545,16 @@
             this.panState.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgState)).EndInit();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
             this.panCity.ResumeLayout(false);
             this.panel5.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgCity)).EndInit();
-            this.panel4.ResumeLayout(false);
-            this.panel4.PerformLayout();
             this.panDealer.ResumeLayout(false);
             this.panel8.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgDealer)).EndInit();
-            this.panel6.ResumeLayout(false);
-            this.panel6.PerformLayout();
             this.tlpMain.ResumeLayout(false);
             this.panToken.ResumeLayout(false);
             this.panel13.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgToken)).EndInit();
-            this.panel14.ResumeLayout(false);
-            this.panel14.PerformLayout();
             this.panel12.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgAdvt)).EndInit();
             this.panel11.ResumeLayout(false);
@@ -1807,19 +1612,8 @@
         private System.Windows.Forms.DataGridView dgState;
         private System.Windows.Forms.DataGridView dgCity;
         private System.Windows.Forms.DataGridView dgDealer;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.ComboBox cmbCountryName;
         private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.ComboBox cmbCityCountry;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.ComboBox cmbStateName;
         private System.Windows.Forms.Panel panel5;
-        private System.Windows.Forms.Panel panel6;
-        private System.Windows.Forms.ComboBox cmbDealerCountry;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Panel panel8;
         private System.Windows.Forms.Button btnRefersh;
         private System.Windows.Forms.Button btnSave;
@@ -1834,9 +1628,6 @@
         private System.Windows.Forms.Button btnDialog;
         private System.Windows.Forms.CheckBox chkDealerClient;
         private System.Windows.Forms.Panel panToken;
-        private System.Windows.Forms.Panel panel14;
-        private System.Windows.Forms.ComboBox cmbDealer;
-        private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Panel panel13;
         private System.Windows.Forms.DataGridView dgToken;
         private System.Windows.Forms.Label label12;

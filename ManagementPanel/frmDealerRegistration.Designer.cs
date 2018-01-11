@@ -29,11 +29,15 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmDealerRegistration));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle25 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle26 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle27 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnUnload = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label16 = new System.Windows.Forms.Label();
+            this.txtSupportPhNo = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.txtSupportEmail = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.chkAsianToken = new System.Windows.Forms.CheckBox();
             this.txtAsianToken = new System.Windows.Forms.TextBox();
@@ -128,6 +132,10 @@
             // 
             this.panel1.BackColor = System.Drawing.Color.Transparent;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel1.Controls.Add(this.label16);
+            this.panel1.Controls.Add(this.txtSupportPhNo);
+            this.panel1.Controls.Add(this.label14);
+            this.panel1.Controls.Add(this.txtSupportEmail);
             this.panel1.Controls.Add(this.label9);
             this.panel1.Controls.Add(this.chkAsianToken);
             this.panel1.Controls.Add(this.txtAsianToken);
@@ -175,6 +183,46 @@
             this.panel1.Size = new System.Drawing.Size(1280, 195);
             this.panel1.TabIndex = 10;
             // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.BackColor = System.Drawing.Color.Transparent;
+            this.label16.Font = new System.Drawing.Font("Arial", 9.75F);
+            this.label16.ForeColor = System.Drawing.Color.White;
+            this.label16.Location = new System.Drawing.Point(296, 137);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(97, 16);
+            this.label16.TabIndex = 198;
+            this.label16.Text = "Support Ph. No";
+            // 
+            // txtSupportPhNo
+            // 
+            this.txtSupportPhNo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtSupportPhNo.Location = new System.Drawing.Point(404, 133);
+            this.txtSupportPhNo.Name = "txtSupportPhNo";
+            this.txtSupportPhNo.Size = new System.Drawing.Size(208, 23);
+            this.txtSupportPhNo.TabIndex = 197;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.BackColor = System.Drawing.Color.Transparent;
+            this.label14.Font = new System.Drawing.Font("Arial", 9.75F);
+            this.label14.ForeColor = System.Drawing.Color.White;
+            this.label14.Location = new System.Drawing.Point(3, 137);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(88, 16);
+            this.label14.TabIndex = 196;
+            this.label14.Text = "Support email";
+            // 
+            // txtSupportEmail
+            // 
+            this.txtSupportEmail.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtSupportEmail.Location = new System.Drawing.Point(95, 133);
+            this.txtSupportEmail.Name = "txtSupportEmail";
+            this.txtSupportEmail.Size = new System.Drawing.Size(195, 23);
+            this.txtSupportEmail.TabIndex = 195;
+            // 
             // label9
             // 
             this.label9.AutoSize = true;
@@ -193,7 +241,7 @@
             this.chkAsianToken.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.chkAsianToken.Font = new System.Drawing.Font("Arial", 9.75F);
             this.chkAsianToken.ForeColor = System.Drawing.Color.White;
-            this.chkAsianToken.Location = new System.Drawing.Point(613, 136);
+            this.chkAsianToken.Location = new System.Drawing.Point(940, 5);
             this.chkAsianToken.Name = "chkAsianToken";
             this.chkAsianToken.Size = new System.Drawing.Size(98, 20);
             this.chkAsianToken.TabIndex = 193;
@@ -206,7 +254,7 @@
             // 
             this.txtAsianToken.Enabled = false;
             this.txtAsianToken.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtAsianToken.Location = new System.Drawing.Point(738, 133);
+            this.txtAsianToken.Location = new System.Drawing.Point(1065, 2);
             this.txtAsianToken.Name = "txtAsianToken";
             this.txtAsianToken.Size = new System.Drawing.Size(37, 23);
             this.txtAsianToken.TabIndex = 192;
@@ -228,7 +276,7 @@
             this.chkSanjivaniToken.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.chkSanjivaniToken.Font = new System.Drawing.Font("Arial", 9.75F);
             this.chkSanjivaniToken.ForeColor = System.Drawing.Color.White;
-            this.chkSanjivaniToken.Location = new System.Drawing.Point(774, 136);
+            this.chkSanjivaniToken.Location = new System.Drawing.Point(1101, 5);
             this.chkSanjivaniToken.Name = "chkSanjivaniToken";
             this.chkSanjivaniToken.Size = new System.Drawing.Size(116, 20);
             this.chkSanjivaniToken.TabIndex = 190;
@@ -241,7 +289,7 @@
             // 
             this.txtSanjivaniToken.Enabled = false;
             this.txtSanjivaniToken.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSanjivaniToken.Location = new System.Drawing.Point(892, 133);
+            this.txtSanjivaniToken.Location = new System.Drawing.Point(1219, 2);
             this.txtSanjivaniToken.Name = "txtSanjivaniToken";
             this.txtSanjivaniToken.Size = new System.Drawing.Size(36, 23);
             this.txtSanjivaniToken.TabIndex = 189;
@@ -354,9 +402,9 @@
             // txtPlayerServiceName
             // 
             this.txtPlayerServiceName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtPlayerServiceName.Location = new System.Drawing.Point(96, 133);
+            this.txtPlayerServiceName.Location = new System.Drawing.Point(389, 7);
             this.txtPlayerServiceName.Name = "txtPlayerServiceName";
-            this.txtPlayerServiceName.Size = new System.Drawing.Size(194, 23);
+            this.txtPlayerServiceName.Size = new System.Drawing.Size(37, 23);
             this.txtPlayerServiceName.TabIndex = 179;
             this.txtPlayerServiceName.Visible = false;
             // 
@@ -366,7 +414,7 @@
             this.label15.BackColor = System.Drawing.Color.Transparent;
             this.label15.Font = new System.Drawing.Font("Arial", 9.75F);
             this.label15.ForeColor = System.Drawing.Color.White;
-            this.label15.Location = new System.Drawing.Point(3, 137);
+            this.label15.Location = new System.Drawing.Point(295, 11);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(88, 16);
             this.label15.TabIndex = 180;
@@ -410,7 +458,7 @@
             // txtVatnumber
             // 
             this.txtVatnumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtVatnumber.Location = new System.Drawing.Point(315, 137);
+            this.txtVatnumber.Location = new System.Drawing.Point(892, 6);
             this.txtVatnumber.Name = "txtVatnumber";
             this.txtVatnumber.Size = new System.Drawing.Size(51, 23);
             this.txtVatnumber.TabIndex = 148;
@@ -717,7 +765,7 @@
             this.btnMailResend.Name = "btnMailResend";
             this.btnMailResend.Size = new System.Drawing.Size(117, 38);
             this.btnMailResend.TabIndex = 12;
-            this.btnMailResend.Text = "Resend Mail";
+            this.btnMailResend.Text = "Send Mail";
             this.btnMailResend.UseVisualStyleBackColor = false;
             this.btnMailResend.Click += new System.EventHandler(this.btnMailResend_Click);
             // 
@@ -735,7 +783,7 @@
             this.btnRefersh.Name = "btnRefersh";
             this.btnRefersh.Size = new System.Drawing.Size(95, 38);
             this.btnRefersh.TabIndex = 11;
-            this.btnRefersh.Text = "Refersh";
+            this.btnRefersh.Text = "Refresh";
             this.btnRefersh.UseVisualStyleBackColor = false;
             this.btnRefersh.Click += new System.EventHandler(this.btnRefersh_Click);
             // 
@@ -838,38 +886,38 @@
             this.dgDealerRegistration.AllowUserToResizeRows = false;
             this.dgDealerRegistration.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(51)))), ((int)(((byte)(45)))));
             this.dgDealerRegistration.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            dataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle25.BackColor = System.Drawing.Color.Gray;
-            dataGridViewCellStyle25.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle25.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle25.SelectionBackColor = System.Drawing.Color.Gray;
-            dataGridViewCellStyle25.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle25.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgDealerRegistration.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle25;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Gray;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.Gray;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgDealerRegistration.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgDealerRegistration.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgDealerRegistration.Cursor = System.Windows.Forms.Cursors.Hand;
-            dataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle26.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle26.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle26.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle26.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(162)))), ((int)(((byte)(175)))));
-            dataGridViewCellStyle26.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle26.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgDealerRegistration.DefaultCellStyle = dataGridViewCellStyle26;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(162)))), ((int)(((byte)(175)))));
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgDealerRegistration.DefaultCellStyle = dataGridViewCellStyle2;
             this.dgDealerRegistration.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgDealerRegistration.GridColor = System.Drawing.Color.Gainsboro;
             this.dgDealerRegistration.Location = new System.Drawing.Point(0, 0);
             this.dgDealerRegistration.MultiSelect = false;
             this.dgDealerRegistration.Name = "dgDealerRegistration";
             this.dgDealerRegistration.ReadOnly = true;
-            dataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle27.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle27.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle27.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle27.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(162)))), ((int)(((byte)(175)))));
-            dataGridViewCellStyle27.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle27.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgDealerRegistration.RowHeadersDefaultCellStyle = dataGridViewCellStyle27;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(162)))), ((int)(((byte)(175)))));
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgDealerRegistration.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dgDealerRegistration.RowHeadersVisible = false;
             this.dgDealerRegistration.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgDealerRegistration.Size = new System.Drawing.Size(1276, 300);
@@ -1071,5 +1119,9 @@
         private System.Windows.Forms.CheckBox chkAsianToken;
         private System.Windows.Forms.TextBox txtAsianToken;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.TextBox txtSupportPhNo;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox txtSupportEmail;
     }
 }

@@ -1813,9 +1813,9 @@ namespace ManagementPanel
             {
                 string filename = txtPath.Text;
                 FileInfo objFile = new FileInfo(filename);
-                string ftpServerIP = "ftp://85.195.82.94:21/AMMusicFiles/ripper/AdvtSongs/" + ReturnAdvtId + ".mp4";
-                string ftpUserName = "harish";
-                string ftpPassword = "Mohali123";
+                string ftpServerIP = "ftp://37.61.214.210:21/AMMusicFiles/ripper/AdvtSongs/" + ReturnAdvtId + ".mp4";
+                string ftpUserName = "ftpTalwinder";
+                string ftpPassword = "Roop!@#123";
 
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(new Uri(ftpServerIP));
                 request.Method = WebRequestMethods.Ftp.UploadFile;
@@ -1900,7 +1900,7 @@ namespace ManagementPanel
             cmd.Parameters["@AdvtEndDate"].Value = dtpEndDate.Value.ToString("dd/MMM/yyyy");
 
             cmd.Parameters.Add(new SqlParameter("@AdvtFilePath", SqlDbType.VarChar));
-            cmd.Parameters["@AdvtFilePath"].Value = "http://85.195.82.94/AdvtSongs/" + ReturnAdvtId + ".mp4";
+            cmd.Parameters["@AdvtFilePath"].Value = "http://37.61.214.210/AdvtSongs/" + ReturnAdvtId + ".mp4";
 
             cmd.Parameters.Add(new SqlParameter("@AdvtPlayertype", SqlDbType.VarChar));
             cmd.Parameters["@AdvtPlayertype"].Value = cmbPlayerType.Text.Trim();
@@ -2727,9 +2727,9 @@ namespace ManagementPanel
                     {
                         try
                         {
-                            string ftpServerIP = "85.195.82.94:21/AMMusicFiles/ripper/AdvtSongs/" + ReturnAdvtId + ".mp4";
-                            string ftpUserName = "harish";
-                            string ftpPassword = "Mohali123";
+                            string ftpServerIP = "37.61.214.210:21/AMMusicFiles/ripper/AdvtSongs/" + ReturnAdvtId + ".mp4";
+                            string ftpUserName = "ftpTalwinder";
+                            string ftpPassword = "Roop!@#123";
                             FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://" + ftpServerIP + "/" + dgAdvt.Rows[e.RowIndex].Cells[0].Value + ".mp4");
                             request.Credentials = new NetworkCredential(ftpUserName, ftpPassword);
                             request.Method = WebRequestMethods.Ftp.DeleteFile;

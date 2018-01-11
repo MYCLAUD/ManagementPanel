@@ -257,7 +257,7 @@ namespace ManagementPanel
         private void btnRegistration_Click(object sender, EventArgs e)
         {
             SetButtonColor(btnRegistration);
-            sprOpenForm(Application.ProductName + ".frmRegistration");
+            sprOpenForm(Application.ProductName + ".frmCopyPlaylistSchedule");
             //frmRegistration frm = new frmRegistration();
             //frm.MdiParent = this;
             //frm.Show();
@@ -292,8 +292,12 @@ namespace ManagementPanel
             btnDotNetStream.BackColor = Color.FromArgb(bLight.A, bLight.R, bLight.G, bLight.B);
             btnMobileAppStream.BackColor = Color.FromArgb(bLight.A, bLight.R, bLight.G, bLight.B);
             btnChangeMiddleImg.BackColor = Color.FromArgb(bLight.A, bLight.R, bLight.G, bLight.B);
-             
+            btnCustomerContents.BackColor = Color.FromArgb(bLight.A, bLight.R, bLight.G, bLight.B);
+            btnSeparation.BackColor = Color.FromArgb(bLight.A, bLight.R, bLight.G, bLight.B);
             //btnName.BackColor = Color.FromArgb(light.A,light.R,light.G,light.B);
+            btnAssignStream.BackColor = Color.FromArgb(bLight.A, bLight.R, bLight.G, bLight.B);
+            btnAssignMobileStream.BackColor = Color.FromArgb(bLight.A, bLight.R, bLight.G, bLight.B);
+            btnOtherUser.BackColor = Color.FromArgb(bLight.A, bLight.R, bLight.G, bLight.B);
             btnName.BackColor = Color.White;
         }
         private void SetButtonColorSpl(Button btnName)
@@ -307,6 +311,7 @@ namespace ManagementPanel
             btnPlayerAdvertisement.BackColor = Color.FromArgb(55, 51, 45);
             btnDirectUpload.BackColor = Color.FromArgb(55, 51, 45);
             btnLinks.BackColor = Color.FromArgb(55, 51, 45);
+            btnCopyData.BackColor = Color.FromArgb(55, 51, 45);
             btnName.BackColor = Color.DimGray;
         }
         private void btnDealerDetail_Click(object sender, EventArgs e)
@@ -388,11 +393,13 @@ namespace ManagementPanel
         private void btnTokenGeneration_Click(object sender, EventArgs e)
         {
             SetButtonColor(btnTokenGeneration);
-            lblOpenType.Text = "Token";
-            panTokenOption.Dock = DockStyle.Fill;
-            panTokenOption.Visible = true;
+            sprOpenForm(Application.ProductName + ".frmCopyPrayerTimig");
+            //frmRegistration frm = new frmRegistration();
+            //frm.MdiParent = this;
+            //frm.Show();
+            //frm.Dock = DockStyle.Fill;
+            panTokenOption.Visible = false;
             panLinks.Visible = false;
-            panLinks.Dock = DockStyle.None;
 
 
 
@@ -502,37 +509,7 @@ namespace ManagementPanel
             panTokenOption.Visible = false;
             panLinks.Visible = false;
         }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://146.0.229.66/PlayerFiles/setups/normal/CL/publish.htm");
-        }
-
-        private void label6_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://146.0.229.66/PlayerFiles/setups/WinXp/normal/CL/publish.htm");
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://146.0.229.66/PlayerFiles/setups/normal/Asian/publish.htm");
-        }
-
-        private void label7_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://146.0.229.66/PlayerFiles/setups/WinXp/normal/Asian/publish.htm");
-        }
-
-        private void label4_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://146.0.229.66/PlayerFiles/setups/normal/CR/publish.htm");
-        }
-
-        private void label8_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://146.0.229.66/PlayerFiles/setups/WinXp/normal/CR/publish.htm");
-        }
-
+ 
          
 
         private void btnLinks_Click(object sender, EventArgs e)
@@ -578,30 +555,7 @@ namespace ManagementPanel
             panLinks.Visible = false;
         }
 
-        private void label12_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://manageyourclaudio.eu/CopyleftTokenDetails.rar");
-        }
-
-        private void label14_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://146.0.229.66/PlayerFiles/setups/TokenLicenseHolder.msi");
-        }
-                                
-        private void label17_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://146.0.229.66/PlayerFiles/setups/Total_Centomedia_MYM.msi");
-        }
-
-        private void label19_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://146.0.229.66/PlayerFiles/setups/remote.exe");
-        }
-
-        private void label21_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://146.0.229.66/PlayerFiles/setups/GetUnquieId.rar");
-        }
+         
 
         
         private void btnStreamShedule_Click(object sender, EventArgs e)
@@ -612,29 +566,8 @@ namespace ManagementPanel
             panLinks.Visible = false;
         }
          
+          
         
-        
-       
-        private void label32_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://146.0.229.66/PlayerFiles/setups/NativeCL/publish.htm");
-        }
-
-        private void label34_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://146.0.229.66/PlayerFiles/setups/WinXp/NativeCL/publish.htm");
-        }
-
-        private void label33_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://146.0.229.66/PlayerFiles/setups/NativeCR/publish.htm");
-        }
-
-        private void label35_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://146.0.229.66/PlayerFiles/setups/WinXp/NativeCR/publish.htm");
-        }
-
         
         private void frmMain_SizeChanged(object sender, EventArgs e)
         {
@@ -719,15 +652,7 @@ namespace ManagementPanel
             panLinks.Visible = false;
         }
 
-        private void label26_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://146.0.229.66/PlayerFiles/setups/NativeAsian/publish.htm");
-        }
-
-        private void label27_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://146.0.229.66/PlayerFiles/setups/WinXp/NativeAsian/publish.htm");
-        }
+        
 
         private void btnVideoAdvt_Click(object sender, EventArgs e)
         {
@@ -813,10 +738,92 @@ namespace ManagementPanel
             }
         }
 
+        private void btnCustomerContents_Click(object sender, EventArgs e)
+        {
+            SetButtonColor(btnCustomerContents);
+            sprOpenForm(Application.ProductName + ".frmDealerContent");
+            panTokenOption.Visible = false;
+            panLinks.Visible = false;
+        }
+
+        private void btnCopyData_Click(object sender, EventArgs e)
+        {
+            SetButtonColorSpl(btnCopyData);
+            SetButtonColor(btnRegistration);
+            sprOpenForm(Application.ProductName + ".frmCopyPlaylistSchedule");
+            panSingleUsers.Visible = true;
+            panManagementDealers.Visible = false;
+            panStreaming.Visible = false;
+            panManagementPlaylists.Visible = false;
+            panAdvt.Visible = false;
+
+            panTokenOption.Visible = false;
+            panLinks.Visible = false;
+        }
+
+        private void btnSeparation_Click(object sender, EventArgs e)
+        {
+            SetButtonColor(btnSeparation);
+            sprOpenForm(Application.ProductName + ".frmSeparation");
+            panTokenOption.Visible = false;
+            panLinks.Visible = false;
+        }
+
+        
+
+        private void lblSF_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://85.195.82.94/StoreAndForwardPlayer.zip");
+        }
+
+        private void lblVideo_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://85.195.82.94/VideoPlayer.zip");
+        }
+
+        private void lblCROGG_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://85.195.82.94/CROggLocalPlayer.zip");
+        }
+
+        private void lblCLOGG_Click(object sender, EventArgs e)          
+        {
+            System.Diagnostics.Process.Start("http://85.195.82.94/CL.zip");
+        }
 
 
+        private void lblAmmy_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://85.195.82.94/remote.exe");
+        }
 
+        private void btnAssignStream_Click(object sender, EventArgs e)
+        {
+            SetButtonColor(btnAssignStream);
+            sprOpenForm(Application.ProductName + ".frmAssignTokenStreams");
+            panTokenOption.Visible = false;
+            panLinks.Visible = false;
+        }
 
+        private void btnAssignMobileStream_Click(object sender, EventArgs e)
+        {
+            SetButtonColor(btnAssignMobileStream);
+            sprOpenForm(Application.ProductName + ".frmAssignMobileStreams");
+            panTokenOption.Visible = false;
+            panLinks.Visible = false;
+        }
 
+        private void lblDealer_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://85.195.82.94/Dealer.zip");
+        }
+
+        private void btnOtherUser_Click(object sender, EventArgs e)
+        {
+            SetButtonColor(btnOtherUser);
+            sprOpenForm(Application.ProductName + ".frmOtherCustomerStreamURLDetails");
+            panTokenOption.Visible = false;
+            panLinks.Visible = false;
+        }
     }
 }

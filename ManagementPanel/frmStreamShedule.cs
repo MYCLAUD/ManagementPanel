@@ -7,208 +7,109 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Globalization;
+
 namespace ManagementPanel
 {
     public partial class frmStreamShedule : Form
     {
         gblClass objMainClass = new gblClass();
-        Int32 ModifyId = 0;
+        DateTimeFormatInfo fi = new DateTimeFormatInfo();
         public frmStreamShedule()
         {
             InitializeComponent();
-            FillComobo();
-            dtpStartDate.Value = DateTime.Now.Date;
-            dtpEndDate.Value = DateTime.Now.Date;
-            dtpFromDate.Value = DateTime.Now.Date;
-            string Advttype = "select dfclientid, dealercode from ( select dfclientid, dealercode from tbdealerlogin  union all select dfclientid, dealercode from dfclients where dealercode='Claudio000' union all  select distinct '10001' as dfclientid, 'MyClaud000' as dealercode from dfclients  ) as a order by dfclientid";
-            objMainClass.fnFillComboBox(Advttype, cmbSearchDealercode, "dfclientid", "dealercode", "");
+            dtpStartTime.Value = DateTime.Now;
+            dtpEndTime.Value = DateTime.Now;
         }
-        private void FillComobo()
+        private void cmbFormat_Click(object sender, EventArgs e)
         {
-            string str = "select * from tblTitleCategory order by TitleCategoryName";
-            objMainClass.fnFillComboBox(str, cmbTitleCategory, "TitleCategoryid", "TitleCategoryName");
-
-            string strCountry = "";
-            strCountry = "select * from CountryCodes order by countryCode";
-            objMainClass.fnFillComboBox(strCountry, cmbCountryName, "countrycode", "countryName", "");
-
-            string Advttype = "select dfclientid, dealercode from ( select dfclientid, dealercode from tbdealerlogin  union all select dfclientid, dealercode from dfclients where dealercode='Claudio000' union all  select distinct '10001' as dfclientid, 'MyClaud000' as dealercode from dfclients ) as a order by dfclientid";
-            objMainClass.fnFillComboBox(Advttype, cmbDealerCode, "dfclientid", "dealercode", "");
-        }
-
-        private void cmbTitleCategory_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (Convert.ToInt32(cmbTitleCategory.SelectedValue) == 0)
-            {
-                cmbStreamName.DataSource = null;
-                cmbStreamName.Refresh();
-                return;
-            }
-            string str = "";
-            str = "Select * from  tblOnlineStreaming where titlecategoryId = " + Convert.ToInt32(cmbTitleCategory.SelectedValue) + " and Dealercode='" + cmbAdminCode.Text + "' order by StreamName";
-            objMainClass.fnFillComboBox(str, cmbStreamName, "StreamId", "StreamName");
-        }
-
-        private void cmbAdminCode_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            
-            string str = "";
-            str = "Select * from  tblOnlineStreaming where titlecategoryId = " + Convert.ToInt32(cmbTitleCategory.SelectedValue) + " and Dealercode='" + cmbAdminCode.Text + "' order by StreamName";
-            objMainClass.fnFillComboBox(str, cmbStreamName, "StreamId", "StreamName");
-        }
-
-        private void cmbCountryName_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (Convert.ToInt32(cmbCountryName.SelectedValue) == 0)
-            {
-                cmbStateName.DataSource = null;
-                cmbStateName.Refresh();
-                return;
-            }
             string strState = "";
-            strState = "select * from tbState where countryId= " + Convert.ToInt32(cmbCountryName.SelectedValue);
-            objMainClass.fnFillComboBox(strState, cmbStateName, "stateid", "StateName", "");
+            strState = "select max(Formatid) as Formatid, formatname from tbSpecialFormat group by formatname";
+            objMainClass.fnFillComboBox(strState, cmbFormat, "FormatId", "FormatName", "");
         }
 
-        private void cmbStateName_SelectedIndexChanged(object sender, EventArgs e)
+        private void cmbFormat_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (Convert.ToInt32(cmbStateName.SelectedValue) == 0)
-            {
-                cmbCityName.DataSource = null;
-                cmbCityName.Refresh();
-                return;
-            }
-            string strCity = "";
-            strCity = "select * from tbCity where countryId= " + Convert.ToInt32(cmbCountryName.SelectedValue) + " and stateid =" + Convert.ToInt32(cmbStateName.SelectedValue);
-            objMainClass.fnFillComboBox(strCity, cmbCityName, "Cityid", "CityName", "");
+            FillSplPlaylists(cmbSplPlaylist, Convert.ToInt32(cmbFormat.SelectedValue));
+        }
+        private void FillSplPlaylists(ComboBox cmbName, Int32 ForId)
+        {
+            string str = "";
+            str = "select  tbSpecialPlaylists.splPlaylistid, (tbSpecialPlaylists.splPlaylistName+ ' (' +convert(varchar(50), count(*) ) + ')' ) as splPlaylistName from tbSpecialPlaylists ";
+            str = str + " inner join tbSpecialPlaylists_Titles on tbSpecialPlaylists_Titles.splPlaylistid = tbSpecialPlaylists.splPlaylistid";
+            str = str + " where tbSpecialPlaylists.formatid=" + ForId + " ";
+            str = str + " group by tbSpecialPlaylists.splPlaylistid, tbSpecialPlaylists.splPlaylistName";
+            objMainClass.fnFillComboBox(str, cmbName, "splPlaylistId", "splPlaylistName", "");
+
         }
 
-        private void btnStateNew_Click(object sender, EventArgs e)
+        private void btnSave_Click(object sender, EventArgs e)
         {
-            if (Convert.ToInt32(cmbCountryName.SelectedValue) == 0)
+            DataTable dtPrv = new DataTable();
+            if (SubmitValidationGet() == false) return;
+            string str = "";
+            str = "select *  from tbStreamPlaylistSchedule where streamPlaylistid=" + Convert.ToInt32(cmbStreamName.SelectedValue) + " and  '" + string.Format(fi, "{0:hh:mm tt}", dtpStartTime.Value.AddMinutes(1)) + "' between starttime and endtime";
+            dtPrv = objMainClass.fnFillDataTable(str);
+            if (dtPrv.Rows.Count > 0)
             {
-                MessageBox.Show("Select a Country from the list name", "Management Panel");
-                cmbCountryName.Focus();
-                return;
+                if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
+                StaticClass.constr.Open();
+                SqlCommand cmdTit = new SqlCommand();
+                cmdTit.Connection = StaticClass.constr;
+                str = "";
+                str = "delete from tbStreamPlaylistSchedule where streamPlaylistid=" + Convert.ToInt32(cmbStreamName.SelectedValue) + " and   '" + string.Format(fi,"{0:hh:mm tt}", dtpStartTime.Value.AddMinutes(1)) + "' between starttime and endtime";
+                cmdTit.CommandText = str;
+                cmdTit.ExecuteNonQuery();
+                StaticClass.constr.Close();
             }
-            txtName.Text = "";
-            txtName.Focus();
-            panMainNew.Width = this.Width;
-            panMainNew.Height = this.Height;
-            panMainNew.Location = new Point(0, 0);
-            panMainNew.BringToFront();
-            panMainNew.Visible = true;
-            lblCaption.Text = "State Name";
-            txtName.Focus();
+            str = "";
+            str = "select *  from tbStreamPlaylistSchedule where streamPlaylistid=" + Convert.ToInt32(cmbStreamName.SelectedValue) + " and   '" + string.Format(fi,"{0:hh:mm tt}", dtpEndTime.Value.AddMinutes(-1)) + "' between starttime and endtime";
+            dtPrv = objMainClass.fnFillDataTable(str);
+            if (dtPrv.Rows.Count > 0)
+            {
+                if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
+                StaticClass.constr.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = StaticClass.constr;
+                str = "";
+                str = "delete from tbStreamPlaylistSchedule where streamPlaylistid=" + Convert.ToInt32(cmbStreamName.SelectedValue) + " and   '" + string.Format(fi,"{0:hh:mm tt}", dtpEndTime.Value.AddMinutes(-1)) + "' between starttime and endtime";
+                cmd.CommandText = str;
+                cmd.ExecuteNonQuery();
+                StaticClass.constr.Close();
+            }
+            if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
+            StaticClass.constr.Open();
+            SqlCommand cmdS = new SqlCommand();
+            cmdS.Connection = StaticClass.constr;
+            str = "";
+            str = "insert into tbStreamPlaylistSchedule(streamPlaylistid,splPlaylistid,StartTime,EndTime,FormatId) values(" + Convert.ToInt32(cmbStreamName.SelectedValue) + "," + Convert.ToInt32(cmbSplPlaylist.SelectedValue) + ", '" + string.Format(fi, "{0:hh:mm tt}", dtpStartTime.Value) + "','" + string.Format(fi, "{0:hh:mm tt}", dtpEndTime.Value) + "'," + Convert.ToInt32(cmbFormat.SelectedValue) + ")";
+            cmdS.CommandText = str;
+            cmdS.ExecuteNonQuery();
+            StaticClass.constr.Close();
+            FillSaveData();
         }
-
-        private void btnCityNew_Click(object sender, EventArgs e)
+        private Boolean SubmitValidationGet()
         {
-            if (Convert.ToInt32(cmbCountryName.SelectedValue) == 0)
+            if (Convert.ToInt32(cmbStreamName.SelectedValue) == 0)
             {
-                MessageBox.Show("Select a Country from the list name", "Management Panel");
-                cmbCountryName.Focus();
-                return;
+                MessageBox.Show("Please select a stream playlist name", "Management Panel");
+                cmbFormat.Focus();
+                return false;
             }
-            if (Convert.ToInt32(cmbStateName.SelectedValue) == 0)
+            if (Convert.ToInt32(cmbFormat.SelectedValue) == 0)
             {
-                MessageBox.Show("Select a state name", "Management Panel");
-                cmbStateName.Focus();
-                return;
+                MessageBox.Show("Please select a format name", "Management Panel");
+                cmbFormat.Focus();
+                return false;
             }
-            txtName.Text = "";
-            txtName.Focus();
-            panMainNew.Width = this.Width;
-            panMainNew.Height = this.Height;
-            panMainNew.BringToFront();
-            panMainNew.Location = new Point(0, 0);
-            panMainNew.Visible = true;
-            lblCaption.Text = "City Name";
-            txtName.Focus();
-        }
 
-        private void btnSaveNew_Click(object sender, EventArgs e)
-        {
-            string returnValue = "";
-            string strState = "";
-            if (lblCaption.Text == "State Name")
+            if (Convert.ToInt32(cmbSplPlaylist.SelectedValue) == 0)
             {
-                try
-                {
-                    SqlCommand cmd = new SqlCommand("SaveState", StaticClass.constr);
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    cmd.Parameters.Add(new SqlParameter("@CountryId", SqlDbType.BigInt));
-                    cmd.Parameters["@CountryId"].Value = Convert.ToInt32(cmbCountryName.SelectedValue);
-
-                    cmd.Parameters.Add(new SqlParameter("@StateName", SqlDbType.VarChar));
-                    cmd.Parameters["@StateName"].Value = txtName.Text;
-                    if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
-                    StaticClass.constr.Open();
-                    returnValue = cmd.ExecuteScalar().ToString();
-                    if (returnValue != "-2")
-                    {
-                        strState = "select * from tbState where countryId= " + Convert.ToInt32(cmbCountryName.SelectedValue);
-                        objMainClass.fnFillComboBox(strState, cmbStateName, "stateid", "StateName", "");
-                        cmbStateName.SelectedValue = Convert.ToInt32(returnValue);
-                        panMainNew.Visible = false;
-                        lblCaption.Text = "";
-                    }
-                    if (returnValue == "-2")
-                    {
-                        MessageBox.Show("State Name already exixts", "Management Panel");
-                        panMainNew.Visible = false;
-                        lblCaption.Text = "";
-                        return;
-                    }
-                }
-                catch (Exception ex) { }
+                MessageBox.Show("Please select a special playlist name.", "Management Panel");
+                cmbSplPlaylist.Focus();
+                return false;
             }
-            else if (lblCaption.Text == "City Name")
-            {
-                try
-                {
-                    SqlCommand cmd = new SqlCommand("SaveCity", StaticClass.constr);
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    cmd.Parameters.Add(new SqlParameter("@CountryId", SqlDbType.BigInt));
-                    cmd.Parameters["@CountryId"].Value = Convert.ToInt32(cmbCountryName.SelectedValue);
-
-                    cmd.Parameters.Add(new SqlParameter("@StateId", SqlDbType.BigInt));
-                    cmd.Parameters["@StateId"].Value = Convert.ToInt32(cmbStateName.SelectedValue);
-
-                    cmd.Parameters.Add(new SqlParameter("@CityName", SqlDbType.VarChar));
-                    cmd.Parameters["@CityName"].Value = txtName.Text;
-
-                    if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
-                    StaticClass.constr.Open();
-                    returnValue = cmd.ExecuteScalar().ToString();
-                    if (returnValue != "-2")
-                    {
-
-                        string strCity = "";
-                        strCity = "select * from tbCity where countryId= " + Convert.ToInt32(cmbCountryName.SelectedValue) + " and stateid =" + Convert.ToInt32(cmbStateName.SelectedValue);
-                        objMainClass.fnFillComboBox(strCity, cmbCityName, "Cityid", "CityName", "");
-                        cmbCityName.SelectedValue = Convert.ToInt32(returnValue);
-                        panMainNew.Visible = false;
-                        lblCaption.Text = "";
-                    }
-                    if (returnValue == "-2")
-                    {
-                        MessageBox.Show("City Name already exixts", "Management Panel");
-                        panMainNew.Visible = false;
-                        lblCaption.Text = "";
-                        return;
-                    }
-                }
-                catch (Exception ex) { }
-            }
-        }
-
-        private void btnNewCancel_Click(object sender, EventArgs e)
-        {
-            panMainNew.Visible = false;
-            txtName.Text = "";
+            return true;
         }
 
         private void btnRefersh_Click(object sender, EventArgs e)
@@ -217,380 +118,384 @@ namespace ManagementPanel
         }
         private void Clear()
         {
-            ModifyId = 0;
-            btnSave.Text = "Save";
-            cmbHour.Text = "";
-            cmbMin.Text = "";
-            cmbAMPM.Text = "";
-            cmbAdminCode.Text = "";
-            dtpStartDate.Value = DateTime.Now.Date;
-            dtpEndDate.Value = DateTime.Now.Date;
-            dtpFromDate.Value = DateTime.Now.Date;
-            FillComobo();
-            FillDealerAdvtDetail("GetStreamSheduling '" + string.Format("{0:dd/MMM/yyyy}", dtpFromDate.Value) + "',''");
-        }
-        private Boolean SubmitValidationAdvt()
-        {
-
-            if (Convert.ToInt32(cmbTitleCategory.SelectedValue) == 0)
-            {
-                MessageBox.Show("Category name cannot be blank", "Management Panel");
-                cmbTitleCategory.Focus();
-                return false;
-            }
-            if (cmbAdminCode.Text == "")
-            {
-                MessageBox.Show("Admin code cannot be blank", "Management Panel");
-                cmbAdminCode.Focus();
-                return false;
-            }
-            if (dtpEndDate.Value < dtpStartDate.Value)
-            {
-                MessageBox.Show("Please select proper date's", "Management Panel");
-                dtpEndDate.Focus();
-                return false;
-            }
-            if (Convert.ToInt32(cmbStreamName.SelectedValue) == 0)
-            {
-                MessageBox.Show("Stream name cannot be balnk", "Management Panel");
-                cmbStreamName.Focus();
-                return false;
-            }
-            if (cmbHour.Text == "")
-            {
-                MessageBox.Show("Please select the hour", "Management Panel");
-                cmbHour.Focus();
-                return false;
-            }
-            if (cmbMin.Text == "")
-            {
-                MessageBox.Show("Please select minute", "Management Panel");
-                cmbMin.Focus();
-                return false;
-            }
-            if (cmbAMPM.Text == "")
-            {
-                MessageBox.Show("Please select time type", "Management Panel");
-                cmbAMPM.Focus();
-                return false;
-            }
-
-            if (Convert.ToInt32(cmbDealerCode.SelectedValue) == 0)
-            {
-                MessageBox.Show("Please select a dealer code", "Management Panel");
-                cmbDealerCode.Focus();
-                return false;
-            }
-            if (Convert.ToInt32(cmbCountryName.SelectedValue) == 0)
-            {
-                MessageBox.Show("Select a Country from the list", "Management Panel");
-                cmbCountryName.Focus();
-                return false;
-            }
-            else if (Convert.ToInt32(cmbStateName.SelectedValue) == 0)
-            {
-                MessageBox.Show("Select a state", "Management Panel");
-                cmbStateName.Focus();
-                return false;
-            }
-            else if (Convert.ToInt32(cmbCityName.SelectedValue) == 0)
-            {
-                MessageBox.Show("Select a city", "Management Panel");
-                cmbCityName.Focus();
-                return false;
-            }
-
-            string GetComboTimeString = "";
-            GetComboTimeString = cmbHour.Text + ":" + cmbMin.Text + " " + cmbAMPM.Text;
-            DateTime GetComboTime = DateTime.ParseExact(GetComboTimeString, "hh:mm tt", System.Globalization.CultureInfo.InvariantCulture);
-            string strDealerTimeValid = "";
-            if (btnSave.Text == "Save")
-            {
-                strDealerTimeValid = "select * from tbStreamScheduling where tokenid=0 and titlecategoryId=" + Convert.ToInt32(cmbTitleCategory.SelectedValue) + " and cityid=" + Convert.ToInt32(cmbCityName.SelectedValue) + " and dealercode='" + cmbDealerCode.Text + "' and ";
-                strDealerTimeValid = strDealerTimeValid + " StartTime='" + GetComboTime.ToString("hh:mm tt") + "' ";
-                strDealerTimeValid = strDealerTimeValid + " and ('" + dtpStartDate.Value.ToString("dd/MMM/yyyy") + "' between StartDate and  EndDate";
-                strDealerTimeValid = strDealerTimeValid + " or '" + dtpEndDate.Value.ToString("dd/MMM/yyyy") + "' between StartDate and  EndDate )";
-            }
-            else
-            {
-                strDealerTimeValid = "select * from tbStreamScheduling where tokenid=0 and titlecategoryId=" + Convert.ToInt32(cmbTitleCategory.SelectedValue) + " and cityid=" + Convert.ToInt32(cmbCityName.SelectedValue) + " and dealercode='" + cmbDealerCode.Text + "' and ";
-                strDealerTimeValid = strDealerTimeValid + " StartTime='" + GetComboTime.ToString("hh:mm tt") + "' ";
-                strDealerTimeValid = strDealerTimeValid + " and ('" + dtpStartDate.Value.ToString("dd/MMM/yyyy") + "' between StartDate and  EndDate";
-                strDealerTimeValid = strDealerTimeValid + " or '" + dtpEndDate.Value.ToString("dd/MMM/yyyy") + "' between StartDate and  EndDate )";
-                strDealerTimeValid = strDealerTimeValid + " and SheduleId   <> " + ModifyId;
-            }
-            DataTable dtDealerTimeValid = new DataTable();
-            dtDealerTimeValid = objMainClass.fnFillDataTable(strDealerTimeValid);
-            if (dtDealerTimeValid.Rows.Count > 0)
-            {
-                MessageBox.Show("This time is already used", "Management Panel");
-                cmbMin.Focus();
-                return false;
-            }
-
-            //strDealerTimeValid = "";
-            //if (btnSave.Text == "Save")
-            //{
-            //    strDealerTimeValid = "select * from tbStreamScheduling where tokenid=0 and  cityid=" + Convert.ToInt32(cmbCityName.SelectedValue) + "' and dealercode='" + cmbDealerCode.Text + "' and ";
-            //    strDealerTimeValid = strDealerTimeValid + " StreamId=" + Convert.ToInt32(cmbStreamName.SelectedValue) + " ";
-            //    strDealerTimeValid = strDealerTimeValid + " and ('" + dtpStartDate.Value.ToString("dd/MMM/yyyy") + "' between StartDate and  EndDate";
-            //    strDealerTimeValid = strDealerTimeValid + " or '" + dtpEndDate.Value.ToString("dd/MMM/yyyy") + "' between StartDate and  EndDate )";
-            //}
-            //else
-            //{
-            //    strDealerTimeValid = "select * from tbStreamScheduling where tokenid=0 and  cityid=" + Convert.ToInt32(cmbCityName.SelectedValue) + "' and dealercode='" + cmbDealerCode.Text + "' and ";
-            //    strDealerTimeValid = strDealerTimeValid + " StreamId=" + Convert.ToInt32(cmbStreamName.SelectedValue) + " ";
-            //    strDealerTimeValid = strDealerTimeValid + " and ('" + dtpStartDate.Value.ToString("dd/MMM/yyyy") + "' between StartDate and  EndDate";
-            //    strDealerTimeValid = strDealerTimeValid + " or '" + dtpEndDate.Value.ToString("dd/MMM/yyyy") + "' between StartDate and  EndDate )";
-            //    strDealerTimeValid = strDealerTimeValid + " and SheduleId   <> " + ModifyId;
-            //}
-            //dtDealerTimeValid = new DataTable();
-            //dtDealerTimeValid = objMainClass.fnFillDataTable(strDealerTimeValid);
-            //if (dtDealerTimeValid.Rows.Count > 0)
-            //{
-            //    MessageBox.Show("This stream is already used in between date's", "Management Panel");
-            //    dtpStartDate.Focus();
-            //    return false;
-            //}
-
-            return true;
+            cmbStreamName.SelectedValue = 0;
+            cmbFormat.SelectedValue = 0;
+            dtpStartTime.Value = DateTime.Now;
+            dtpEndTime.Value = DateTime.Now;
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
+        private void frmStreamShedule_Load(object sender, EventArgs e)
         {
-            if (SubmitValidationAdvt() == false) return;
-            SaveRecord();
+            SetButtonColor(btnMenuSearch);
+            panSearch.Visible = true;
+            panAddNew.Visible = false;
+            panSearch.Dock = DockStyle.Fill;
+
+            fi.AMDesignator = "AM";
+            fi.PMDesignator = "PM";
+
+            string strState = "";
+            strState = "select max(Formatid) as Formatid, formatname from tbSpecialFormat group by formatname";
+            objMainClass.fnFillComboBox(strState, cmbFormat, "FormatId", "FormatName", "");
+            FillSaveStreamPlaylist();
+            FillStreamPlaylist();
+            FillSaveData();
         }
-        private void SaveRecord()
+        private void InitilizeSplGrid()
         {
-            string GetComboTimeString = "";
-            GetComboTimeString = cmbHour.Text + ":" + cmbMin.Text + " " + cmbAMPM.Text;
-            DateTime GetComboTime = DateTime.ParseExact(GetComboTimeString, "hh:mm tt", System.Globalization.CultureInfo.InvariantCulture);
-            if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
-            StaticClass.constr.Open();
-            SqlCommand cmd = new SqlCommand("spStreamScheduling", StaticClass.constr);
-            cmd.CommandType = CommandType.StoredProcedure;
-
-            cmd.Parameters.Add(new SqlParameter("@SheduleId", SqlDbType.BigInt));
-            cmd.Parameters["@SheduleId"].Value = Convert.ToInt32(ModifyId);
-
-            cmd.Parameters.Add(new SqlParameter("@TitleCategoryId", SqlDbType.BigInt));
-            cmd.Parameters["@TitleCategoryId"].Value = Convert.ToInt32(cmbTitleCategory.SelectedValue);
-
-            cmd.Parameters.Add(new SqlParameter("@AdminCode", SqlDbType.VarChar));
-            cmd.Parameters["@AdminCode"].Value = cmbAdminCode.Text.Trim();
-
-            cmd.Parameters.Add(new SqlParameter("@StreamId", SqlDbType.BigInt));
-            cmd.Parameters["@StreamId"].Value = Convert.ToInt32(cmbStreamName.SelectedValue);
-
-            cmd.Parameters.Add(new SqlParameter("@StartDate", SqlDbType.DateTime));
-            cmd.Parameters["@StartDate"].Value = dtpStartDate.Value.ToString("dd/MMM/yyyy");
-
-            cmd.Parameters.Add(new SqlParameter("@EndDate", SqlDbType.DateTime));
-            cmd.Parameters["@EndDate"].Value = dtpEndDate.Value.ToString("dd/MMM/yyyy");
-
-            cmd.Parameters.Add(new SqlParameter("@StartTime", SqlDbType.DateTime));
-            cmd.Parameters["@StartTime"].Value = GetComboTime.ToString("hh:mm tt");
-
-            cmd.Parameters.Add(new SqlParameter("@Dealercode", SqlDbType.VarChar));
-            cmd.Parameters["@Dealercode"].Value = cmbDealerCode.Text;
-
-            cmd.Parameters.Add(new SqlParameter("@CountryId", SqlDbType.BigInt));
-            cmd.Parameters["@CountryId"].Value = Convert.ToInt32(cmbCountryName.SelectedValue);
-
-            cmd.Parameters.Add(new SqlParameter("@StateId", SqlDbType.BigInt));
-            cmd.Parameters["@StateId"].Value = Convert.ToInt32(cmbStateName.SelectedValue);
-
-            cmd.Parameters.Add(new SqlParameter("@CityId", SqlDbType.BigInt));
-            cmd.Parameters["@CityId"].Value = Convert.ToInt32(cmbCityName.SelectedValue);
-            try
+            if (dgSpl.Rows.Count > 0)
             {
-                cmd.ExecuteNonQuery();
-                MessageBox.Show("Record is save", "Manageyourclaudio");
-                Clear();
+                dgSpl.Rows.Clear();
             }
-            catch (Exception ex)
+            if (dgSpl.Columns.Count > 0)
             {
-                MessageBox.Show("Record not save", "!! Problem !!");
-                Clear();
-                return;
+                dgSpl.Columns.Clear();
             }
-            finally
-            {
-                StaticClass.constr.Close();
-            }
-        }
+            dgSpl.Dock = DockStyle.Fill;
+            //0
+            dgSpl.Columns.Add("pschId", "Id");
+            dgSpl.Columns["pschId"].Width = 0;
+            dgSpl.Columns["pschId"].Visible = false;
+            dgSpl.Columns["pschId"].ReadOnly = true;
+            //1
 
-        private void InitilizeGrid()
-        {
-            if (dgStream.Rows.Count > 0)
-            {
-                dgStream.Rows.Clear();
-            }
-            if (dgStream.Columns.Count > 0)
-            {
-                dgStream.Columns.Clear();
-            }
+            dgSpl.Columns.Add("fName", "Format Name");
+            dgSpl.Columns["fName"].Width = 200;
+            dgSpl.Columns["fName"].Visible = true;
+            dgSpl.Columns["fName"].ReadOnly = true;
+            dgSpl.Columns["fName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
-            dgStream.Columns.Add("ScheduleId", "Schedule Id");
-            dgStream.Columns["ScheduleId"].Width = 0;
-            dgStream.Columns["ScheduleId"].Visible = false;
-            dgStream.Columns["ScheduleId"].ReadOnly = true;
+            dgSpl.Columns.Add("pName", "Playlist Name");
+            dgSpl.Columns["pName"].Width = 200;
+            dgSpl.Columns["pName"].Visible = true;
+            dgSpl.Columns["pName"].ReadOnly = true;
+            dgSpl.Columns["pName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
-            dgStream.Columns.Add("cName", "Category Name");
-            dgStream.Columns["cName"].Width = 140;
-            dgStream.Columns["cName"].Visible = true;
-            dgStream.Columns["cName"].ReadOnly = true;
-            dgStream.Columns["cName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dgSpl.Columns.Add("sTime", "Start Time");
+            dgSpl.Columns["sTime"].Width = 150;
+            dgSpl.Columns["sTime"].Visible = true;
+            dgSpl.Columns["sTime"].ReadOnly = true;
+            dgSpl.Columns["sTime"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
 
-            dgStream.Columns.Add("sName", "Stream Name");
-            dgStream.Columns["sName"].Width = 370;
-            dgStream.Columns["sName"].Visible = true;
-            dgStream.Columns["sName"].ReadOnly = true;
-            dgStream.Columns["sName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dgSpl.Columns.Add("eTime", "End Time");
+            dgSpl.Columns["eTime"].Width = 150;
+            dgSpl.Columns["eTime"].Visible = true;
+            dgSpl.Columns["eTime"].ReadOnly = true;
+            dgSpl.Columns["eTime"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
 
-            dgStream.Columns.Add("aCode", "Admin Code");
-            dgStream.Columns["aCode"].Width = 110;
-            dgStream.Columns["aCode"].Visible = true;
-            dgStream.Columns["aCode"].ReadOnly = true;
-            dgStream.Columns["aCode"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dgSpl.Columns.Add("splId", "splId");
+            dgSpl.Columns["splId"].Width = 0;
+            dgSpl.Columns["splId"].Visible = false;
+            dgSpl.Columns["splId"].ReadOnly = true;
+            dgSpl.Columns["splId"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
-            dgStream.Columns.Add("StartDate", "Start Date");
-            dgStream.Columns["StartDate"].Width = 120;
-            dgStream.Columns["StartDate"].Visible = true;
-            dgStream.Columns["StartDate"].ReadOnly = true;
-            dgStream.Columns["StartDate"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-
-            dgStream.Columns.Add("EndDate", "End Date");
-            dgStream.Columns["EndDate"].Width = 120;
-            dgStream.Columns["EndDate"].Visible = true;
-            dgStream.Columns["EndDate"].ReadOnly = true;
-            dgStream.Columns["EndDate"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-
-            dgStream.Columns.Add("Time", "Time");
-            dgStream.Columns["Time"].Width = 100;
-            dgStream.Columns["Time"].Visible = true;
-            dgStream.Columns["Time"].ReadOnly = true;
-            dgStream.Columns["Time"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-
-
-            dgStream.Columns.Add("CiName", "City Name");
-            dgStream.Columns["CiName"].Width = 140;
-            dgStream.Columns["CiName"].Visible = true;
-            dgStream.Columns["CiName"].ReadOnly = true;
-            dgStream.Columns["CiName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dgSpl.Columns.Add("fId", "fId");
+            dgSpl.Columns["fId"].Width = 0;
+            dgSpl.Columns["fId"].Visible = false;
+            dgSpl.Columns["fId"].ReadOnly = true;
+            dgSpl.Columns["fId"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             DataGridViewLinkColumn EditAdvt = new DataGridViewLinkColumn();
             EditAdvt.HeaderText = "Edit";
             EditAdvt.Text = "Edit";
             EditAdvt.DataPropertyName = "Edit";
-            dgStream.Columns.Add(EditAdvt);
+            dgSpl.Columns.Add(EditAdvt);
             EditAdvt.UseColumnTextForLinkValue = true;
             EditAdvt.Width = 70;
             EditAdvt.Visible = true;
-            dgStream.Columns[8].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dgSpl.Columns[7].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
 
             DataGridViewLinkColumn DeleteAdvt = new DataGridViewLinkColumn();
             DeleteAdvt.HeaderText = "Delete";
             DeleteAdvt.Text = "Delete";
             DeleteAdvt.DataPropertyName = "Delete";
-            dgStream.Columns.Add(DeleteAdvt);
+            dgSpl.Columns.Add(DeleteAdvt);
             DeleteAdvt.UseColumnTextForLinkValue = true;
             DeleteAdvt.Width = 70;
             DeleteAdvt.Visible = true;
-            dgStream.Columns[9].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-            //dgGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.ColumnHeader;
+            dgSpl.Columns[8].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+
+
 
         }
-        private void FillDealerAdvtDetail(string Query)
+        private void FillSaveData()
         {
-            int iCtr;
-            DataTable dtDetail;
-            dtDetail = objMainClass.fnFillDataTable(Query);
-            InitilizeGrid();
-            if ((dtDetail.Rows.Count > 0))
+            string sQr = "";
+            sQr = "GetStreamPlaylistSchedule " + Convert.ToInt32(cmbStreamName.SelectedValue);
+            DataTable dtDetail = new DataTable();
+            InitilizeSplGrid();
+            dtDetail = objMainClass.fnFillDataTable(sQr);
+            if (dtDetail.Rows.Count > 0)
             {
-                for (iCtr = 0; (iCtr <= (dtDetail.Rows.Count - 1)); iCtr++)
+                for (int i = 0; i <= dtDetail.Rows.Count - 1; i++)
                 {
-                    dgStream.Rows.Add();
-                    dgStream.Rows[dgStream.Rows.Count - 1].Cells["ScheduleId"].Value = dtDetail.Rows[iCtr]["SheduleId"];
-                    dgStream.Rows[dgStream.Rows.Count - 1].Cells["cName"].Value = dtDetail.Rows[iCtr]["titlecategoryname"];
-                    dgStream.Rows[dgStream.Rows.Count - 1].Cells["sName"].Value = dtDetail.Rows[iCtr]["StreamName"];
-                    dgStream.Rows[dgStream.Rows.Count - 1].Cells["aCode"].Value = dtDetail.Rows[iCtr]["AdminCode"];
-                    dgStream.Rows[dgStream.Rows.Count - 1].Cells["StartDate"].Value = string.Format("{0:dd/MMM/yyyy}", dtDetail.Rows[iCtr]["StartDate"]);
-                    dgStream.Rows[dgStream.Rows.Count - 1].Cells["EndDate"].Value = string.Format("{0:dd/MMM/yyyy}", dtDetail.Rows[iCtr]["EndDate"]);
-                    dgStream.Rows[dgStream.Rows.Count - 1].Cells["Time"].Value = string.Format("{0:hh:mm tt}", dtDetail.Rows[iCtr]["StartTime"]);
-                    dgStream.Rows[dgStream.Rows.Count - 1].Cells["CiName"].Value = dtDetail.Rows[iCtr]["CityName"];
+                    sQr = "";
+                    dgSpl.Rows.Add();
+                    dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["pSchid"].Value = dtDetail.Rows[i]["pschid"];
+                    //                    sQr = dtDetail.Rows[i]["splPlaylistName"].ToString() + " (" + GetSongCounter(Convert.ToInt32(dtDetail.Rows[i]["splPlaylistid"])) + ")";
+                    dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["fName"].Value = dtDetail.Rows[i]["FormatName"].ToString();
+                    dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["pName"].Value = dtDetail.Rows[i]["splPlaylistName"].ToString();
+                    dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["sTime"].Value = string.Format(fi, "{0:hh:mm tt}", Convert.ToDateTime(dtDetail.Rows[i]["StartTime"]));
+                    dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["eTime"].Value = string.Format(fi, "{0:hh:mm tt}", Convert.ToDateTime(dtDetail.Rows[i]["EndTime"]));
+                    dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["fId"].Value = dtDetail.Rows[i]["formatid"].ToString();
+                    dgSpl.Rows[dgSpl.Rows.Count - 1].Cells["splId"].Value = dtDetail.Rows[i]["splPlaylistId"].ToString();
                 }
-                 
+
             }
         }
 
-        private void dtpFromDate_ValueChanged(object sender, EventArgs e)
-        {
-            string Localstr = "";
-            Localstr = "GetStreamSheduling '" + string.Format("{0:dd/MMM/yyyy}", dtpFromDate.Value) + "','" + cmbSearchDealercode.Text + "'";
-            FillDealerAdvtDetail(Localstr);
-        }
-
-        private void cmbSearchDealercode_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            
-            if (Convert.ToInt32(cmbSearchDealercode.SelectedValue) == 0) return;
-            string Localstr = "";
-            Localstr = "GetStreamSheduling '" + string.Format("{0:dd/MMM/yyyy}", dtpFromDate.Value) + "','" + cmbSearchDealercode.Text + "'";
-            FillDealerAdvtDetail(Localstr);
-        }
-
-        private void dgStream_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dgSpl_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
+
+            if (e.ColumnIndex == 7)
+            {
+                cmbFormat.SelectedValue = Convert.ToInt32(dgSpl.Rows[e.RowIndex].Cells["fId"].Value);
+                cmbSplPlaylist.SelectedValue= Convert.ToInt32(dgSpl.Rows[e.RowIndex].Cells["splId"].Value);
+                dtpStartTime.Value= Convert.ToDateTime(dgSpl.Rows[e.RowIndex].Cells["sTime"].Value);
+                dtpEndTime.Value = Convert.ToDateTime(dgSpl.Rows[e.RowIndex].Cells["eTime"].Value);
+            }
             if (e.ColumnIndex == 8)
             {
-                string Localstr = "";
-                Localstr = " select * from tbStreamScheduling ";
-                Localstr = Localstr + "	where SheduleId = " + Convert.ToInt32(dgStream.Rows[dgStream.CurrentCell.RowIndex].Cells[0].Value);
-                DataTable dtDetail;
-                dtDetail = objMainClass.fnFillDataTable(Localstr);
-                if ((dtDetail.Rows.Count > 0))
+                DialogResult result;
+                result = MessageBox.Show("Are you sure to delete ?", "Management Panel", MessageBoxButtons.YesNo);
+                if (result == System.Windows.Forms.DialogResult.Yes)
                 {
-                    btnSave.Text = "Update";
-                    ModifyId = Convert.ToInt32(dtDetail.Rows[0]["SheduleId"]);
+                    if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
+                    StaticClass.constr.Open();
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = StaticClass.constr;
+                   string str = "";
+                    str = "delete from tbStreamPlaylistSchedule where pschid= " + Convert.ToInt32(dgSpl.Rows[e.RowIndex].Cells["pschid"].Value);
+                    cmd.CommandText = str;
+                    cmd.ExecuteNonQuery();
+                    StaticClass.constr.Close();
+                    FillSaveData();
+                }
+            }
 
-                    cmbCountryName.SelectedValue = Convert.ToInt32(dtDetail.Rows[0]["Countryid"]);
-                    cmbTitleCategory.SelectedValue = Convert.ToInt32(dtDetail.Rows[0]["TitleCategoryId"]);
-                    cmbAdminCode.Text = dtDetail.Rows[0]["AdminCode"].ToString();
-                    cmbStreamName.SelectedValue = Convert.ToInt32(dtDetail.Rows[0]["StreamId"]);
-                    dtpStartDate.Value = Convert.ToDateTime(string.Format("{0:dd/MMM/yyyy}", dtDetail.Rows[0]["StartDate"]));
-                    dtpEndDate.Value = Convert.ToDateTime(string.Format("{0:dd/MMM/yyyy}", dtDetail.Rows[0]["EndDate"]));
-                    cmbStateName.SelectedValue = Convert.ToInt32(dtDetail.Rows[0]["StateId"]);
-                    cmbDealerCode.Text = dtDetail.Rows[0]["Dealercode"].ToString();
-                    cmbHour.Text = string.Format("{0:hh}", dtDetail.Rows[0]["StartTime"]);
-                    cmbMin.Text = string.Format("{0:mm}", dtDetail.Rows[0]["StartTime"]);
-                    cmbAMPM.Text = string.Format("{0:tt}", dtDetail.Rows[0]["StartTime"]);
-                    cmbCityName.SelectedValue = Convert.ToInt32(dtDetail.Rows[0]["CityId"]);
+        }
+
+        private void btnMenuAddNew_Click(object sender, EventArgs e)
+        {
+            SetButtonColor(btnMenuAddNew);
+            panSearch.Visible = false;
+            panAddNew.Visible = true;
+            panAddNew.Dock = DockStyle.Fill;
+        }
+
+        private void btnMenuSearch_Click(object sender, EventArgs e)
+        {
+            SetButtonColor(btnMenuSearch);
+            panSearch.Visible = true;
+            panAddNew.Visible = false;
+            panSearch.Dock = DockStyle.Fill;
+            FillSaveStreamPlaylist();
+        }
+        private void SetButtonColor(Button btnName)
+        {
+            Color light = Color.FromName("ControlLightLight");
+            Color bLight = Color.FromName("Control");
+            btnMenuSearch.BackColor = Color.FromArgb(bLight.A, bLight.R, bLight.G, bLight.B);
+            btnMenuAddNew.BackColor = Color.FromArgb(bLight.A, bLight.R, bLight.G, bLight.B);
+            btnName.BackColor = Color.White;
+        }
+
+        private void btnNew_Click(object sender, EventArgs e)
+        {
+            txtName.Focus();
+            if (Convert.ToInt32(cmbStreamName.SelectedValue) == 0)
+            {
+                txtName.Text = "";
+                btnSaveNew.Text = "Save";
+            }
+            else
+            {
+                txtName.Text = cmbStreamName.Text;
+                btnSaveNew.Text = "Update";
+            }
+            panMainNew.Width = this.Width;
+            panMainNew.Height = this.Height;
+            panMainNew.BringToFront();
+            panMainNew.Location = new Point(0, 0);
+            panMainNew.Visible = true;
+            txtName.Focus();
+            panNew.Location = new Point(
+          this.panMainNew.Width / 2 - panNew.Size.Width / 2,
+          this.panMainNew.Height / 2 - panNew.Size.Height / 2);
+        }
+
+        private void btnSaveNew_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int returnValue = 0;
+
+                SqlCommand cmd = new SqlCommand("sp_SaveStreamPlaylist", StaticClass.constr);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add(new SqlParameter("@streamPlaylistid", SqlDbType.BigInt));
+                if (btnSaveNew.Text == "Update")
+                {
+                    cmd.Parameters["@streamPlaylistid"].Value = Convert.ToInt32(cmbStreamName.SelectedValue);
+                }
+                else
+                {
+                    cmd.Parameters["@streamPlaylistid"].Value = "0";
+                }
+
+
+                cmd.Parameters.Add(new SqlParameter("@streamname", SqlDbType.VarChar));
+                cmd.Parameters["@streamname"].Value = txtName.Text;
+
+                if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
+                StaticClass.constr.Open();
+                returnValue = Convert.ToInt32(cmd.ExecuteScalar());
+                if (returnValue != 999999999)
+                {
+                    FillStreamPlaylist();
+                    cmbStreamName.SelectedValue = Convert.ToInt32(returnValue);
+                    panMainNew.Visible = false;
+
+                }
+                if (returnValue == 999999999)
+                {
+                    MessageBox.Show("This stream palylist name already exists", "Management Panel");
+
+                    // panMainNew.Visible = false;
+                    //  lblCaption.Text = "";
+                    txtName.Text = "";
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void btnNewCancel_Click(object sender, EventArgs e)
+        {
+            panMainNew.Visible = false;
+            txtName.Text = "";
+        }
+        private void FillStreamPlaylist()
+        {
+            string strState = "";
+            strState = "select streamPlaylistid, streamName from tbStreamPlaylist order by streamName";
+            objMainClass.fnFillComboBox(strState, cmbStreamName, "streamPlaylistid", "streamName", "");
+        }
+
+        private void cmbStreamName_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FillSaveData();
+        }
+        private void InitilizeSearchGrid()
+        {
+            if (dgSearch.Rows.Count > 0)
+            {
+                dgSearch.Rows.Clear();
+            }
+            if (dgSearch.Columns.Count > 0)
+            {
+                dgSearch.Columns.Clear();
+            }
+            dgSearch.Dock = DockStyle.Fill;
+            //0
+            dgSearch.Columns.Add("sid", "Id");
+            dgSearch.Columns["sid"].Width = 0;
+            dgSearch.Columns["sid"].Visible = false;
+            dgSearch.Columns["sid"].ReadOnly = true;
+            //1
+
+            dgSearch.Columns.Add("sName", "Stream Playlist Name");
+            dgSearch.Columns["sName"].Width = 200;
+            dgSearch.Columns["sName"].Visible = true;
+            dgSearch.Columns["sName"].ReadOnly = true;
+            dgSearch.Columns["sName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+           
+            DataGridViewLinkColumn EditAdvt = new DataGridViewLinkColumn();
+            EditAdvt.HeaderText = "Edit";
+            EditAdvt.Text = "Edit";
+            EditAdvt.DataPropertyName = "Edit";
+            dgSearch.Columns.Add(EditAdvt);
+            EditAdvt.UseColumnTextForLinkValue = true;
+            EditAdvt.Width = 70;
+            EditAdvt.Visible = true;
+            dgSearch.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+
+            DataGridViewLinkColumn DeleteAdvt = new DataGridViewLinkColumn();
+            DeleteAdvt.HeaderText = "Delete";
+            DeleteAdvt.Text = "Delete";
+            DeleteAdvt.DataPropertyName = "Delete";
+            dgSearch.Columns.Add(DeleteAdvt);
+            DeleteAdvt.UseColumnTextForLinkValue = true;
+            DeleteAdvt.Width = 70;
+            DeleteAdvt.Visible = true;
+            dgSearch.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+
+
+
+        }
+        private void FillSaveStreamPlaylist()
+        {
+            string sQr = "";
+            sQr = "select streamPlaylistid, streamName from tbStreamPlaylist order by streamName";
+            DataTable dtDetail = new DataTable();
+            InitilizeSearchGrid();
+            dtDetail = objMainClass.fnFillDataTable(sQr);
+            if (dtDetail.Rows.Count > 0)
+            {
+                for (int i = 0; i <= dtDetail.Rows.Count - 1; i++)
+                {
+                    sQr = "";
+                    dgSearch.Rows.Add();
+                    dgSearch.Rows[dgSearch.Rows.Count - 1].Cells["sid"].Value = dtDetail.Rows[i]["streamPlaylistid"];
+                    dgSearch.Rows[dgSearch.Rows.Count - 1].Cells["sName"].Value = dtDetail.Rows[i]["streamName"].ToString();
                 }
 
             }
-            if (e.ColumnIndex == 9)
+        }
+
+        private void dgSearch_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 2)
             {
-                MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                cmbStreamName.SelectedValue = Convert.ToInt32(dgSearch.Rows[e.RowIndex].Cells["sid"].Value);
+                SetButtonColor(btnMenuAddNew);
+                panSearch.Visible = false;
+                panAddNew.Visible = true;
+                panAddNew.Dock = DockStyle.Fill;
+            }
+            if (e.ColumnIndex == 3)
+            {
                 DialogResult result;
-                if (dgStream.Rows.Count <= 0) return;
-                if (Convert.ToInt32(dgStream.Rows[dgStream.CurrentCell.RowIndex].Cells[0].Value) != 0)
+                result = MessageBox.Show("Are you sure to delete ?", "Management Panel", MessageBoxButtons.YesNo);
+                if (result == System.Windows.Forms.DialogResult.Yes)
                 {
-                    result = MessageBox.Show("Are you sure delete selected shedule?", "Management Panel", buttons);
-                    if (result == System.Windows.Forms.DialogResult.Yes)
-                    {
-                        if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
-                        StaticClass.constr.Open();
-                        SqlCommand cmd = new SqlCommand();
-                        cmd.Connection = StaticClass.constr;
-                        cmd.CommandText = "delete from tbStreamScheduling where SheduleId=" + Convert.ToInt32(dgStream.Rows[dgStream.CurrentCell.RowIndex].Cells[0].Value);
-                        cmd.ExecuteNonQuery();
-                        StaticClass.constr.Close();
-                        FillDealerAdvtDetail("GetStreamSheduling '01-01-1900',''");
-                    }
+                    string str = "";
+                    if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
+                    StaticClass.constr.Open();
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = StaticClass.constr;
+                    str = "";
+                    str = "delete from tbStreamPlaylistSchedule where streamPlaylistid= " + Convert.ToInt32(dgSearch.Rows[e.RowIndex].Cells["sid"].Value);
+                    cmd.CommandText = str;
+                    cmd.ExecuteNonQuery();
+                    StaticClass.constr.Close();
+                    if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
+                    StaticClass.constr.Open();
+
+                    cmd = new SqlCommand();
+                    cmd.Connection = StaticClass.constr;
+                    str = "";
+                    str = "delete from tbStreamPlaylist where streamPlaylistid= " + Convert.ToInt32(dgSearch.Rows[e.RowIndex].Cells["sid"].Value);
+                    cmd.CommandText = str;
+                    cmd.ExecuteNonQuery();
+                    StaticClass.constr.Close();
+                    FillStreamPlaylist();
+                    FillSaveStreamPlaylist();
                 }
             }
         }

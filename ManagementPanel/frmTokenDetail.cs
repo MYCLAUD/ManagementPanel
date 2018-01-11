@@ -85,7 +85,7 @@ namespace ManagementPanel
                     dgToken.Rows[dgToken.Rows.Count - 1].Cells["pName"].Value = dtDetail.Rows[i]["PersonName"].ToString();
                     dgToken.Rows[dgToken.Rows.Count - 1].Cells["loc"].Value = dtDetail.Rows[i]["Location"].ToString();
                     dgToken.Rows[dgToken.Rows.Count - 1].Cells["cName"].Value = dtDetail.Rows[i]["CityName"].ToString();
-                    dgToken.Rows[dgToken.Rows.Count - 1].Cells["sName"].Value = dtDetail.Rows[i]["StateName"].ToString();
+                  //  dgToken.Rows[dgToken.Rows.Count - 1].Cells["sName"].Value = dtDetail.Rows[i]["StateName"].ToString();
                     dgToken.Rows[dgToken.Rows.Count - 1].Cells["coName"].Value = dtDetail.Rows[i]["CountryName"].ToString();
                     if (Convert.ToBoolean(dtDetail.Rows[i]["IsStore"]) == true)
                     {
@@ -93,8 +93,10 @@ namespace ManagementPanel
                     }
                     else
                     {
-                        dgToken.Rows[dgToken.Rows.Count - 1].Cells["ver"].Value = "Stream";
+                        dgToken.Rows[dgToken.Rows.Count - 1].Cells["ver"].Value = "Local";
                     }
+                    dgToken.Rows[dgToken.Rows.Count - 1].Cells["pType"].Value = dtDetail.Rows[i]["PlType"].ToString();
+                    dgToken.Rows[dgToken.Rows.Count - 1].Cells["lType"].Value = dtDetail.Rows[i]["LiType"].ToString();
                     dgToken.Rows[dgToken.Rows.Count - 1].Cells["uId"].Value = dtDetail.Rows[i]["userid"].ToString();
 
                 }
@@ -132,17 +134,18 @@ namespace ManagementPanel
             chk.Visible = false;
             dgToken.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
             //2
-            dgToken.Columns.Add("tNo", "Token No");
+            dgToken.Columns.Add("tNo", "Token Code");
             dgToken.Columns["tNo"].Width = 200;
             dgToken.Columns["tNo"].Visible = true;
             dgToken.Columns["tNo"].ReadOnly = true;
             dgToken.Columns["tNo"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             dgToken.Columns.Add("pName", "Name");
-            dgToken.Columns["pName"].Width = 250;
+            dgToken.Columns["pName"].Width = 150;
             dgToken.Columns["pName"].Visible = true;
             dgToken.Columns["pName"].ReadOnly = true;
             dgToken.Columns["pName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
 
             dgToken.Columns.Add("loc", "Location");
             dgToken.Columns["loc"].Width = 150;
@@ -150,23 +153,31 @@ namespace ManagementPanel
             dgToken.Columns["loc"].ReadOnly = true;
             dgToken.Columns["loc"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
+
+            
             dgToken.Columns.Add("cName", "City");
             dgToken.Columns["cName"].Width = 150;
             dgToken.Columns["cName"].Visible = true;
             dgToken.Columns["cName"].ReadOnly = true;
             dgToken.Columns["cName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
-            dgToken.Columns.Add("sName", "State");
-            dgToken.Columns["sName"].Width = 150;
-            dgToken.Columns["sName"].Visible = true;
-            dgToken.Columns["sName"].ReadOnly = true;
-            dgToken.Columns["sName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-
             dgToken.Columns.Add("coName", "Country");
             dgToken.Columns["coName"].Width = 150;
             dgToken.Columns["coName"].Visible = true;
             dgToken.Columns["coName"].ReadOnly = true;
             dgToken.Columns["coName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+            dgToken.Columns.Add("pType", "Player Type");
+            dgToken.Columns["pType"].Width = 100;
+            dgToken.Columns["pType"].Visible = true;
+            dgToken.Columns["pType"].ReadOnly = true;
+            dgToken.Columns["pType"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+            dgToken.Columns.Add("lType", "License Type");
+            dgToken.Columns["lType"].Width = 100;
+            dgToken.Columns["lType"].Visible = true;
+            dgToken.Columns["lType"].ReadOnly = true;
+            dgToken.Columns["lType"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             dgToken.Columns.Add("ver", "Type");
             dgToken.Columns["ver"].Width = 100;
@@ -182,7 +193,7 @@ namespace ManagementPanel
             ModifyToken.UseColumnTextForLinkValue = true;
             ModifyToken.Width = 70;
             ModifyToken.Visible = true;
-            dgToken.Columns[9].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dgToken.Columns[10].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
 
             dgToken.Columns.Add("uId", "uId");
             dgToken.Columns["uId"].Width = 0;
@@ -200,15 +211,15 @@ namespace ManagementPanel
         private void cmbClientName_Click(object sender, EventArgs e)
         {
             string str = "";
-            str = "select DFClientID,ClientName from DFClients where CountryCode is not null and DFClients.IsDealer=1 ";
-            str = str + " order by DFClientID desc ";
+            str = "select DFClientID, RIGHT(ClientName, LEN(ClientName) - 3) as ClientName from DFClients where CountryCode is not null and DFClients.IsDealer=1 ";
+            str = str + " order by RIGHT(ClientName, LEN(ClientName) - 3) ";
             objMainClass.fnFillComboBox(str, cmbClientName, "DFClientID", "ClientName", "");
         }
 
         private void dgToken_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
-            if (e.ColumnIndex == 9)
+            if (e.ColumnIndex == 10)
             {
                 frmTokenInformation frm = new frmTokenInformation();
                 StaticClass.DealerTokenId = 0;

@@ -45,10 +45,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ClosedXML">
-      <HintPath>..\..\..\WorkingProjects\AlenkaMyClaudPlayer\ManagementPanel\bin\Debug\ClosedXML.dll</HintPath>
+      <HintPath>C:\Users\ParasNet\Desktop\SearchCriteria\SearchCriteria\bin\Debug\ClosedXML.dll</HintPath>
     </Reference>
     <Reference Include="NAudio">
-      <HintPath>..\..\..\WorkingProjects\AlenkaMyClaudPlayer\ManagementPanel\bin\Debug\NAudio.dll</HintPath>
+      <HintPath>..\..\..\GetAllSongsUntitly\GetAllSongs\GetAllSongs\bin\Debug\NAudio.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -85,6 +85,18 @@
     </Compile>
     <Compile Include="frmAsianTokenSettings.designer.cs">
       <DependentUpon>frmAsianTokenSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmAssignMobileStreams.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAssignMobileStreams.Designer.cs">
+      <DependentUpon>frmAssignMobileStreams.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmAssignTokenStreams.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAssignTokenStreams.Designer.cs">
+      <DependentUpon>frmAssignTokenStreams.cs</DependentUpon>
     </Compile>
     <Compile Include="frmBestofPlaylist.cs">
       <SubType>Form</SubType>
@@ -146,6 +158,18 @@
     <Compile Include="frmCopyleftTokenSetting_Android.Designer.cs">
       <DependentUpon>frmCopyleftTokenSetting_Android.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmCopyPlaylistSchedule.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCopyPlaylistSchedule.Designer.cs">
+      <DependentUpon>frmCopyPlaylistSchedule.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmCopyPrayerTimig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCopyPrayerTimig.Designer.cs">
+      <DependentUpon>frmCopyPrayerTimig.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmCopyrightTokenSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -157,6 +181,17 @@
     </Compile>
     <Compile Include="frmCopyleftTokenGeneration.Designer.cs">
       <DependentUpon>frmCopyleftTokenGeneration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmDealerContent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDealerContent.Designer.cs">
+      <DependentUpon>frmDealerContent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmDealerContent1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>frmDealerContent.resx</DependentUpon>
     </Compile>
     <Compile Include="frmDealerLedger.cs">
       <SubType>Form</SubType>
@@ -200,6 +235,12 @@
     <Compile Include="frmOnlineStreaming.Designer.cs">
       <DependentUpon>frmOnlineStreaming.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmOtherCustomerStreamURLDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmOtherCustomerStreamURLDetails.Designer.cs">
+      <DependentUpon>frmOtherCustomerStreamURLDetails.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmPlayerUpdateVersion.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -211,6 +252,12 @@
     </Compile>
     <Compile Include="frmPrayer.Designer.cs">
       <DependentUpon>frmPrayer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmSeparation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSeparation.Designer.cs">
+      <DependentUpon>frmSeparation.cs</DependentUpon>
     </Compile>
     <Compile Include="frmSpecialEvent.cs">
       <SubType>Form</SubType>
@@ -299,6 +346,12 @@
     <EmbeddedResource Include="frmAsianTokenSettings.resx">
       <DependentUpon>frmAsianTokenSettings.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmAssignMobileStreams.resx">
+      <DependentUpon>frmAssignMobileStreams.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAssignTokenStreams.resx">
+      <DependentUpon>frmAssignTokenStreams.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmBestofPlaylist.resx">
       <DependentUpon>frmBestofPlaylist.cs</DependentUpon>
     </EmbeddedResource>
@@ -326,11 +379,21 @@
     <EmbeddedResource Include="frmCopyleftTokenSettings_iPhone.resx">
       <DependentUpon>frmCopyleftTokenSettings_iPhone.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmCopyPlaylistSchedule.resx">
+      <DependentUpon>frmCopyPlaylistSchedule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCopyPrayerTimig.resx">
+      <DependentUpon>frmCopyPrayerTimig.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmCopyrightTokenSettings.resx">
       <DependentUpon>frmCopyrightTokenSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmCopyleftTokenGeneration.resx">
       <DependentUpon>frmCopyleftTokenGeneration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmDealerContent.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>frmDealerContent1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="frmDealerLedger.resx">
       <DependentUpon>frmDealerLedger.cs</DependentUpon>
@@ -353,11 +416,17 @@
     <EmbeddedResource Include="frmOnlineStreaming.resx">
       <DependentUpon>frmOnlineStreaming.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmOtherCustomerStreamURLDetails.resx">
+      <DependentUpon>frmOtherCustomerStreamURLDetails.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmPlayerUpdateVersion.resx">
       <DependentUpon>frmPlayerUpdateVersion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmPrayer.resx">
       <DependentUpon>frmPrayer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSeparation.resx">
+      <DependentUpon>frmSeparation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmSpecialEvent.resx">
       <DependentUpon>frmSpecialEvent.cs</DependentUpon>

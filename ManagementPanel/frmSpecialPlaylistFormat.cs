@@ -30,7 +30,7 @@ namespace ManagementPanel
             {
                 mType = "Video";
             }
-            string str = "SELECT TOP (500) Titles.TitleID, Titles.Title, Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, isnull(Titles.AlenkaTempo,'') as Tempo,isnull(tbAlenkaGenre.genre,'') as genre, Titles.titleyear FROM Titles INNER JOIN Albums ON Titles.AlbumID = Albums.AlbumID INNER JOIN Artists ON Titles.ArtistID = Artists.ArtistID LEFT OUTER JOIN tbAlenkaGenre ON Titles.AlenkaGenreId = tbAlenkaGenre.AlenkaGenreId    where titlecategoryid=4  and mediatype='" + mType+"' order by TitleID desc";
+            string str = "SELECT TOP (500) Titles.TitleID, Titles.Title, Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, isnull(Titles.tempo,'') as Tempo,isnull(tbGenre.genre,'') as genre, Titles.titleyear , isnull(acategory,'') as Category FROM Titles INNER JOIN Albums ON Titles.AlbumID = Albums.AlbumID INNER JOIN Artists ON Titles.ArtistID = Artists.ArtistID LEFT OUTER JOIN tbGenre ON Titles.GenreId = tbGenre.GenreId    where titlecategoryid=4  and mediatype='" + mType+"' order by TitleID desc";
             FillGrid(str);
             tbcMain.Dock = DockStyle.Fill;
             FillFormat();
@@ -53,11 +53,22 @@ namespace ManagementPanel
             dgLocalPlaylist.Columns["playlistId"].ReadOnly = true;
             dgLocalPlaylist.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
 
+
+            DataGridViewCheckBoxColumn chk = new DataGridViewCheckBoxColumn();
+            chk.HeaderText = "";
+            chk.DataPropertyName = "IsChecked";
+            dgLocalPlaylist.Columns.Add(chk);
+            chk.Width = 50;
+            chk.Visible = true;
+            dgLocalPlaylist.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+
+
+
             dgLocalPlaylist.Columns.Add("playlistname", "Playlist Name");
             dgLocalPlaylist.Columns["playlistname"].Width = 250;
             dgLocalPlaylist.Columns["playlistname"].Visible = true;
             dgLocalPlaylist.Columns["playlistname"].ReadOnly = true;
-            dgLocalPlaylist.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dgLocalPlaylist.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dgLocalPlaylist.Columns["playlistname"].CellTemplate.Style.Font = new System.Drawing.Font("Segoe UI", 10, System.Drawing.FontStyle.Regular);
 
             DataGridViewLinkColumn EditPlaylist = new DataGridViewLinkColumn();
@@ -69,7 +80,7 @@ namespace ManagementPanel
             EditPlaylist.UseColumnTextForLinkValue = true;
             EditPlaylist.Width = 50;
             EditPlaylist.Visible = true;
-            dgLocalPlaylist.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dgLocalPlaylist.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
             EditPlaylist.CellTemplate.Style.Font = new System.Drawing.Font("Segoe UI", 10, System.Drawing.FontStyle.Regular);
 
             DataGridViewLinkColumn DeleteSong = new DataGridViewLinkColumn();
@@ -82,7 +93,7 @@ namespace ManagementPanel
             dgLocalPlaylist.Columns.Add(DeleteSong);
             DeleteSong.UseColumnTextForLinkValue = true;
             DeleteSong.Width = 55;
-            dgLocalPlaylist.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dgLocalPlaylist.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
 
         }
 
@@ -111,13 +122,13 @@ namespace ManagementPanel
                 for (iCtr = 0; (iCtr <= (dtDetail.Rows.Count - 1)); iCtr++)
                 {
                     dgLocalPlaylist.Rows.Add();
-                    dgLocalPlaylist.Rows[dgLocalPlaylist.Rows.Count - 1].Cells[0].Value = dtDetail.Rows[iCtr]["splPlaylistId"];
+                    dgLocalPlaylist.Rows[dgLocalPlaylist.Rows.Count - 1].Cells["playlistId"].Value = dtDetail.Rows[iCtr]["splPlaylistId"];
 
                     strGetCount = "select Count(*) as Total from  tbSpecialPlaylists_Titles where splPlaylistId =" + dtDetail.Rows[iCtr]["splPlaylistId"] + " ";
                     dtGetCount = ObjMainClass.fnFillDataTable(strGetCount);
 
-                    dgLocalPlaylist.Rows[dgLocalPlaylist.Rows.Count - 1].Cells[1].Value = dtDetail.Rows[iCtr]["splPlaylistName"] + "  (" + dtGetCount.Rows[0]["Total"] + ")";
-                    dgLocalPlaylist.Rows[dgLocalPlaylist.Rows.Count - 1].Cells[2].Value = "";
+                    dgLocalPlaylist.Rows[dgLocalPlaylist.Rows.Count - 1].Cells["playlistName"].Value = dtDetail.Rows[iCtr]["splPlaylistName"] + "  (" + dtGetCount.Rows[0]["Total"] + ")";
+                    dgLocalPlaylist.Rows[dgLocalPlaylist.Rows.Count - 1].Cells[1].Value = Convert.ToBoolean(dtDetail.Rows[iCtr]["IsShowDefault"]);
 
 
                 }
@@ -167,13 +178,13 @@ namespace ManagementPanel
             dgGrid.Columns["Length"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
 
             dgGrid.Columns.Add("Artist", "Artist");
-            dgGrid.Columns["Artist"].Width = 190;
+            dgGrid.Columns["Artist"].Width = 150;
             dgGrid.Columns["Artist"].Visible = true;
             dgGrid.Columns["Artist"].ReadOnly = true;
             dgGrid.Columns["Artist"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
 
             dgGrid.Columns.Add("Album", "Album");
-            dgGrid.Columns["Album"].Width = 190;
+            dgGrid.Columns["Album"].Width = 150;
             
                 dgGrid.Columns["Album"].Visible = true;
              
@@ -201,8 +212,13 @@ namespace ManagementPanel
             dgGrid.Columns["year"].ReadOnly = true;
             dgGrid.Columns["year"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
 
+            dgGrid.Columns.Add("Category", "Category");
+            dgGrid.Columns["Category"].Width = 150;
+            dgGrid.Columns["Category"].Visible = true;
+            dgGrid.Columns["Category"].ReadOnly = true;
+            dgGrid.Columns["Category"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
 
-            dgGrid.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, System.Drawing.FontStyle.Regular);
+            dgGrid.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9, System.Drawing.FontStyle.Regular);
             dgGrid.ColumnHeadersDefaultCellStyle.BackColor = Color.DimGray;
             dgGrid.EnableHeadersVisualStyles = false;
             dgGrid.ColumnHeadersHeight = 30;
@@ -221,21 +237,21 @@ namespace ManagementPanel
             if (IsBestOf == false)
             {
                 mlsSql = "SELECT  Titles.TitleID, rtrim(ltrim(Titles.Title)) as Title, Titles.Time,rtrim(ltrim(Albums.Name)) AS AlbumName ,";
-                mlsSql = mlsSql + " Titles.TitleYear ,  rtrim(ltrim(Artists.Name)) as ArtistName , isnull(tbAlenkaGenre.genre,'') as genre, isnull(Titles.AlenkaTempo,'') as Tempo  FROM   tbSpecialPlaylists_Titles  ";
+                mlsSql = mlsSql + " Titles.TitleYear ,  rtrim(ltrim(Artists.Name)) as ArtistName , isnull(tbGenre.genre,'') as genre, isnull(Titles.tempo,'') as Tempo  , isnull(acategory,'') as Category  FROM   tbSpecialPlaylists_Titles  ";
                 mlsSql = mlsSql + " INNER JOIN Titles ON tbSpecialPlaylists_Titles.TitleID = Titles.TitleID   ";
                 mlsSql = mlsSql + " INNER JOIN Albums ON Titles.AlbumID = Albums.AlbumID  ";
                 mlsSql = mlsSql + " INNER JOIN Artists ON Titles.ArtistID = Artists.ArtistID  ";
-                mlsSql = mlsSql + " LEFT OUTER JOIN tbAlenkaGenre ON Titles.AlenkaGenreId = tbAlenkaGenre.AlenkaGenreId  "; 
-                mlsSql = mlsSql + " where tbSpecialPlaylists_Titles.splPlaylistId= " + Convert.ToInt32(currentPlayRow) + " order by Titles.Title ";
+                mlsSql = mlsSql + " LEFT OUTER JOIN tbGenre ON Titles.GenreId = tbGenre.GenreId  "; 
+                mlsSql = mlsSql + " where tbSpecialPlaylists_Titles.splPlaylistId= " + Convert.ToInt32(currentPlayRow) + " order by tbSpecialPlaylists_Titles.srno ";
             }
             else
             {
                 mlsSql = "SELECT  Titles.TitleID, ltrim(Titles.Title) as Title, Titles.Time,ltrim(Albums.Name) AS AlbumName ,";
-                mlsSql = mlsSql + " Titles.TitleYear ,  ltrim(Artists.Name) as ArtistName, isnull(tbAlenkaGenre.genre,'') as genre, isnull(Titles.AlenkaTempo,'') as Tempo  FROM  TitlesInPlaylists  ";
+                mlsSql = mlsSql + " Titles.TitleYear ,  ltrim(Artists.Name) as ArtistName, isnull(tbGenre.genre,'') as genre, isnull(Titles.tempo,'') as Tempo  , isnull(acategory,'') as Category  FROM  TitlesInPlaylists  ";
                 mlsSql = mlsSql + " INNER JOIN Titles ON TitlesInPlaylists.TitleID = Titles.TitleID    ";
                 mlsSql = mlsSql + " INNER JOIN Albums ON Titles.AlbumID = Albums.AlbumID  ";
                 mlsSql = mlsSql + " INNER JOIN Artists ON Titles.ArtistID = Artists.ArtistID   ";
-                mlsSql = mlsSql + " LEFT OUTER JOIN tbAlenkaGenre ON Titles.AlenkaGenreId = tbAlenkaGenre.AlenkaGenreId  ";
+                mlsSql = mlsSql + " LEFT OUTER JOIN tbGenre ON Titles.GenreId = tbGenre.GenreId  ";
                 mlsSql = mlsSql + " where TitlesInPlaylists.PlaylistID=" + Convert.ToInt32(currentPlayRow) + " order by Titles.Title ";
             }
 
@@ -281,18 +297,19 @@ namespace ManagementPanel
 
                     dgGrid.Rows[dgGrid.Rows.Count - 1].Cells["Tempo"].Value = dtDetail.Rows[iCtr]["Tempo"];
                     dgGrid.Rows[dgGrid.Rows.Count - 1].Cells["year"].Value = dtDetail.Rows[iCtr]["TitleYear"];
+                    dgGrid.Rows[dgGrid.Rows.Count - 1].Cells["Category"].Value = dtDetail.Rows[iCtr]["Category"];
 
                     dgGrid.Rows[dgGrid.Rows.Count - 1].Cells["songname"].Style.Font = new Font("Segoe UI", 10, System.Drawing.FontStyle.Regular);
                     dgGrid.Rows[dgGrid.Rows.Count - 1].Cells["Length"].Style.Font = new Font("Segoe UI", 9, System.Drawing.FontStyle.Regular);
                     dgGrid.Rows[dgGrid.Rows.Count - 1].Cells["Album"].Style.Font = new Font("Segoe UI", 9, System.Drawing.FontStyle.Regular);
                     dgGrid.Rows[dgGrid.Rows.Count - 1].Cells["Artist"].Style.Font = new Font("Segoe UI", 9, System.Drawing.FontStyle.Regular);
                     dgGrid.Rows[dgGrid.Rows.Count - 1].Cells["Genre"].Style.Font = new Font("Segoe UI", 9, System.Drawing.FontStyle.Regular);
-                    dgGrid.Rows[dgGrid.Rows.Count - 1].Cells["Tempo"].Style.Font = new Font("Segoe UI", 9, System.Drawing.FontStyle.Regular);
-                    
+                    dgGrid.Rows[dgGrid.Rows.Count - 1].Cells["Tempo"].Style.Font = new Font("Segoe UI", 8, System.Drawing.FontStyle.Regular);
+                    dgGrid.Rows[dgGrid.Rows.Count - 1].Cells["Category"].Style.Font = new Font("Segoe UI", 9, System.Drawing.FontStyle.Regular);
                     //dgGrid.Rows[dgGrid.Rows.Count - 1].Cells["songname"].Style.Font = new Font("Segoe UI", 11, System.Drawing.FontStyle.Regular);
                     //dgGrid.Rows[dgGrid.Rows.Count - 1].Cells["Length"].Style.Font = new Font("Segoe UI", 11, System.Drawing.FontStyle.Regular);
                     //dgGrid.Rows[dgGrid.Rows.Count - 1].Cells["genre"].Style.Font = new Font("Segoe UI", 9, System.Drawing.FontStyle.Regular);
-                   //dgGrid.Rows[dgGrid.Rows.Count - 1].Cells["Artist"].Style.Font = new Font("Segoe UI", 11, System.Drawing.FontStyle.Regular);
+                    //dgGrid.Rows[dgGrid.Rows.Count - 1].Cells["Artist"].Style.Font = new Font("Segoe UI", 11, System.Drawing.FontStyle.Regular);
                 }
             }
             foreach (DataGridViewRow row in dgGrid.Rows)
@@ -304,26 +321,27 @@ namespace ManagementPanel
         private void dgLocalPlaylist_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex == -1) return;
-            if (e.ColumnIndex == 1)
+           
+            if (e.ColumnIndex == 2)
             {
                 if (e.RowIndex >= 0)
                 {
                     PopulateInputFileTypeDetail(dgPlaylist, Convert.ToInt32(dgLocalPlaylist.Rows[e.RowIndex].Cells[0].Value), false);
                 }
             }
-            if (e.ColumnIndex == 2)
+            if (e.ColumnIndex == 3)
             {
                 if (e.RowIndex >= 0)
                 {
-                    string str45 = dgLocalPlaylist.Rows[e.RowIndex].Cells[1].Value.ToString();
+                    string str45 = dgLocalPlaylist.Rows[e.RowIndex].Cells["playlistname"].Value.ToString();
                     string[] arr = str45.Split('(');
                     txtPlaylistName.Text = arr[0].Trim();
-                    ModifyPlaylistId = Convert.ToInt32(dgLocalPlaylist.Rows[e.RowIndex].Cells[0].Value);
+                    ModifyPlaylistId = Convert.ToInt32(dgLocalPlaylist.Rows[e.RowIndex].Cells["playlistid"].Value);
                     pAction = "Modify";
                     txtPlaylistName.Focus();
                 }
             }
-            if (e.ColumnIndex == 3)
+            if (e.ColumnIndex == 4)
             {
                 if (e.RowIndex >= 0)
                 {
@@ -335,7 +353,7 @@ namespace ManagementPanel
                         DataTable dtDetail = new DataTable();
                         strDel = "select tbSpecialPlaylistSchedule_Token.* from tbSpecialPlaylistSchedule";
                         strDel = strDel + " inner join tbSpecialPlaylistSchedule_Token on tbSpecialPlaylistSchedule_Token.pschid= tbSpecialPlaylistSchedule.pschid";
-                        strDel = strDel + " where tbSpecialPlaylistSchedule.splplaylistid = " + Convert.ToInt32(dgLocalPlaylist.Rows[e.RowIndex].Cells[0].Value);
+                        strDel = strDel + " where tbSpecialPlaylistSchedule.splplaylistid = " + Convert.ToInt32(dgLocalPlaylist.Rows[e.RowIndex].Cells["playlistid"].Value);
 
 
                         dtDetail = ObjMainClass.fnFillDataTable(strDel);
@@ -347,7 +365,7 @@ namespace ManagementPanel
 
 
                         strDel = "";
-                        strDel = "delete from tbSpecialPlaylists_Titles where splPlaylistId= " + Convert.ToInt32(dgLocalPlaylist.Rows[e.RowIndex].Cells[0].Value);
+                        strDel = "delete from tbSpecialPlaylists_Titles where splPlaylistId= " + Convert.ToInt32(dgLocalPlaylist.Rows[e.RowIndex].Cells["playlistid"].Value);
                         if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
                         StaticClass.constr.Open();
                         SqlCommand cmd = new SqlCommand(strDel, StaticClass.constr);
@@ -356,7 +374,7 @@ namespace ManagementPanel
                         StaticClass.constr.Close();
 
                         strDel = "";
-                        strDel = "delete from tbSpecialPlaylists where splPlaylistId= " + Convert.ToInt32(dgLocalPlaylist.Rows[e.RowIndex].Cells[0].Value);
+                        strDel = "delete from tbSpecialPlaylists where splPlaylistId= " + Convert.ToInt32(dgLocalPlaylist.Rows[e.RowIndex].Cells["playlistid"].Value);
                         if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
                         StaticClass.constr.Open();
                         cmd = new SqlCommand(strDel, StaticClass.constr);
@@ -368,7 +386,7 @@ namespace ManagementPanel
 
                         if (dgLocalPlaylist.Rows.Count > 0)
                         {
-                            PopulateInputFileTypeDetail(dgPlaylist, Convert.ToInt32(dgLocalPlaylist.Rows[0].Cells[0].Value), false);
+                            PopulateInputFileTypeDetail(dgPlaylist, Convert.ToInt32(dgLocalPlaylist.Rows[0].Cells["playlistid"].Value), false);
                         }
                         else
                         {
@@ -420,11 +438,15 @@ namespace ManagementPanel
                             dgCommanGrid.Rows[dgCommanGrid.Rows.Count - 1].Cells["Genre"].Value = dtDetail.Rows[iCtr]["genre"];
                             dgCommanGrid.Rows[dgCommanGrid.Rows.Count - 1].Cells["Tempo"].Value = dtDetail.Rows[iCtr]["Tempo"];
                         dgCommanGrid.Rows[dgCommanGrid.Rows.Count - 1].Cells["year"].Value = dtDetail.Rows[iCtr]["TitleYear"];
+                        dgCommanGrid.Rows[dgCommanGrid.Rows.Count - 1].Cells["Category"].Value = dtDetail.Rows[iCtr]["Category"];
 
+                        dgCommanGrid.Rows[dgCommanGrid.Rows.Count - 1].Cells["songname"].Style.Font = new Font("Segoe UI", 9, System.Drawing.FontStyle.Regular);
                         dgCommanGrid.Rows[dgCommanGrid.Rows.Count - 1].Cells["Artist"].Style.Font = new Font("Segoe UI", 9, System.Drawing.FontStyle.Regular);
                         dgCommanGrid.Rows[dgCommanGrid.Rows.Count - 1].Cells["Album"].Style.Font = new Font("Segoe UI", 9, System.Drawing.FontStyle.Regular);
                         dgCommanGrid.Rows[dgCommanGrid.Rows.Count - 1].Cells["Genre"].Style.Font = new Font("Segoe UI", 9, System.Drawing.FontStyle.Regular);
-
+                        dgCommanGrid.Rows[dgCommanGrid.Rows.Count - 1].Cells["Category"].Style.Font = new Font("Segoe UI", 9, System.Drawing.FontStyle.Regular);
+                        dgCommanGrid.Rows[dgCommanGrid.Rows.Count - 1].Cells["Tempo"].Style.Font = new Font("Segoe UI", 9, System.Drawing.FontStyle.Regular);
+                        dgCommanGrid.Rows[dgCommanGrid.Rows.Count - 1].Cells["year"].Style.Font = new Font("Segoe UI", 9, System.Drawing.FontStyle.Regular);
                     }
                     foreach (DataGridViewRow row in dgCommanGrid.Rows)
                     {
@@ -463,7 +485,7 @@ namespace ManagementPanel
             {
                 if (txtSearch.Text == "")
                 {
-                        string str = "SELECT TOP (500) Titles.TitleID, Titles.Title, Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, isnull(Titles.AlenkaTempo,'') as Tempo,isnull(tbAlenkaGenre.genre,'') as genre , Titles.titleyear FROM Titles INNER JOIN Albums ON Titles.AlbumID = Albums.AlbumID INNER JOIN Artists ON Titles.ArtistID = Artists.ArtistID LEFT OUTER JOIN tbAlenkaGenre ON Titles.AlenkaGenreId = tbAlenkaGenre.AlenkaGenreId    where titlecategoryid=4 and mediaType='" + mType + "' order by TitleID desc";
+                        string str = "SELECT TOP (500) Titles.TitleID, Titles.Title, Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, isnull(Titles.tempo,'') as Tempo,isnull(tbGenre.genre,'') as genre , Titles.titleyear ,isnull(acategory,'') as Category FROM Titles INNER JOIN Albums ON Titles.AlbumID = Albums.AlbumID INNER JOIN Artists ON Titles.ArtistID = Artists.ArtistID LEFT OUTER JOIN tbGenre ON Titles.GenreId = tbGenre.GenreId    where titlecategoryid=4 and mediaType='" + mType + "' order by TitleID desc";
                         FillGrid(str);
                         return;
                 }
@@ -549,37 +571,63 @@ namespace ManagementPanel
             }
             else if (rdoGenre.Checked==true)
             {
-                stSearch = " select distinct TitleID, ltrim(Title) as Title,Time, ltrim(ArtistName) as ArtistName, ltrim(AlbumName) as AlbumName , isnull(genre,'') as genre, Tempo ,titleyear from( ";
-                stSearch = stSearch + " SELECT  Titles.TitleID, Titles.Title,Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, tbAlenkaGenre.genre, isnull(Titles.AlenkaTempo,'') as Tempo,Titles.titleyear FROM Titles ";
+                stSearch = " select distinct TitleID, ltrim(Title) as Title,Time, ltrim(ArtistName) as ArtistName, ltrim(AlbumName) as AlbumName , isnull(genre,'') as genre, Tempo ,titleyear,Category  from( ";
+                stSearch = stSearch + " SELECT  Titles.TitleID, Titles.Title,Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, tbGenre.genre, isnull(Titles.tempo,'') as Tempo,Titles.titleyear , isnull(acategory,'') as Category FROM Titles ";
                 stSearch = stSearch + " INNER JOIN Albums ON Titles.AlbumID = Albums.AlbumID  ";
                 stSearch = stSearch + " INNER JOIN Artists ON Titles.ArtistID = Artists.ArtistID  ";
-                stSearch = stSearch + " LEFT OUTER JOIN tbAlenkaGenre ON Titles.AlenkaGenreId = tbAlenkaGenre.AlenkaGenreId  ";
-                stSearch = stSearch + " where Titles.AlenkaGenreId= " + Convert.ToInt32(cmbAlbum.SelectedValue) + " and Titles.mediatype='" + mType + "'";
+                stSearch = stSearch + " LEFT OUTER JOIN tbGenre ON Titles.GenreId = tbGenre.GenreId  ";
+                stSearch = stSearch + " where Titles.GenreId= " + Convert.ToInt32(cmbAlbum.SelectedValue) + " and Titles.mediatype='" + mType + "'";
                     
                 stSearch = stSearch + " ) as d  order by TitleID desc    ";
             }
             else if (rdoTempo.Checked == true)
             {
-                stSearch = " select distinct TitleID, ltrim(Title) as Title,Time, ltrim(ArtistName) as ArtistName, ltrim(AlbumName) as AlbumName , isnull(genre,'') as genre, Tempo, titleyear from( ";
-                stSearch = stSearch + " SELECT  Titles.TitleID, Titles.Title,Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, tbAlenkaGenre.genre, isnull(Titles.AlenkaTempo,'') as Tempo , Titles.titleyear FROM Titles ";
+                stSearch = " select distinct TitleID, ltrim(Title) as Title,Time, ltrim(ArtistName) as ArtistName, ltrim(AlbumName) as AlbumName , isnull(genre,'') as genre, Tempo, titleyear,Category  from( ";
+                stSearch = stSearch + " SELECT  Titles.TitleID, Titles.Title,Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, tbGenre.genre, isnull(Titles.tempo,'') as Tempo , Titles.titleyear, isnull(acategory,'') as Category  FROM Titles ";
                 stSearch = stSearch + " INNER JOIN Albums ON Titles.AlbumID = Albums.AlbumID  ";
                 stSearch = stSearch + " INNER JOIN Artists ON Titles.ArtistID = Artists.ArtistID  ";
-                stSearch = stSearch + " LEFT OUTER JOIN tbAlenkaGenre ON Titles.AlenkaGenreId = tbAlenkaGenre.AlenkaGenreId  ";
-                stSearch = stSearch + " where Titles.alenkatempo= '" + cmbAlbum.Text + "'  and Titles.mediatype='" + mType + "'";
+                stSearch = stSearch + " LEFT OUTER JOIN tbGenre ON Titles.GenreId = tbGenre.GenreId  ";
+                stSearch = stSearch + " where Titles.tempo= '" + cmbAlbum.Text + "'  and Titles.mediatype='" + mType + "'";
 
                 stSearch = stSearch + " ) as d  order by TitleID desc    ";
             }
             else if (rdoCategory.Checked == true)
             {
-                stSearch = " select distinct TitleID, ltrim(Title) as Title,Time, ltrim(ArtistName) as ArtistName, ltrim(AlbumName) as AlbumName , isnull(genre,'') as genre, Tempo , titleyear from( ";
-                stSearch = stSearch + " SELECT  Titles.TitleID, Titles.Title,Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, tbAlenkaGenre.genre, isnull(Titles.AlenkaTempo,'') as Tempo , Titles.titleyear FROM Titles ";
+                stSearch = " select distinct TitleID, ltrim(Title) as Title,Time, ltrim(ArtistName) as ArtistName, ltrim(AlbumName) as AlbumName , isnull(genre,'') as genre, Tempo , titleyear,Category from( ";
+                stSearch = stSearch + " SELECT  Titles.TitleID, Titles.Title,Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, tbGenre.genre, isnull(Titles.tempo,'') as Tempo , Titles.titleyear , isnull(acategory,'') as Category  FROM Titles ";
                 stSearch = stSearch + " INNER JOIN Albums ON Titles.AlbumID = Albums.AlbumID  ";
                 stSearch = stSearch + " INNER JOIN Artists ON Titles.ArtistID = Artists.ArtistID  ";
-                stSearch = stSearch + " LEFT OUTER JOIN tbAlenkaGenre ON Titles.AlenkaGenreId = tbAlenkaGenre.AlenkaGenreId  ";
-                stSearch = stSearch + " where Titles.alenkacategory= '" + cmbAlbum.Text + "'  and Titles.mediatype='" + mType + "'";
+                stSearch = stSearch + " LEFT OUTER JOIN tbGenre ON Titles.GenreId = tbGenre.GenreId  ";
+                stSearch = stSearch + " where Titles.acategory= '" + cmbAlbum.Text + "'  and Titles.mediatype='" + mType + "'";
 
                 stSearch = stSearch + " ) as d  order by TitleID desc    ";
             }
+            else if (rdoPlaylist.Checked == true)
+            {
+                stSearch = " select distinct TitleID, ltrim(Title) as Title,Time, ltrim(ArtistName) as ArtistName, ltrim(AlbumName) as AlbumName , isnull(genre,'') as genre, Tempo , titleyear,Category from( ";
+                stSearch = stSearch + " SELECT  Titles.TitleID, Titles.Title,Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, tbGenre.genre, isnull(Titles.tempo,'') as Tempo , Titles.titleyear , isnull(acategory,'') as Category  FROM Titles ";
+                stSearch = stSearch + " INNER JOIN Albums ON Titles.AlbumID = Albums.AlbumID  ";
+                stSearch = stSearch + " INNER JOIN Artists ON Titles.ArtistID = Artists.ArtistID  ";
+                stSearch = stSearch + " LEFT OUTER JOIN tbGenre ON Titles.GenreId = tbGenre.GenreId  ";
+                stSearch = stSearch + " inner JOIN tbSpecialPlaylists_Titles ON Titles.TitleID = tbSpecialPlaylists_Titles.TitleID    ";
+                stSearch = stSearch + " where tbSpecialPlaylists_Titles.splPlaylistid= " + Convert.ToInt32(cmbAlbum.SelectedValue) + "  and Titles.mediatype='" + mType + "'";
+
+                stSearch = stSearch + " ) as d  order by TitleID desc    ";
+            }
+
+            else if (rdoLang.Checked == true)
+            {
+                stSearch = " select distinct TitleID, ltrim(Title) as Title,Time, ltrim(ArtistName) as ArtistName, ltrim(AlbumName) as AlbumName , isnull(genre,'') as genre, Tempo ,titleyear,Category  from( ";
+                stSearch = stSearch + " SELECT  Titles.TitleID, Titles.Title,Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, tbGenre.genre, isnull(Titles.tempo,'') as Tempo,Titles.titleyear , isnull(acategory,'') as Category FROM Titles ";
+                stSearch = stSearch + " INNER JOIN Albums ON Titles.AlbumID = Albums.AlbumID  ";
+                stSearch = stSearch + " INNER JOIN Artists ON Titles.ArtistID = Artists.ArtistID  ";
+                stSearch = stSearch + " LEFT OUTER JOIN tbGenre ON Titles.GenreId = tbGenre.GenreId  ";
+                stSearch = stSearch + " where Titles.Language = '" +  cmbAlbum.Text  + "' and Titles.mediatype='" + mType + "'";
+
+                stSearch = stSearch + " ) as d  order by TitleID desc    ";
+            }
+
+
             FillGrid(stSearch);
         }
 
@@ -628,7 +676,7 @@ namespace ManagementPanel
             {
                 if (txtSearch.Text == "")
                 {
-                        string str = "SELECT TOP (500) Titles.TitleID, Titles.Title, Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, isnull(Titles.AlenkaTempo,'') as Tempo,isnull(tbAlenkaGenre.genre,'') as genre , Titles.titleyear FROM Titles INNER JOIN Albums ON Titles.AlbumID = Albums.AlbumID INNER JOIN Artists ON Titles.ArtistID = Artists.ArtistID LEFT OUTER JOIN tbAlenkaGenre ON Titles.AlenkaGenreId = tbAlenkaGenre.AlenkaGenreId    where titlecategoryid=4  and mediatype='" + mType + "' order by TitleID desc";
+                        string str = "SELECT TOP (500) Titles.TitleID, Titles.Title, Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, isnull(Titles.tempo,'') as Tempo,isnull(tbGenre.genre,'') as genre , Titles.titleyear, isnull(acategory,'') as Category  FROM Titles INNER JOIN Albums ON Titles.AlbumID = Albums.AlbumID INNER JOIN Artists ON Titles.ArtistID = Artists.ArtistID LEFT OUTER JOIN tbGenre ON Titles.GenreId = tbGenre.GenreId    where titlecategoryid=4  and mediatype='" + mType + "' order by TitleID desc";
                         FillGrid(str);
                         return;
                 }
@@ -683,7 +731,7 @@ namespace ManagementPanel
                     StaticClass.constr.Open();
                     cmd = new SqlCommand();
                     cmd.Connection = StaticClass.constr;
-                    cmd.CommandText = "insert into tbSpecialPlaylists_Titles select " + lPlaylistId + ",titleid from titlesinplaylists where playlistid=" + Convert.ToInt32(dgBestofPlaylist.Rows[dgBestofPlaylist.CurrentCell.RowIndex].Cells[0].Value);
+                    cmd.CommandText = "insert into tbSpecialPlaylists_Titles(splplaylistid,titleid,srno) select " + lPlaylistId + ",titleid,0 from titlesinplaylists where playlistid=" + Convert.ToInt32(dgBestofPlaylist.Rows[dgBestofPlaylist.CurrentCell.RowIndex].Cells[0].Value);
                     cmd.ExecuteNonQuery();
                     StaticClass.constr.Close();
                 }
@@ -693,7 +741,7 @@ namespace ManagementPanel
                     StaticClass.constr.Open();
                     cmd = new SqlCommand();
                     cmd.Connection = StaticClass.constr;
-                    cmd.CommandText = "insert into tbSpecialPlaylists_Titles select " + lPlaylistId + ",titleid from tbSpecialPlaylists_Titles where splPlaylistid=" + Convert.ToInt32(dgLibrary.Rows[dgLibrary.CurrentCell.RowIndex].Cells[0].Value);
+                    cmd.CommandText = "insert into tbSpecialPlaylists_Titles(splplaylistid,titleid,srno) select " + lPlaylistId + ",titleid,0 from tbSpecialPlaylists_Titles where splPlaylistid=" + Convert.ToInt32(dgLibrary.Rows[dgLibrary.CurrentCell.RowIndex].Cells[0].Value);
                     cmd.ExecuteNonQuery();
                     StaticClass.constr.Close();
                 }
@@ -744,13 +792,15 @@ namespace ManagementPanel
                             TitleTime = dgCommanGrid.Rows[i].Cells["Length"].Value.ToString();
                             AlbumName = dgCommanGrid.Rows[i].Cells["album"].Value.ToString();
                             ArtistName = dgCommanGrid.Rows[i].Cells["Artist"].Value.ToString();
-                            dgPlaylist.Rows.Insert(dgPlaylist.Rows.Count, Title_id, Title, TitleTime, ArtistName, AlbumName, dgCommanGrid.Rows[i].Cells["Genre"].Value.ToString(), dgCommanGrid.Rows[i].Cells["Tempo"].Value.ToString());
+                            dgPlaylist.Rows.Insert(dgPlaylist.Rows.Count, Title_id, Title, TitleTime, ArtistName, AlbumName, dgCommanGrid.Rows[i].Cells["Genre"].Value.ToString(), dgCommanGrid.Rows[i].Cells["Tempo"].Value.ToString(), dgCommanGrid.Rows[i].Cells["Year"].Value.ToString(), dgCommanGrid.Rows[i].Cells["category"].Value.ToString());
                             dgPlaylist.Rows[dgPlaylist.Rows.Count - 1].Cells["songname"].Style.Font = new Font("Segoe UI", 10, System.Drawing.FontStyle.Regular);
                             dgPlaylist.Rows[dgPlaylist.Rows.Count - 1].Cells["Length"].Style.Font = new Font("Segoe UI", 9, System.Drawing.FontStyle.Regular);
                             dgPlaylist.Rows[dgPlaylist.Rows.Count - 1].Cells["Album"].Style.Font = new Font("Segoe UI", 9, System.Drawing.FontStyle.Regular);
                             dgPlaylist.Rows[dgPlaylist.Rows.Count - 1].Cells["Artist"].Style.Font = new Font("Segoe UI", 9, System.Drawing.FontStyle.Regular);
                             dgPlaylist.Rows[dgPlaylist.Rows.Count - 1].Cells["Genre"].Style.Font = new Font("Segoe UI", 9, System.Drawing.FontStyle.Regular);
                             dgPlaylist.Rows[dgPlaylist.Rows.Count - 1].Cells["Tempo"].Style.Font = new Font("Segoe UI", 9, System.Drawing.FontStyle.Regular);
+                            dgPlaylist.Rows[dgPlaylist.Rows.Count - 1].Cells["year"].Style.Font = new Font("Segoe UI", 9, System.Drawing.FontStyle.Regular);
+                            dgPlaylist.Rows[dgPlaylist.Rows.Count - 1].Cells["category"].Style.Font = new Font("Segoe UI", 9, System.Drawing.FontStyle.Regular);
                             insert_Playlist_song(dgCommanGrid.Rows[i].Cells[0].Value.ToString(), "No", false);
                             GetSongCounter();
                         }
@@ -781,6 +831,8 @@ namespace ManagementPanel
                 cmd.Parameters["@splPlaylistId"].Value = Convert.ToInt32(dgLocalPlaylist.Rows[dgLocalPlaylist.CurrentCell.RowIndex].Cells[0].Value);
                 cmd.Parameters.Add(new SqlParameter("@TitleID", SqlDbType.BigInt));
                 cmd.Parameters["@TitleID"].Value = songid;
+                cmd.Parameters.Add(new SqlParameter("@Srno", SqlDbType.Int));
+                cmd.Parameters["@Srno"].Value = dgPlaylist.Rows.Count;
                 cmd.ExecuteNonQuery();
             }
             catch (Exception ex)
@@ -914,7 +966,9 @@ namespace ManagementPanel
         {
             if (tbcMain.SelectedIndex == 0)
             {
+                 
                 FillLocalPlaylist();
+                
             }
         }
 
@@ -1364,13 +1418,13 @@ namespace ManagementPanel
                                 StaticClass.constr.Close();
 
 
-                                if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
-                                StaticClass.constr.Open();
-                                cmd = new SqlCommand();
-                                cmd.Connection = StaticClass.constr;
-                                cmd.CommandText = "delete from Titles where TitleID =" + dgPlaylist.Rows[i].Cells[0].Value;
-                                cmd.ExecuteNonQuery();
-                                StaticClass.constr.Close();
+                                //if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
+                                //StaticClass.constr.Open();
+                                //cmd = new SqlCommand();
+                                //cmd.Connection = StaticClass.constr;
+                                //cmd.CommandText = "delete from Titles where TitleID =" + dgPlaylist.Rows[i].Cells[0].Value;
+                                //cmd.ExecuteNonQuery();
+                                //StaticClass.constr.Close();
 
                                 // dgPlaylist.Rows.RemoveAt(i);
                             }
@@ -1441,8 +1495,8 @@ namespace ManagementPanel
         {
             if (rdoGenre.Checked == true)
             {
-                string str = "select *  from tbAlenkaGenre order by genre";
-                ObjMainClass.fnFillComboBoxSpl(str, cmbAlbum, "AlenkaGenreId", "genre", "");
+                string str = "select *  from tbGenre order by genre";
+                ObjMainClass.fnFillComboBoxSpl(str, cmbAlbum, "GenreId", "genre", "");
                 cmbAlbum.Visible = true;
                 txtSearch.Visible = false;
             }
@@ -1454,8 +1508,8 @@ namespace ManagementPanel
         {
             if (rdoTempo.Checked == true)
             {
-                string str = "select  alenkatempo  as Tempo, 1 as alenkatempo from titles where alenkatempo is not null group by alenkatempo order by alenkatempo";
-                ObjMainClass.fnFillComboBoxSpl(str, cmbAlbum, "alenkatempo", "Tempo", "");
+                string str = "select  tempo  as Tempo, 1 as tempo from titles where tempo is not null group by tempo order by tempo";
+                ObjMainClass.fnFillComboBoxSpl(str, cmbAlbum, "tempo", "Tempo", "");
                 cmbAlbum.Visible = true;
                 txtSearch.Visible = false;
             }
@@ -1691,7 +1745,7 @@ namespace ManagementPanel
                 {
                     if (txtSearch.Text == "")
                     {
-                        string str = "SELECT TOP (500) Titles.TitleID, Titles.Title, Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, isnull(Titles.AlenkaTempo,'') as Tempo,isnull(tbAlenkaGenre.genre,'') as genre, Titles.titleyear FROM Titles INNER JOIN Albums ON Titles.AlbumID = Albums.AlbumID INNER JOIN Artists ON Titles.ArtistID = Artists.ArtistID LEFT OUTER JOIN tbAlenkaGenre ON Titles.AlenkaGenreId = tbAlenkaGenre.AlenkaGenreId    where titlecategoryid=4 and mediaType='" + mType + "' order by TitleID desc";
+                        string str = "SELECT TOP (500) Titles.TitleID, Titles.Title, Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, isnull(Titles.tempo,'') as Tempo,isnull(tbGenre.genre,'') as genre, Titles.titleyear, isnull(acategory,'') as Category  FROM Titles INNER JOIN Albums ON Titles.AlbumID = Albums.AlbumID INNER JOIN Artists ON Titles.ArtistID = Artists.ArtistID LEFT OUTER JOIN tbGenre ON Titles.GenreId = tbGenre.GenreId    where titlecategoryid=4 and mediaType='" + mType + "' order by TitleID desc";
                         FillGrid(str);
                         return;
                     }
@@ -1716,23 +1770,23 @@ namespace ManagementPanel
                     }
                     else if (rdoGenre.Checked == true)
                     {
-                        stSearch = " select distinct TitleID, ltrim(Title) as Title,Time, ltrim(ArtistName) as ArtistName, ltrim(AlbumName) as AlbumName , isnull(genre,'') as genre, Tempo from( ";
-                        stSearch = stSearch + " SELECT  Titles.TitleID, Titles.Title,Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, tbAlenkaGenre.genre, isnull(Titles.AlenkaTempo,'') as Tempo FROM Titles ";
+                        stSearch = " select distinct TitleID, ltrim(Title) as Title,Time, ltrim(ArtistName) as ArtistName, ltrim(AlbumName) as AlbumName , isnull(genre,'') as genre, Tempo,titleyear,Category from( ";
+                        stSearch = stSearch + " SELECT  Titles.TitleID, Titles.Title,Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, tbGenre.genre, isnull(Titles.tempo,'') as Tempo, Titles.titleyear, isnull(acategory,'') as Category   FROM Titles ";
                         stSearch = stSearch + " INNER JOIN Albums ON Titles.AlbumID = Albums.AlbumID  ";
                         stSearch = stSearch + " INNER JOIN Artists ON Titles.ArtistID = Artists.ArtistID  ";
-                        stSearch = stSearch + " LEFT OUTER JOIN tbAlenkaGenre ON Titles.AlenkaGenreId = tbAlenkaGenre.AlenkaGenreId  ";
-                        stSearch = stSearch + " where Titles.AlenkaGenreId= " + Convert.ToInt32(cmbAlbum.SelectedValue) + " and Titles.mediatype='" + mType + "'";
+                        stSearch = stSearch + " LEFT OUTER JOIN tbGenre ON Titles.GenreId = tbGenre.GenreId  ";
+                        stSearch = stSearch + " where Titles.GenreId= " + Convert.ToInt32(cmbAlbum.SelectedValue) + " and Titles.mediatype='" + mType + "'";
 
                         stSearch = stSearch + " ) as d  order by TitleID desc    ";
                     }
                     else if (rdoTempo.Checked == true)
                     {
-                        stSearch = " select distinct TitleID, ltrim(Title) as Title,Time, ltrim(ArtistName) as ArtistName, ltrim(AlbumName) as AlbumName , isnull(genre,'') as genre, Tempo from( ";
-                        stSearch = stSearch + " SELECT  Titles.TitleID, Titles.Title,Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, tbAlenkaGenre.genre, isnull(Titles.AlenkaTempo,'') as Tempo FROM Titles ";
+                        stSearch = " select distinct TitleID, ltrim(Title) as Title,Time, ltrim(ArtistName) as ArtistName, ltrim(AlbumName) as AlbumName , isnull(genre,'') as genre, Tempo,titleyear,Category  from( ";
+                        stSearch = stSearch + " SELECT  Titles.TitleID, Titles.Title,Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, tbGenre.genre, isnull(Titles.tempo,'') as Tempo, Titles.titleyear, isnull(acategory,'') as Category   FROM Titles ";
                         stSearch = stSearch + " INNER JOIN Albums ON Titles.AlbumID = Albums.AlbumID  ";
                         stSearch = stSearch + " INNER JOIN Artists ON Titles.ArtistID = Artists.ArtistID  ";
-                        stSearch = stSearch + " LEFT OUTER JOIN tbAlenkaGenre ON Titles.AlenkaGenreId = tbAlenkaGenre.AlenkaGenreId  ";
-                        stSearch = stSearch + " where Titles.alenkatempo= '" + cmbAlbum.Text + "'  and Titles.mediatype='" + mType + "'";
+                        stSearch = stSearch + " LEFT OUTER JOIN tbGenre ON Titles.GenreId = tbGenre.GenreId  ";
+                        stSearch = stSearch + " where Titles.tempo= '" + cmbAlbum.Text + "'  and Titles.mediatype='" + mType + "'";
 
                         stSearch = stSearch + " ) as d  order by TitleID desc    ";
                     }
@@ -1758,7 +1812,7 @@ namespace ManagementPanel
                 {
                     if (txtSearch.Text == "")
                     {
-                        string str = "SELECT TOP (500) Titles.TitleID, Titles.Title, Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, isnull(Titles.AlenkaTempo,'') as Tempo,isnull(tbAlenkaGenre.genre,'') as genre, Titles.titleyear FROM Titles INNER JOIN Albums ON Titles.AlbumID = Albums.AlbumID INNER JOIN Artists ON Titles.ArtistID = Artists.ArtistID LEFT OUTER JOIN tbAlenkaGenre ON Titles.AlenkaGenreId = tbAlenkaGenre.AlenkaGenreId    where titlecategoryid=4 and mediaType='" + mType + "' order by TitleID desc";
+                        string str = "SELECT TOP (500) Titles.TitleID, Titles.Title, Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, isnull(Titles.tempo,'') as Tempo,isnull(tbGenre.genre,'') as genre, Titles.titleyear, isnull(acategory,'') as Category FROM Titles INNER JOIN Albums ON Titles.AlbumID = Albums.AlbumID INNER JOIN Artists ON Titles.ArtistID = Artists.ArtistID LEFT OUTER JOIN tbGenre ON Titles.GenreId = tbGenre.GenreId    where titlecategoryid=4 and mediaType='" + mType + "' order by TitleID desc";
                         FillGrid(str);
                         return;
                     }
@@ -1783,23 +1837,23 @@ namespace ManagementPanel
                     }
                     else if (rdoGenre.Checked == true)
                     {
-                        stSearch = " select distinct TitleID, ltrim(Title) as Title,Time, ltrim(ArtistName) as ArtistName, ltrim(AlbumName) as AlbumName , isnull(genre,'') as genre, Tempo from( ";
-                        stSearch = stSearch + " SELECT  Titles.TitleID, Titles.Title,Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, tbAlenkaGenre.genre, isnull(Titles.AlenkaTempo,'') as Tempo FROM Titles ";
+                        stSearch = " select distinct TitleID, ltrim(Title) as Title,Time, ltrim(ArtistName) as ArtistName, ltrim(AlbumName) as AlbumName , isnull(genre,'') as genre, Tempo,titleyear,Category  from( ";
+                        stSearch = stSearch + " SELECT  Titles.TitleID, Titles.Title,Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, tbGenre.genre, isnull(Titles.tempo,'') as Tempo, Titles.titleyear, isnull(acategory,'') as Category  FROM Titles ";
                         stSearch = stSearch + " INNER JOIN Albums ON Titles.AlbumID = Albums.AlbumID  ";
                         stSearch = stSearch + " INNER JOIN Artists ON Titles.ArtistID = Artists.ArtistID  ";
-                        stSearch = stSearch + " LEFT OUTER JOIN tbAlenkaGenre ON Titles.AlenkaGenreId = tbAlenkaGenre.AlenkaGenreId  ";
-                        stSearch = stSearch + " where Titles.AlenkaGenreId= " + Convert.ToInt32(cmbAlbum.SelectedValue) + " and Titles.mediatype='" + mType + "'";
+                        stSearch = stSearch + " LEFT OUTER JOIN tbGenre ON Titles.GenreId = tbGenre.GenreId  ";
+                        stSearch = stSearch + " where Titles.GenreId= " + Convert.ToInt32(cmbAlbum.SelectedValue) + " and Titles.mediatype='" + mType + "'";
 
                         stSearch = stSearch + " ) as d  order by TitleID desc    ";
                     }
                     else if (rdoTempo.Checked == true)
                     {
-                        stSearch = " select distinct TitleID, ltrim(Title) as Title,Time, ltrim(ArtistName) as ArtistName, ltrim(AlbumName) as AlbumName , isnull(genre,'') as genre, Tempo from( ";
-                        stSearch = stSearch + " SELECT  Titles.TitleID, Titles.Title,Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, tbAlenkaGenre.genre, isnull(Titles.AlenkaTempo,'') as Tempo FROM Titles ";
+                        stSearch = " select distinct TitleID, ltrim(Title) as Title,Time, ltrim(ArtistName) as ArtistName, ltrim(AlbumName) as AlbumName , isnull(genre,'') as genre, Tempo,titleyear,Category from( ";
+                        stSearch = stSearch + " SELECT  Titles.TitleID, Titles.Title,Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, tbGenre.genre, isnull(Titles.tempo,'') as Tempo, Titles.titleyear, isnull(acategory,'') as Category  FROM Titles ";
                         stSearch = stSearch + " INNER JOIN Albums ON Titles.AlbumID = Albums.AlbumID  ";
                         stSearch = stSearch + " INNER JOIN Artists ON Titles.ArtistID = Artists.ArtistID  ";
-                        stSearch = stSearch + " LEFT OUTER JOIN tbAlenkaGenre ON Titles.AlenkaGenreId = tbAlenkaGenre.AlenkaGenreId  ";
-                        stSearch = stSearch + " where Titles.alenkatempo= '" + cmbAlbum.Text + "'  and Titles.mediatype='" + mType + "'";
+                        stSearch = stSearch + " LEFT OUTER JOIN tbGenre ON Titles.GenreId = tbGenre.GenreId  ";
+                        stSearch = stSearch + " where Titles.tempo= '" + cmbAlbum.Text + "'  and Titles.mediatype='" + mType + "'";
 
                         stSearch = stSearch + " ) as d  order by TitleID desc    ";
                     }
@@ -1812,11 +1866,449 @@ namespace ManagementPanel
         {
             if (rdoCategory.Checked == true)
             {
-                string str = "select  alenkacategory as Acat, 1 as alenkacategory from titles where alenkacategory is not null group by alenkacategory order by alenkacategory";
-                ObjMainClass.fnFillComboBoxSpl(str, cmbAlbum, "alenkacategory", "Acat", "");
+                string str = "select  acategory as Acat, 1 as acategory from titles ";
+                str = str + " where acategory is not null ";
+                if (rdoAudio.Checked == true)
+                {
+                    str = str + " and acategory not like '%video%'";
+                    if (rdoCopyright.Checked == true)
+                    {
+                        str = str + " and acategory not like '%Royalty%'";
+                    }
+                    else
+                    {
+                        str = str + " and acategory  like '%Royalty%'";
+                    }
+                }
+                else
+                {
+                    str = str + " and acategory like '%video%'";
+                }
+                str = str + " group by acategory order by Acat ";
+
+                ObjMainClass.fnFillComboBoxSpl(str, cmbAlbum, "acategory", "Acat", "");
                 cmbAlbum.Visible = true;
                 txtSearch.Visible = false;
             }
+
+
+
+
+
+
+
+
+        }
+
+        private void rdoPlaylist_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rdoPlaylist.Checked == true)
+            {
+                ObjMainClass.fnFillComboBoxSpl("GetPlaylistLibrary", cmbAlbum, "idname", "textname", "");
+                cmbAlbum.Visible = true;
+                txtSearch.Visible = false;
+            }
+        }
+
+        private void rdoCopyright_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rdoCopyright.Checked == true)
+            {
+                if (rdoCategory.Checked == true)
+                {
+                    string str = "select  acategory as Acat, 1 as acategory from titles ";
+                    str = str + " where acategory is not null ";
+                    if (rdoAudio.Checked == true)
+                    {
+                        str = str + " and acategory not like '%video%'";
+                        if (rdoCopyright.Checked == true)
+                        {
+                            str = str + " and acategory not like '%Royalty%'";
+                        }
+                        else
+                        {
+                            str = str + " and acategory  like '%Royalty%'";
+                        }
+                    }
+                    else
+                    {
+                        str = str + " and acategory like '%video%'";
+                    }
+                    str = str + " group by acategory order by Acat ";
+
+                    ObjMainClass.fnFillComboBoxSpl(str, cmbAlbum, "acategory", "Acat", "");
+                    cmbAlbum.Visible = true;
+                    txtSearch.Visible = false;
+                }
+
+
+
+                if (rdoAudio.Checked == true)
+                {
+                    string mType = "";
+                    if (rdoAudio.Checked == true)
+                    {
+                        mType = "Audio";
+                    }
+                    if (rdoVideo.Checked == true)
+                    {
+                        mType = "Video";
+                    }
+                    if (txtSearch.Visible == true)
+                    {
+                        if (txtSearch.Text == "")
+                        {
+                            string str = "SELECT TOP (500) Titles.TitleID, Titles.Title, Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, isnull(Titles.tempo,'') as Tempo,isnull(tbGenre.genre,'') as genre, Titles.titleyear, isnull(acategory,'') as Category FROM Titles INNER JOIN Albums ON Titles.AlbumID = Albums.AlbumID INNER JOIN Artists ON Titles.ArtistID = Artists.ArtistID LEFT OUTER JOIN tbGenre ON Titles.GenreId = tbGenre.GenreId    where titlecategoryid=4 and mediaType='" + mType + "' order by TitleID desc";
+                            FillGrid(str);
+                            return;
+                        }
+                        if (txtSearch.Text.Length < 2)
+                        {
+                            MessageBox.Show("Enter minimum 2 characters for a search function.", "Token Admin");
+                            return;
+                        }
+
+                        SearchText = txtSearch.Text.Trim();
+                        CommanSearch();
+                        txtSearch.TextAlign = HorizontalAlignment.Left;
+                        txtSearch.ForeColor = Color.White;
+                        txtSearch.Text = "";
+                    }
+                    else
+                    {
+                        string stSearch = "";
+                        if (rdoAlbum.Checked == true)
+                        {
+                            stSearch = "spSearch_Album_spl " + cmbAlbum.SelectedValue;
+                        }
+                        else if (rdoGenre.Checked == true)
+                        {
+                            stSearch = " select distinct TitleID, ltrim(Title) as Title,Time, ltrim(ArtistName) as ArtistName, ltrim(AlbumName) as AlbumName , isnull(genre,'') as genre, Tempo,titleyear,Category  from( ";
+                            stSearch = stSearch + " SELECT  Titles.TitleID, Titles.Title,Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, tbGenre.genre, isnull(Titles.tempo,'') as Tempo, Titles.titleyear, isnull(acategory,'') as Category  FROM Titles ";
+                            stSearch = stSearch + " INNER JOIN Albums ON Titles.AlbumID = Albums.AlbumID  ";
+                            stSearch = stSearch + " INNER JOIN Artists ON Titles.ArtistID = Artists.ArtistID  ";
+                            stSearch = stSearch + " LEFT OUTER JOIN tbGenre ON Titles.GenreId = tbGenre.GenreId  ";
+                            stSearch = stSearch + " where Titles.GenreId= " + Convert.ToInt32(cmbAlbum.SelectedValue) + " and Titles.mediatype='" + mType + "'";
+
+                            stSearch = stSearch + " ) as d  order by TitleID desc    ";
+                        }
+                        else if (rdoTempo.Checked == true)
+                        {
+                            stSearch = " select distinct TitleID, ltrim(Title) as Title,Time, ltrim(ArtistName) as ArtistName, ltrim(AlbumName) as AlbumName , isnull(genre,'') as genre, Tempo,titleyear,Category from( ";
+                            stSearch = stSearch + " SELECT  Titles.TitleID, Titles.Title,Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, tbGenre.genre, isnull(Titles.tempo,'') as Tempo, Titles.titleyear, isnull(acategory,'') as Category  FROM Titles ";
+                            stSearch = stSearch + " INNER JOIN Albums ON Titles.AlbumID = Albums.AlbumID  ";
+                            stSearch = stSearch + " INNER JOIN Artists ON Titles.ArtistID = Artists.ArtistID  ";
+                            stSearch = stSearch + " LEFT OUTER JOIN tbGenre ON Titles.GenreId = tbGenre.GenreId  ";
+                            stSearch = stSearch + " where Titles.tempo= '" + cmbAlbum.Text + "'  and Titles.mediatype='" + mType + "'";
+
+                            stSearch = stSearch + " ) as d  order by TitleID desc    ";
+                        }
+                        FillGrid(stSearch);
+                    }
+                }
+
+
+            }
+        }
+
+        private void rdoRoyalty_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rdoRoyalty.Checked == true)
+            {
+                if (rdoCategory.Checked == true)
+                {
+                    string str = "select  acategory as Acat, 1 as acategory from titles ";
+                    str = str + " where acategory is not null ";
+                    if (rdoAudio.Checked == true)
+                    {
+                        str = str + " and acategory not like '%video%'";
+                        if (rdoCopyright.Checked == true)
+                        {
+                            str = str + " and acategory not like '%Royalty%'";
+                        }
+                        else
+                        {
+                            str = str + " and acategory  like '%Royalty%'";
+                        }
+                    }
+                    else
+                    {
+                        str = str + " and acategory like '%video%'";
+                    }
+                    str = str + " group by acategory order by Acat ";
+
+                    ObjMainClass.fnFillComboBoxSpl(str, cmbAlbum, "acategory", "Acat", "");
+                    cmbAlbum.Visible = true;
+                    txtSearch.Visible = false;
+                }
+
+
+                if (rdoAudio.Checked == true)
+                {
+                    string mType = "";
+                    if (rdoAudio.Checked == true)
+                    {
+                        mType = "Audio";
+                    }
+                    if (rdoVideo.Checked == true)
+                    {
+                        mType = "Video";
+                    }
+                    if (txtSearch.Visible == true)
+                    {
+                        if (txtSearch.Text == "")
+                        {
+                            string str = "SELECT TOP (500) Titles.TitleID, Titles.Title, Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, isnull(Titles.tempo,'') as Tempo,isnull(tbGenre.genre,'') as genre, Titles.titleyear, isnull(acategory,'') as Category FROM Titles INNER JOIN Albums ON Titles.AlbumID = Albums.AlbumID INNER JOIN Artists ON Titles.ArtistID = Artists.ArtistID LEFT OUTER JOIN tbGenre ON Titles.GenreId = tbGenre.GenreId    where titlecategoryid=4 and mediaType='" + mType + "' order by TitleID desc";
+                            FillGrid(str);
+                            return;
+                        }
+                        if (txtSearch.Text.Length < 2)
+                        {
+                            MessageBox.Show("Enter minimum 2 characters for a search function.", "Token Admin");
+                            return;
+                        }
+
+                        SearchText = txtSearch.Text.Trim();
+                        CommanSearch();
+                        txtSearch.TextAlign = HorizontalAlignment.Left;
+                        txtSearch.ForeColor = Color.White;
+                        txtSearch.Text = "";
+                    }
+                    else
+                    {
+                        string stSearch = "";
+                        if (rdoAlbum.Checked == true)
+                        {
+                            stSearch = "spSearch_Album_spl " + cmbAlbum.SelectedValue;
+                        }
+                        else if (rdoGenre.Checked == true)
+                        {
+                            stSearch = " select distinct TitleID, ltrim(Title) as Title,Time, ltrim(ArtistName) as ArtistName, ltrim(AlbumName) as AlbumName , isnull(genre,'') as genre, Tempo,titleyear,Category  from( ";
+                            stSearch = stSearch + " SELECT  Titles.TitleID, Titles.Title,Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, tbGenre.genre, isnull(Titles.tempo,'') as Tempo, Titles.titleyear, isnull(acategory,'') as Category  FROM Titles ";
+                            stSearch = stSearch + " INNER JOIN Albums ON Titles.AlbumID = Albums.AlbumID  ";
+                            stSearch = stSearch + " INNER JOIN Artists ON Titles.ArtistID = Artists.ArtistID  ";
+                            stSearch = stSearch + " LEFT OUTER JOIN tbGenre ON Titles.GenreId = tbGenre.GenreId  ";
+                            stSearch = stSearch + " where Titles.GenreId= " + Convert.ToInt32(cmbAlbum.SelectedValue) + " and Titles.mediatype='" + mType + "'";
+
+                            stSearch = stSearch + " ) as d  order by TitleID desc    ";
+                        }
+                        else if (rdoTempo.Checked == true)
+                        {
+                            stSearch = " select distinct TitleID, ltrim(Title) as Title,Time, ltrim(ArtistName) as ArtistName, ltrim(AlbumName) as AlbumName , isnull(genre,'') as genre, Tempo,titleyear,Category from( ";
+                            stSearch = stSearch + " SELECT  Titles.TitleID, Titles.Title,Titles.Time, Artists.Name as ArtistName, Albums.Name AS AlbumName, tbGenre.genre, isnull(Titles.tempo,'') as Tempo, Titles.titleyear, isnull(acategory,'') as Category  FROM Titles ";
+                            stSearch = stSearch + " INNER JOIN Albums ON Titles.AlbumID = Albums.AlbumID  ";
+                            stSearch = stSearch + " INNER JOIN Artists ON Titles.ArtistID = Artists.ArtistID  ";
+                            stSearch = stSearch + " LEFT OUTER JOIN tbGenre ON Titles.GenreId = tbGenre.GenreId  ";
+                            stSearch = stSearch + " where Titles.tempo= '" + cmbAlbum.Text + "'  and Titles.mediatype='" + mType + "'";
+
+                            stSearch = stSearch + " ) as d  order by TitleID desc    ";
+                        }
+                        FillGrid(stSearch);
+                    }
+                }
+
+
+
+            }
+        }
+
+        private void picUp_Click(object sender, EventArgs e)
+        {
+            moveUp(dgPlaylist);
+        }
+
+        private void picDown_Click(object sender, EventArgs e)
+        {
+            moveDown(dgPlaylist);
+        }
+
+
+        private void moveUp(DataGridView dgGrid)
+        {
+            try
+            {
+                if (dgGrid.RowCount > 0)
+                {
+                    if (dgGrid.SelectedRows.Count > 0)
+                    {
+                        int rowCount = dgGrid.Rows.Count;
+                        int index = dgGrid.SelectedCells[0].OwningRow.Index;
+
+                        if (index == 0)
+                        {
+                            return;
+                        }
+                        DataGridViewRowCollection rows = dgGrid.Rows;
+
+                        // remove the previous row and add it behind the selected row.
+                        DataGridViewRow prevRow = rows[index - 1];
+                        rows.Remove(prevRow);
+                        prevRow.Frozen = false;
+
+                        rows.Insert(index, prevRow);
+
+                        dgGrid.ClearSelection();
+                       // SaveSongSequence(dgGrid);
+                        dgGrid.Rows[index - 1].Selected = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+        private void moveDown(DataGridView dgGrid)
+        {
+            try
+            {
+
+           
+            if (dgGrid.RowCount > 0)
+            {
+                if (dgGrid.SelectedRows.Count > 0)
+                {
+                    int rowCount = dgGrid.Rows.Count;
+                    int index = dgGrid.SelectedCells[0].OwningRow.Index;
+
+                    if (index == (rowCount - 2)) // include the header row
+                    {
+                        return;
+                    }
+                    DataGridViewRowCollection rows = dgGrid.Rows;
+
+                    // remove the next row and add it in front of the selected row.
+                    DataGridViewRow nextRow = rows[index + 1];
+                    rows.Remove(nextRow);
+                    nextRow.Frozen = false;
+                    rows.Insert(index, nextRow);
+                    dgGrid.ClearSelection();
+
+                   // SaveSongSequence(dgGrid);
+                    dgGrid.Rows[index + 1].Selected = true;
+                }
+            }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            
+        }
+        Int64 iSize = 0;
+        Int64 iRunningByteTotal = 0;
+        private void picSave_Click(object sender, EventArgs e)
+        {
+            if (dgPlaylist.Rows.Count <= 0)
+            {
+                return;
+            }
+
+            lblName.Text = "Save song Sequence";
+
+            panPopUp.BringToFront();
+            panPopUp.Visible = true;
+            panPopUp.Location = new Point(
+           this.Width / 2 - panPopUp.Size.Width / 2,
+           this.Height / 2 - panPopUp.Size.Height / 2);
+
+            iSize = dgPlaylist.Rows.Count + 1;
+            iRunningByteTotal = 0;
+            bgSaveSequence.RunWorkerAsync();
+        }
+
+        private void bgSaveSequence_DoWork(object sender, DoWorkEventArgs e)
+        {
+            int sr = 0;
+            foreach (DataGridViewRow row in dgPlaylist.Rows)
+            {
+                using (SqlCommand cmd = new SqlCommand("update tbSpecialPlaylists_Titles set srno=@srno where Titleid=@TitleId and splplaylistid= @splplaylistid", StaticClass.constr))
+                {
+                    sr = sr + 1;
+                    byte[] byteBuffer = new byte[iSize];
+                    cmd.Parameters.AddWithValue("@srno", sr);
+                    cmd.Parameters.AddWithValue("@TitleId", row.Cells["songid"].Value);
+                    cmd.Parameters.AddWithValue("@splplaylistid", dgLocalPlaylist.Rows[dgLocalPlaylist.CurrentCell.RowIndex].Cells["playlistId"].Value );
+                    if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
+                    StaticClass.constr.Open();
+                    cmd.ExecuteNonQuery();
+                    StaticClass.constr.Close();
+
+                    iRunningByteTotal = iRunningByteTotal + 1;
+                    double dIndex = (double)(iRunningByteTotal);
+                    double dTotal = (double)byteBuffer.Length;
+                    double dProgressPercentage = (dIndex / dTotal);
+                    int iProgressPercentage = (int)(dProgressPercentage * 100);
+                    bgSaveSequence.ReportProgress(iProgressPercentage);
+                }
+            }
+        }
+
+        private void bgSaveSequence_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            pBar.Value = e.ProgressPercentage;
+            lblPercentage.Text = e.ProgressPercentage.ToString() + " %";
+        }
+
+        private void bgSaveSequence_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            pBar.Value = 0;
+            panPopUp.SendToBack();
+            panPopUp.Visible = false;
+            MessageBox.Show("Song Sequence is saved");
+        }
+
+        private void rdoLang_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rdoLang.Checked == true)
+            {
+                string str = "select  1 as lang,  Language from titles ";
+                str = str + " where Language is not null ";
+
+                str = str + " group by Language order by Language ";
+
+                ObjMainClass.fnFillComboBoxSpl(str, cmbAlbum, "lang", "Language", "");
+                cmbAlbum.Visible = true;
+                txtSearch.Visible = false;
+            }
+        }
+        
+ 
+         
+
+        private void frmSpecialPlaylistFormat_Load(object sender, EventArgs e)
+        {
+             
+        }
+
+        private void dgLocalPlaylist_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex == -1) return;
+            if (e.ColumnIndex == 1)
+            {
+                dgLocalPlaylist.EndEdit();
+                string strDel = "";
+                strDel = "update tbSpecialPlaylists set IsShowDefault= " + Convert.ToInt32(dgLocalPlaylist.Rows[e.RowIndex].Cells[1].Value) + " where splPlaylistId= " + Convert.ToInt32(dgLocalPlaylist.Rows[e.RowIndex].Cells["playlistid"].Value);
+                if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
+                StaticClass.constr.Open();
+                SqlCommand cmd = new SqlCommand(strDel, StaticClass.constr);
+                cmd.CommandType = CommandType.Text;
+                cmd.ExecuteNonQuery();
+                StaticClass.constr.Close();
+            }
+        }
+
+        private void dgLocalPlaylist_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+
+        }
+
+        private void dgPlaylist_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+
         }
     }
 }

@@ -17,12 +17,12 @@ namespace ManagementPanel
     public partial class frmUserlogin : Form
     {
         gblClass ObjMainClass = new gblClass();
-        
+        string LoginOTP="";
         Int32 User_id = 0;
         Int32 OnlineUserId = 0;
         Int32 MainClientId = 0;
         Int32 OldMainClientId = 0;
-        string SubmitValidate="";
+        string SubmitValidate = "";
         string Matter = "";
         public frmUserlogin()
         {
@@ -37,8 +37,8 @@ namespace ManagementPanel
 
         private void frmUserlogin_FormClosing(object sender, FormClosingEventArgs e)
         {
-          
-           Application.Exit();
+
+            Application.Exit();
         }
         private void CheckIfRememberedUser()
         {
@@ -52,41 +52,83 @@ namespace ManagementPanel
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            //if (ObjMainClass.CheckForInternetConnection() == false)
-            //{
-            //    MessageBox.Show("Please check your Internet connection.", "Management Panel");
-            //    return;
-            //}
-            SubmitValidation();
-            if (SubmitValidate == "True")
+
+            if (txtloginUserName.Text == "talwinder@myclaud.com")
             {
-                GetDataFromWebsite();
+                MainScreen();
+            }
+            else
+            {
+                SubmitValidation();
+                if (SubmitValidate == "True")
+                {
+                    MainScreen();
+                    //txtOTP.Focus();
+                    //SendOTPMail();
+                    //panOTP.Location = new Point(276, 216);
+                    //panOTP.Visible = true;
+                }
             }
         }
-        private void GetDataFromWebsite()
+        private void SendOTPMail()
         {
-            
-                if (chkRemember.Checked == true)
+            try
+            {
+                var fromAddress = new MailAddress("noreply.myclaudalenka@gmail.com", "MyClaudAlenka");
+                var toAddress = new MailAddress(txtloginUserName.Text);
+
+                const string fromPassword = "Myclaud@123";
+                string subject = "Management Panel Login";
+                string body = "Hello \n";
+                body += "Your one time password is : " + LoginOTP; 
+                var smtp = new SmtpClient
                 {
-                    Properties.Settings.Default.RememberMeUsername = txtloginUserName.Text;
-                    Properties.Settings.Default.RememberMePassword = txtLoginPassword.Text;
-                    Properties.Settings.Default.Save();
-                }
-                else
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+                };
+                using (var message = new MailMessage(fromAddress, toAddress)
                 {
-                    Properties.Settings.Default.RememberMeUsername = "";
-                    Properties.Settings.Default.RememberMePassword = "";
-                    Properties.Settings.Default.Save();
+                    Subject = subject,
+                    Body = body
+                })
+                {
+                    smtp.Send(message);
                 }
-                //MusicPlayerTokenAdministrator objMainWindow = new MusicPlayerTokenAdministrator();
-                //objMainWindow.Show();
-                //panOnline.Visible = false;
-                frmMain objMainWindow = new frmMain();
-                objMainWindow.Show();
-                this.Hide(); 
-            
-            
-           
+            }
+            catch (Exception ex)
+            {
+                panOTP.Visible = false;
+                MessageBox.Show("OTP is not send. Please try again","Management Panel");
+            }
+        }
+        private void MainScreen()
+        {
+
+            if (chkRemember.Checked == true)
+            {
+                Properties.Settings.Default.RememberMeUsername = txtloginUserName.Text;
+                Properties.Settings.Default.RememberMePassword = txtLoginPassword.Text;
+                Properties.Settings.Default.Save();
+            }
+            else
+            {
+                Properties.Settings.Default.RememberMeUsername = "";
+                Properties.Settings.Default.RememberMePassword = "";
+                Properties.Settings.Default.Save();
+            }
+            //MusicPlayerTokenAdministrator objMainWindow = new MusicPlayerTokenAdministrator();
+            //objMainWindow.Show();
+            //panOnline.Visible = false;
+            frmMain objMainWindow = new frmMain();
+            objMainWindow.Show();
+            this.Hide();
+
+
+
 
         }
 
@@ -98,7 +140,7 @@ namespace ManagementPanel
             try
             {
                 string str = "";
-                str = "select * from tbdealerlogin where loginname='" + txtloginUserName.Text + "' and Loginpassword='" + txtLoginPassword.Text + "'";
+                str = "select * from tbAdministratorLogin where loginid='" + txtloginUserName.Text + "'";
                 DataSet ds = new DataSet();
                 ds = ObjMainClass.fnFillDataSet(str);
                 if (txtloginUserName.Text == "")
@@ -118,141 +160,160 @@ namespace ManagementPanel
                 }
                 else if (ds.Tables[0].Rows.Count > 0)
                 {
-                    SubmitValidate = "True";
+                    if (Decryptdata(ds.Tables[0].Rows[0]["password"].ToString()) == txtLoginPassword.Text.ToString())
+                    {
+                        SubmitValidate = "True";
+                        LoginOTP= GetOTP();
+                        //string sp = "";
+                        //sp = "update tbAdministratorLogin set OTP='" + LoginOTP + "' where loginid='" + txtloginUserName.Text + "'";
+                        //if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
+                        //StaticClass.constr.Open();
+                        //SqlCommand cmd = new SqlCommand(sp, StaticClass.constr);
+                        //cmd.CommandType = CommandType.Text;
+                        //cmd.ExecuteNonQuery();
+                    }
+                    else
+                    {
+                        SubmitValidate = "False";
+                    }
+
+                    
                 }
             }
             catch (Exception ex) { }
         }
-
+        
+        private string RandomString(int size, bool lowerCase)
+        {
+            StringBuilder builder = new StringBuilder();
+            Random random = new Random();
+            char ch;
+            for (int i = 0; i < size; i++)
+            {
+                ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65)));
+                builder.Append(ch);
+            }
+            if (lowerCase)
+                return builder.ToString().ToLower();
+            return builder.ToString();
+        }
+        private int RandomNumber(int min, int max)
+        {
+            Random random = new Random();
+            return random.Next(min, max);
+        }
+        public string GetOTP()
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(RandomString(4, true));
+            builder.Append(RandomNumber(1000, 9999));
+            builder.Append(RandomString(2, false));
+            return builder.ToString();
+        }
         private void button1_Click(object sender, EventArgs e)
         {
-            int[] a = new int[] { 10, 20, 100, 100, 100, 10, 30, 20, 40, 50, 12, 14 };
-            var query = from d in a
-                        group d by d into da
-                        select da;
-            foreach (var i in query.Select((ab, bc) => ab).Where((ab, bc) => ab.Count() != 1))
-                txtloginUserName.Text = txtloginUserName.Text + ',' + i.Key;
+             
+            try
+            { 
+            //int[] a = new int[] { 10, 20, 100, 100, 100, 10, 30, 20, 40, 50, 12, 14 };
+            //var query = from d in a
+            //            group d by d into da
+            //            select da;
+            //foreach (var i in query.Select((ab, bc) => ab).Where((ab, bc) => ab.Count() != 1))
+            //    txtloginUserName.Text = txtloginUserName.Text + ',' + i.Key;
             //MessageBox.Show(Enum.GetName(typeof(DayOfWeek), Convert.ToInt32(txtloginUserName.Text)).Substring(0,3).ToString());
 
-            //try
-            //{
-            //    var fromAddress = "support@freejobsnews.com";
-            //    var toAddress = "talwinder.parastechnologies@gmail.com";
-            //    const string fromPassword = "Siyainfotech@123";
-            //    string subject = "Welcome";
-            //    string body = "Hello \n";
-            //    body += "You are regsiter with manageyourclaudio \n";
-            //    body += "\n";
-            //    body += "Team\n";
-            //    body += "Manageyourclaudio";
-            //    var smtp = new System.Net.Mail.SmtpClient();
-            //    {
-            //        smtp.Host = "40.78.157.193";
-            //        smtp.Port = 26;
-            //        smtp.EnableSsl = false;
-            //        smtp.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
-            //        smtp.Credentials = new NetworkCredential(fromAddress, fromPassword);
-            //        smtp.Timeout = 999999999;
-            //    }
-            //    smtp.Send(fromAddress, toAddress, subject, body);
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message);
-            //}
-        }
+           
+                //var fromAddress = new MailAddress("noreply.myclaudalenka@gmail.com", "MyClaudAlenka");
+                var fromAddress = new MailAddress("annex@assuredtech.net", "");
+                var toAddress = new MailAddress("talwindergur@gmail.com");
+                const string fromPassword = "sarbjit123";
+                const string subject = "Subject";
+                const string body = "Body";
 
-
-
-        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
-        {
-            
-            HttpWebRequest request = null;
-            HttpWebResponse response = null;
-            Stream streamRemote = null;
-            Stream streamLocal = null;
-
-            String RemoteFtpPath = "http://146.0.229.66/oggfiles/1.ogg";
-            String LocalDestinationPath = Application.StartupPath + "\\1.ogg";
-            try
-            {
-
-                string sUrlToReadFileFrom = RemoteFtpPath;
-                string sFilePathToWriteFileTo = LocalDestinationPath;
-                Uri url = new Uri(sUrlToReadFileFrom);
-                request = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(url);
-                response = (System.Net.HttpWebResponse)request.GetResponse();
-                response.Close();
-                Int64 iSize = response.ContentLength;
-                Int64 iRunningByteTotal = 0;
-                using (System.Net.WebClient client = new System.Net.WebClient())
+                var smtp = new SmtpClient
                 {
-                    using (streamRemote = client.OpenRead(new Uri(sUrlToReadFileFrom)))
-                    {
-                        using (streamLocal = new FileStream(sFilePathToWriteFileTo, FileMode.Create, FileAccess.Write, FileShare.None))
-                        {
-                            int iByteSize = 0;
-                            byte[] byteBuffer = new byte[iSize];
-                            while ((iByteSize = streamRemote.Read(byteBuffer, 0, byteBuffer.Length)) > 0)
-                            {
-                                streamLocal.Write(byteBuffer, 0, iByteSize);
-                                iRunningByteTotal += iByteSize;
-                                double dIndex = (double)(iRunningByteTotal);
-                                double dTotal = (double)byteBuffer.Length;
-                                double dProgressPercentage = (dIndex / dTotal);
-                                int iProgressPercentage = (int)(dProgressPercentage * 100);
-                                backgroundWorker1.ReportProgress(iProgressPercentage);
-                            }
-                            streamLocal.Close();
-                        }
-                        streamRemote.Close();
-                    }
+                    Host = "retail.smtp.com",
+                    Port = 2525,
+                     EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                     UseDefaultCredentials = true,
+                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+                };
+                using (var message = new MailMessage(fromAddress, toAddress)
+                {
+                    Subject = subject,
+                    Body = body
+                })
+                {
+                    smtp.Send(message);
                 }
-
             }
-            catch (Exception  ex)
+            catch (Exception ex)
             {
-                
-
-
-
-                if (backgroundWorker1.IsBusy == true)
-                {
-                    streamLocal = null;
-                    streamRemote = null;
-                    request = null;
-                    response = null;
-
-                    backgroundWorker1.CancelAsync();
-                    if (backgroundWorker1.CancellationPending == true)
-                    {
-                        e.Cancel = true;
-                    }
-                }
-                return;
+                MessageBox.Show(ex.Message);
             }
         }
 
-        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-             //pBarOnline.Value = e.ProgressPercentage;
-        }
 
-        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            GC.Collect();
-        }
 
+        
         private void frmUserlogin_Load(object sender, EventArgs e)
         {
             this.Icon = Properties.Resources.Eufory;
         }
 
-        
-    
+        private void btnSignUp_Click(object sender, EventArgs e)
+        {
+            if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
+            StaticClass.constr.Open();
+            SqlCommand cmd = new SqlCommand("sp_SaveAdministratorLogin", StaticClass.constr);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@loginid", SqlDbType.VarChar));
+            cmd.Parameters["@loginid"].Value = txtloginUserName.Text;
 
-        
-       
- 
+            cmd.Parameters.Add(new SqlParameter("@password", SqlDbType.VarChar));
+            cmd.Parameters["@password"].Value = Encryptdata(txtLoginPassword.Text);
+            cmd.ExecuteNonQuery();
+            //textBox2.Text = Decryptdata(textBox1.Text);
+        }
+        private string Encryptdata(string password)
+        {
+            string strmsg = string.Empty;
+            byte[] encode = new byte[password.Length];
+            encode = Encoding.UTF8.GetBytes(password);
+            strmsg = Convert.ToBase64String(encode);
+            return strmsg;
+        }
+        private string Decryptdata(string encryptpwd)
+        {
+            string decryptpwd = string.Empty;
+            UTF8Encoding encodepwd = new UTF8Encoding();
+            Decoder Decode = encodepwd.GetDecoder();
+            byte[] todecode_byte = Convert.FromBase64String(encryptpwd);
+            int charCount = Decode.GetCharCount(todecode_byte, 0, todecode_byte.Length);
+            char[] decoded_char = new char[charCount];
+            Decode.GetChars(todecode_byte, 0, todecode_byte.Length, decoded_char, 0);
+            decryptpwd = new String(decoded_char);
+            return decryptpwd;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            panOTP.Visible = false;
+        }
+
+        private void btnSubmit_Click(object sender, EventArgs e)
+        {
+            if (txtOTP.Text.ToString() == LoginOTP)
+            {
+                MainScreen();
+            }
+            else
+            {
+                MessageBox.Show("OTP is incorrect", "Manageyourclaudio");
+                return;
+            }
+        }
     }
 }

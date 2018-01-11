@@ -33,7 +33,7 @@ namespace ManagementPanel
         Int32 SanjivaniTotalToken = 0;
         Int32 AsianTotalToken = 0;
         Int32 TempDfClientId = 0;
-        DateTime ExpiryDate;
+        string ExpiryDate="";
         string TotalEmail = "";
         string LoginName = "";
         string LoginPassword = "";
@@ -132,12 +132,13 @@ namespace ManagementPanel
                 OrderId = Convert.ToInt32(dsOrder.Tables[0].Rows[0]["MaxId"]);
                 intDealerCodeId = "00" + OrderId;
                 txtDealerName.Text = ds.Tables[0].Rows[0]["CountryNameShort"].ToString() + "-";
+                
                 txtOrderNo.Text = "A-" + DateTime.Now.Year + "-" + OrderId;
                 strDealerCountry = ds.Tables[0].Rows[0]["CountryNameShort"].ToString();
                 //txtCityName.Text = "";
             }
             string strState = "";
-            strState = "select * from tbState where countryId= " + Convert.ToInt32(cmbCountryName.SelectedValue);
+            strState = "select * from tbState where countryId= " + Convert.ToInt32(cmbCountryName.SelectedValue)+ " order by StateName ";
             objMainClass.fnFillComboBox(strState, cmbStateName, "stateid", "StateName", "");
 
             if (rdoSubDealer.Checked == true)
@@ -308,6 +309,8 @@ namespace ManagementPanel
             MailMatterCopyright = "";
             MailMatterAsian = "";
             MailMatterSanjivani = "";
+            txtSupportEmail.Text = "";
+            txtSupportPhNo.Text = "";
         }
         private Boolean SubmitValidation()
         {
@@ -591,6 +594,12 @@ namespace ManagementPanel
             cmd.Parameters.Add(new SqlParameter("@MainDealerId", SqlDbType.BigInt));
             cmd.Parameters["@MainDealerId"].Value = Convert.ToInt32(cmbMainDealer.SelectedValue);
 
+            cmd.Parameters.Add(new SqlParameter("@supportEmail", SqlDbType.VarChar));
+            cmd.Parameters["@supportEmail"].Value = txtSupportEmail.Text.Trim();
+
+            cmd.Parameters.Add(new SqlParameter("@supportPhoneNo", SqlDbType.VarChar));
+            cmd.Parameters["@supportPhoneNo"].Value = txtSupportPhNo.Text.Trim();
+
             try
             {
                 cmd.ExecuteNonQuery();
@@ -689,6 +698,11 @@ namespace ManagementPanel
             cmd.Parameters.Add(new SqlParameter("@MainDealerId", SqlDbType.BigInt));
             cmd.Parameters["@MainDealerId"].Value = Convert.ToInt32(cmbMainDealer.SelectedValue);
 
+            cmd.Parameters.Add(new SqlParameter("@supportEmail", SqlDbType.VarChar));
+            cmd.Parameters["@supportEmail"].Value = txtSupportEmail.Text.Trim();
+
+            cmd.Parameters.Add(new SqlParameter("@supportPhoneNo", SqlDbType.VarChar));
+            cmd.Parameters["@supportPhoneNo"].Value = txtSupportPhNo.Text.Trim();
             try
             {
 
@@ -768,7 +782,7 @@ namespace ManagementPanel
             LoginName = txtEmail.Text;
 
 
-            ExpiryDate = dtpExpiryDate.Value;
+           // ExpiryDate = dtpExpiryDate.Value;
             try
             {
                 cmd.ExecuteNonQuery();
@@ -919,7 +933,7 @@ namespace ManagementPanel
                 if (mAction == "Save")
                 {
                     SendEmail();
-                    SendMailAdmin();
+                   // SendMailAdmin();
                 }
                 ClearFields();
             }
@@ -1263,18 +1277,9 @@ namespace ManagementPanel
         }
         private void SendEmail()
         {
-            //if (SaveDfClientId == 10484)
-            //{
-            //    t2 = new Thread(SendMailTotalFina);
-            //    t2.IsBackground = true;
-            //    t2.Start();
-            //}
-            //else
-            //{
-            //    t2 = new Thread(SendMailCopyleft);
-            //    t2.IsBackground = true;
-            //    t2.Start();
-            //}
+            
+            IsMailSend = true;
+            GetRecord(SaveDfClientId);
         }
 
         private void SendMailCopyleft()
@@ -1532,7 +1537,7 @@ namespace ManagementPanel
                 DataTable dtDetail = new DataTable();
                 string sQr = "";
                 sQr = "select DFClientID,CountryCode , ClientName,isnull(Email,'') as email,orderno,cityname,streetname ,DealerNoTotalToken,DealerCode, ";
-                sQr = sQr + " Stateid,cityId , isnull(IsMainDealer,0) as IsMainDealer,vatnumber , isnull(issubdealer,0) as isSubdealer, isnull(MainDealerId,0) as MainDealerId from DFClients ";
+                sQr = sQr + " Stateid,cityId , isnull(IsMainDealer,0) as IsMainDealer,vatnumber , isnull(issubdealer,0) as isSubdealer, isnull(MainDealerId,0) as MainDealerId, isnull(supportEmail,'') as supportEmail,isnull(supportPhoneNo,'') as supportPhoneNo from DFClients ";
                 sQr = sQr + " where DFClientID=" + dgDealerRegistration.Rows[e.RowIndex].Cells[0].Value;
                 dtDetail = objMainClass.fnFillDataTable(sQr);
                 if (dtDetail.Rows.Count > 0)
@@ -1557,6 +1562,8 @@ namespace ManagementPanel
 
 
                     txtDealerCode.Text = dtDetail.Rows[0]["DealerCode"].ToString();
+                    txtSupportEmail.Text = dtDetail.Rows[0]["supportEmail"].ToString();
+                    txtSupportPhNo.Text = dtDetail.Rows[0]["supportPhoneNo"].ToString();
 
                 }
                 sQr = "";
@@ -1772,14 +1779,14 @@ namespace ManagementPanel
 
 
 
-                if (strDealer.Length >= 5)
+                if (strDealer.Length >= 6)
                 {
-                    strDealerName = strDealerCountry + "" + strDealer.Substring(3, 2);
+                    strDealerName = strDealerCountry + "" + strDealer.Substring(4, 2);
                     txtDealerCode.Text = strDealerName.ToUpper();
                 }
                 if (strDealerCity.Length >= 2)
                 {
-                    txtDealerCode.Text = strDealerName.ToUpper() + strDealerCity.Substring(0, 2).ToUpper() + intDealerCodeId;
+                    txtDealerCode.Text = strDealerName.ToUpper() + strDealerCity.Substring(0, 3).ToUpper() + intDealerCodeId;
                 }
             }
         }
@@ -1806,7 +1813,7 @@ namespace ManagementPanel
         private void cmbStateName_SelectedIndexChanged(object sender, EventArgs e)
         {
             string strCity = "";
-            strCity = "select * from tbCity where countryId= " + Convert.ToInt32(cmbCountryName.SelectedValue) + " and stateid =" + Convert.ToInt32(cmbStateName.SelectedValue);
+            strCity = "select * from tbCity where countryId= " + Convert.ToInt32(cmbCountryName.SelectedValue) + " and stateid =" + Convert.ToInt32(cmbStateName.SelectedValue) + " order by CityName";
             objMainClass.fnFillComboBox(strCity, cmbCityName, "Cityid", "CityName", "");
         }
 
@@ -1943,14 +1950,14 @@ namespace ManagementPanel
                 txtDealerCode.Text = "";
                 string strDealerCity = cmbCityName.Text;
                 string strDealer = txtDealerName.Text;
-                if (strDealer.Length >= 5)
+                if (strDealer.Length >= 6)
                 {
-                    strDealerName = strDealerCountry + "" + strDealer.Substring(3, 2);
+                    strDealerName = strDealerCountry + "" + strDealer.Substring(4, 2);
                     txtDealerCode.Text = strDealerName.ToUpper();
                 }
                 if (strDealerCity.Length >= 2)
                 {
-                    txtDealerCode.Text = strDealerName.ToUpper() + strDealerCity.Substring(0, 2).ToUpper() + intDealerCodeId;
+                    txtDealerCode.Text = strDealerName.ToUpper() + strDealerCity.Substring(0, 3).ToUpper() + intDealerCodeId;
                 }
             }
         }
@@ -1962,36 +1969,33 @@ namespace ManagementPanel
             IsMailSend = true;
             GetRecord(Df_Client);
         }
+        int TotalTok = 0;
+        string MailMatter = "";
+        string CountryId = "";
+        string SupportMatter = "";
         private void GetRecord(Int32 Df_Client)
         {
             DataTable dtDetail = new DataTable();
             string strResend = "";
             //////////Mail Matter///////////
             DataTable dtGetToken = new DataTable();
-            string MailMatter = "";
+
             string strQ = "";
-            strQ = "select * from AMPlayerTokens where Clientid=" + Df_Client + " and IsDam =1 and Code is null";
+            TotalTok = 0;
+            MailMatter = "";
+            strQ = "select * from AMPlayerTokens where Clientid=" + Df_Client + " and Code is null";
             dtGetToken = objMainClass.fnFillDataTable(strQ);
             if (dtGetToken.Rows.Count > 0)
             {
                 for (int i = 0; i <= dtGetToken.Rows.Count - 1; i++)
                 {
-                    MailMatter = MailMatter + "Your installation token no: " + dtGetToken.Rows[i]["Token"].ToString() + " \n";
+                    TotalTok = TotalTok + 1;
+                    MailMatter = MailMatter + TotalTok + ". " + dtGetToken.Rows[i]["Token"].ToString() + " \n";
                 }
-                MailMatterCopyleft = MailMatter;
-            }
-            strQ = "select * from AMPlayerTokens where Clientid=" + Df_Client + " and IsCopyright =1 and Code is null";
-            dtGetToken = objMainClass.fnFillDataTable(strQ);
-            if (dtGetToken.Rows.Count > 0)
-            {
-                for (int i = 0; i <= dtGetToken.Rows.Count - 1; i++)
-                {
-                    MailMatter = MailMatter + "Your installation token no: " + dtGetToken.Rows[i]["Token"].ToString() + " \n";
-                }
-                MailMatterCopyright = MailMatter;
             }
 
 
+            SupportMatter = "";
             //strResend = "select * from  tbResendMail";
             strResend = "  select DFClients.*, tbDealerLogin.LoginPassword,tbDealerLogin.ExpiryDate, tbdealerlogin.DamTotalToken,tbdealerlogin.CopyrightTotalToken,tbdealerlogin.SanjivaniTotalToken ";
             strResend = strResend + "  from DFClients inner join tbDealerLogin on DFClients.DFClientID= tbDealerLogin.DFClientID ";
@@ -2006,7 +2010,7 @@ namespace ManagementPanel
                         TempDfClientId = Convert.ToInt32(dtDetail.Rows[i]["DfclientId"]);
                         ClientEmail = dtDetail.Rows[i]["Email"].ToString();
                         TotalToken = Convert.ToInt32(dtDetail.Rows[i]["DealerNoTotalToken"]);
-                        ExpiryDate = Convert.ToDateTime(dtDetail.Rows[i]["ExpiryDate"]);
+                        ExpiryDate = string.Format("{0:dd/MMM/yyyy}", dtDetail.Rows[i]["ExpiryDate"]);
                         ClientName = dtDetail.Rows[i]["ClientName"].ToString();
                         LoginName = dtDetail.Rows[i]["Email"].ToString();
                         LoginPassword = dtDetail.Rows[i]["LoginPassword"].ToString();
@@ -2015,6 +2019,24 @@ namespace ManagementPanel
                         DamTotalToken = Convert.ToInt32(dtDetail.Rows[i]["DamTotalToken"]);
                         CopyrightTotalToken = Convert.ToInt32(dtDetail.Rows[i]["CopyrightTotalToken"]);
                         SanjivaniTotalToken = Convert.ToInt32(dtDetail.Rows[i]["SanjivaniTotalToken"]);
+
+                        CountryId = dtDetail.Rows[i]["countryCode"].ToString();
+                        if (dtDetail.Rows[i]["supportPhoneNo"].ToString() != "")
+                        {
+                            SupportMatter = "For installation support, please call "+ dtDetail.Rows[i]["supportPhoneNo"].ToString() + " \n";
+                        }
+                        if (dtDetail.Rows[i]["supportEmail"].ToString() != "")
+                        {
+                            if (SupportMatter == "")
+                            {
+                                SupportMatter = "For installation support, please email "+ dtDetail.Rows[i]["supportEmail"].ToString() + " \n";
+                            }
+                            else
+                            {
+                                SupportMatter = "For installation support, please call " + dtDetail.Rows[i]["supportPhoneNo"].ToString() + " or email " + dtDetail.Rows[i]["supportEmail"].ToString() + " \n";
+                            }
+                        }
+                        
 
                         bgWorker.RunWorkerAsync();
                         break;
@@ -2027,71 +2049,66 @@ namespace ManagementPanel
             try
             {
 
-                var fromAddress = "noreply@manageyourclaudio.eu";
 
-                var toAddress = ClientEmail;
-                const string fromPassword = "Claudio@123456";
+                
+
+                var fromAddress = new MailAddress("noreply.myclaud@gmail.com", "MyClaud");
+                var toAddress = new MailAddress(ClientEmail);
+                
+                const string fromPassword = "Myclaud@123";
                 string subject = "Notification";
                 string body = "Dear Customer, \n";
                 body += "\n";
-                body += "This is to you inform that your records are modified and the new modifications are:\n";
-                body += "You have become a dealer for ";
-                if (DamTotalToken != 0)
-                {
-                    body += "Copyleft ";
-                }
-                if (CopyrightTotalToken != 0)
-                {
-                    body += ", Copyright ";
-                }
-                if (SanjivaniTotalToken != 0)
-                {
-                    body += ", Copyleft(Sanjivani) ";
-                }
-                if (AsianTotalToken != 0)
-                {
-                    body += ", Asian ";
-                }
-                body += " music services. \n";
-                body += "Your token details are: \n";
-                body += "Your dealership expiry date: " + ExpiryDate + "   \n";
-                if (DamTotalToken != 0)
-                {
-                    body += "Your copyleft player tokens: " + DamTotalToken + " \n";
-                }
-                if (CopyrightTotalToken != 0)
-                {
-
-                    body += "Your copyright player tokens: " + CopyrightTotalToken + " \n";
-                }
-                if (SanjivaniTotalToken != 0)
-                {
-                    body += "Your sanjivani player tokens: " + SanjivaniTotalToken + " \n";
-                }
-                if (AsianTotalToken != 0)
-                {
-                    body += "Your asian player tokens: " + AsianTotalToken + " \n";
-                }
-                body += "Your total tokens: " + TotalToken + " \n";
+                body += "Thank you for registering with MYCLAUD music streaming services.You have registered " + TotalTok + " tokens.";
                 body += "\n";
-                body += "Thank you for using our software \n";
-                body += "The Screen & Sound Solutions Team \n";
-                var smtp = new System.Net.Mail.SmtpClient();
-                {
-                    smtp.Host = "gladiolus.arvixe.com";
+                body += "\n";
+                body += "Customer Name: "+ ClientName + "\n";
+                body += "Dealer Code: "+ DealerCode + "\n";
+                body += "Player License Tokens:: \n";
+                body += MailMatter;
+                body += "\n";
 
-                    smtp.Port = 26;
-                    smtp.EnableSsl = false;
-                    smtp.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
-                    smtp.Credentials = new NetworkCredential(fromAddress, fromPassword);
-                    smtp.Timeout = 999999999;
+                body += "License Expiry: " + ExpiryDate + "   \n";
+                body += "\n";
+                body += "Following the link to download the application:";
+                body += "\n";
+                body += "https://play.google.com/store/apps/details?id=com.myclaudstreaming&hl=en";
+                body += "\n";
+                body += "\n";
+                body += SupportMatter;
+                body += "\n";
+                body += "\n";
+                body += "Regards \n";
+                body += "Support Team";
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+                };
+                MailMessage message = new MailMessage();
+                message.Subject = subject;
+                message.Body = body;
+                message.To.Add(toAddress);
+               message.To.Add("jan@myclaud.com");
+                message.From = fromAddress;
+                //using (var message = new MailMessage(fromAddress, toAddress)
+                //{
+                //    Subject = subject,
+                //    Body = body,
+
+                //})
+                {
+                    smtp.Send(message);
                 }
-                smtp.Send(fromAddress, toAddress, subject, body);
             }
             catch (Exception ex)
             {
                 IsMailSend = false;
-                MessageBox.Show(ex.Message);
+               // MessageBox.Show(ex.Message);
             }
         }
 
@@ -2101,12 +2118,12 @@ namespace ManagementPanel
             delete_temp_table();
             if (IsMailSend == true)
             {
-                ReSendMailAdmin();
+              //  ReSendMailAdmin();
             }
 
 
             //SendMailAdmin();
-            MessageBox.Show("This email is resend succesfully", "Token Admin");
+            MessageBox.Show("Email is send succesfully", "Management Panel");
             //GetRecord();
         }
         void delete_temp_table()
@@ -2251,9 +2268,9 @@ namespace ManagementPanel
 
         private void ReSendMailAdmin()
         {
-            t2 = new Thread(ReAdminMail);
-            t2.IsBackground = true;
-            t2.Start();
+            //t2 = new Thread(ReAdminMail);
+            //t2.IsBackground = true;
+            //t2.Start();
         }
         private void ReAdminMail()
         {

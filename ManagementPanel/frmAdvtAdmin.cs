@@ -158,12 +158,87 @@ namespace ManagementPanel
             }
 
         }
+        private void FillCountry()
+        {
+            IsDealerCheckBoxClicked = true;
+            DealerCheckBox.Checked = false;
 
+
+
+            IsCountryCheckBoxClicked = true;
+            CountryCheckBox.Checked = false;
+            string strCou = "";
+            strCou = "";
+            strCou = "SELECT distinct CountryCodes.CountryCode as Id, CountryCodes.CountryName as DisplayName FROM AMPlayerTokens ";
+            strCou = strCou + " INNER JOIN CountryCodes ON AMPlayerTokens.CountryId = CountryCodes.CountryCode ";
+            strCou = strCou + " order by CountryCodes.CountryName";
+
+            FillDataParamter(dgCountry, "Country Name", strCou);
+            TotalCheckBoxes = dgCountry.RowCount;
+            TotalCheckedCheckBoxes = 0;
+            InitilizeGrid(dgDealer, "Customer Name");
+            if (ReturnAdvtId != 0)
+            {
+                if (chkCountry.Checked == false)
+                {
+                    return;
+                }
+                #region Get Country List
+                string Localstr = "";
+                Localstr = "select distinct countryId, IsAllCountry from tbAdvtAdminDetail where advtid=" + ReturnAdvtId + " and countryId != IsAllCountry";
+                DataTable dtCommon = new DataTable();
+                dtCommon = objMainClass.fnFillDataTable(Localstr);
+                if ((dtCommon.Rows.Count > 0))
+                {
+                    CountryCheckBox.Checked = Convert.ToBoolean(dtCommon.Rows[0]["IsAllCountry"]);
+                    if (CountryCheckBox.Checked == false)
+                    {
+                        for (int iCtr = 0; (iCtr <= (dtCommon.Rows.Count - 1)); iCtr++)
+                        {
+                            for (int i = 0; i < dgCountry.Rows.Count; i++)
+                            {
+                                if (Convert.ToInt32(dgCountry.Rows[i].Cells["Id"].Value) == Convert.ToInt32(dtCommon.Rows[iCtr]["countryId"]))
+                                {
+                                    dgCountry.Rows[i].Cells[1].Value = true;
+                                }
+                            }
+                        }
+                    }
+                    if (CountryCheckBox.Checked == true)
+                    {
+                        CountryCheckBoxClick(CountryCheckBox);
+                    }
+                    if (chkDealer.Checked == true)
+                    {
+                        if (dgDealer.Rows.Count == 0)
+                        {
+                            FillCountryDealer();
+                        }
+                    }
+                    if (chkState.Checked == true)
+                    {
+                        if (dgState.Rows.Count == 0)
+                        {
+                            FillCountryState();
+                        }
+                    }
+                    if (chkDealerClient.Checked == true)
+                    {
+                        if (dgToken.Rows.Count == 0)
+                        {
+                            FillData();
+                        }
+                    }
+                }
+                #endregion
+            }
+
+        }
         private void chkCountry_CheckedChanged(object sender, EventArgs e)
         {
             if (chkCountry.Checked == true)
             {
-                 
+                FillCountry();
                 panCountry.Visible = true;
                 tlpMain.ColumnStyles[0].Width = 15;
             }
@@ -171,8 +246,11 @@ namespace ManagementPanel
             {
                 panCountry.Visible = false;
                 tlpMain.ColumnStyles[0].Width = 0;
-            }
+                InitilizeGrid(dgCountry, "Country Name");
+                FillCountryState();
+                FillCountryDealer();
 
+            }
         }
 
         private void frmAdvtAdmin_Load(object sender, EventArgs e)
@@ -185,6 +263,8 @@ namespace ManagementPanel
             panSearch.Visible = true;
             panAddNew.Visible = false;
             panSearch.Dock = DockStyle.Fill;
+
+            InitilizeGrid(dgDealer, "Customer Name");
 
             string Advttype = "select * from tbAdvertisementType";
             objMainClass.fnFillComboBox(Advttype, cmbAdvertisementTypeAdd, "AdvtTypeId", "AdvtTypeName", "");
@@ -229,8 +309,17 @@ namespace ManagementPanel
         }
         private void CountryCheckBox_MouseClick(object sender, MouseEventArgs e)
         {
-
             CountryCheckBoxClick((CheckBox)sender);
+            if (chkState.Checked == true)
+            {
+                FillCountryState();
+            }
+            
+            if (chkDealer.Checked == true)
+            {
+                FillCountryDealer();
+            }
+            
         }
         private void CountryCheckBoxClick(CheckBox HCheckBox)
         {
@@ -249,14 +338,22 @@ namespace ManagementPanel
         {
             if (chkState.Checked == true)
             {
-                 
+                FillCountryState();
                 panState.Visible = true;
                 tlpMain.ColumnStyles[1].Width = 16;
             }
             else
             {
+                InitilizeGrid(dgState, "State Name");
                 panState.Visible = false;
                 tlpMain.ColumnStyles[1].Width = 0;
+                FillStateCity();
+            }
+            if (chkDealerClient.Checked == true)
+            {
+                IsTokenCheckBoxClicked = true;
+                TokenCheckBox.Checked = false;
+                FillData();
             }
         }
 
@@ -264,14 +361,21 @@ namespace ManagementPanel
         {
             if (chkCity.Checked == true)
             {
-                 
+                FillStateCity();
                 panCity.Visible = true;
                 tlpMain.ColumnStyles[2].Width = 16;
             }
             else
             {
+                InitilizeGrid(dgCity, "City Name");
                 panCity.Visible = false;
                 tlpMain.ColumnStyles[2].Width = 0;
+            }
+            if (chkDealerClient.Checked == true)
+            {
+                IsTokenCheckBoxClicked = true;
+                TokenCheckBox.Checked = false;
+                FillData();
             }
         }
 
@@ -280,14 +384,21 @@ namespace ManagementPanel
 
             if (chkDealer.Checked == true)
             {
-                
+                FillCountryDealer();
                 panDealer.Visible = true;
                 tlpMain.ColumnStyles[3].Width = 16;
             }
             else
             {
+                InitilizeGrid(dgDealer, "Customer Name");
                 panDealer.Visible = false;
                 tlpMain.ColumnStyles[3].Width = 0;
+            }
+            if (chkDealerClient.Checked == true)
+            {
+                IsTokenCheckBoxClicked = true;
+                TokenCheckBox.Checked = false;
+                FillData();
             }
         }
 
@@ -469,8 +580,12 @@ namespace ManagementPanel
         }
         private void StateCheckBox_MouseClick(object sender, MouseEventArgs e)
         {
-
             StateCheckBoxClick((CheckBox)sender);
+            if (chkCity.Checked == true)
+            {
+                FillStateCity();
+            }
+            
         }
         private void StateCheckBoxClick(CheckBox HCheckBox)
         {
@@ -641,8 +756,8 @@ namespace ManagementPanel
         }
         private void DealerCheckBox_MouseClick(object sender, MouseEventArgs e)
         {
-
             DealerCheckBoxClick((CheckBox)sender);
+            FillData();
         }
         private void DealerCheckBoxClick(CheckBox HCheckBox)
         {
@@ -665,59 +780,9 @@ namespace ManagementPanel
 
 
 
-        private void cmbCountryName_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            IsStateCheckBoxClicked = true;
-            string str = "";
-            str = "";
-            str = "SELECT distinct tbState.StateID as Id, tbState.StateName as DisplayName FROM AMPlayerTokens ";
-            str = str + " INNER JOIN tbState ON AMPlayerTokens.StateId = tbState.Stateid ";
-            if (Convert.ToInt32(cmbCountryName.SelectedValue) != 0)
-            {
-                str = str + " where  tbState.CountryId=" + Convert.ToInt32(cmbCountryName.SelectedValue) + "  ";
-            }
-            str = str + " order by StateName ";
-            FillDataParamter(dgState, "State Name", str);
-            TotalCheckBoxesState = dgState.RowCount;
-            TotalCheckedCheckBoxesState = 0;
+      
 
-        }
-
-        private void cmbCityCountry_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string str = "";
-            str = "";
-            str = "SELECT distinct tbState.StateID as Id, tbState.StateName as DisplayName FROM AMPlayerTokens ";
-            str = str + " INNER JOIN tbState ON AMPlayerTokens.StateId = tbState.Stateid ";
-            str = str + " where  tbState.CountryId=" + Convert.ToInt32(cmbCityCountry.SelectedValue) + "  ";
-            str = str + " order by StateName ";
-            objMainClass.fnFillComboBox(str, cmbStateName, "Id", "DisplayName", "");
-        }
-
-        private void cmbStateName_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            IsCityCheckBoxClicked = true;
-
-            string str = "";
-            str = "";
-            str = "SELECT distinct tbCity.CityId as Id, tbCity.CityName as DisplayName FROM AMPlayerTokens  ";
-            str = str + " INNER JOIN tbCity ON AMPlayerTokens.CityId = tbCity.CityId ";
-            if (Convert.ToInt32(cmbCityCountry.SelectedValue) != 0)
-            {
-                str = str + " where  tbCity.CountryId=" + Convert.ToInt32(cmbCityCountry.SelectedValue) + "  ";
-            }
-            if (Convert.ToInt32(cmbStateName.SelectedValue) != 0)
-            {
-                str = str + " and  tbCity.StateId=" + Convert.ToInt32(cmbStateName.SelectedValue) + "  ";
-            }
-            str = str + " order by tbCity.CityName ";
-            FillDataParamter(dgCity, "City Name", str);
-            TotalCheckBoxesCity = dgCity.RowCount;
-            TotalCheckedCheckBoxesCity = 0;
-
-
-        }
-
+      
         private void FillMainData()
         {
             IsDealerCheckBoxClicked = true;
@@ -730,38 +795,15 @@ namespace ManagementPanel
             strCou = "SELECT distinct CountryCodes.CountryCode as Id, CountryCodes.CountryName as DisplayName FROM AMPlayerTokens ";
             strCou = strCou + " INNER JOIN CountryCodes ON AMPlayerTokens.CountryId = CountryCodes.CountryCode ";
             strCou = strCou + " order by countryCode";
-            objMainClass.fnFillComboBox(strCou, cmbCountryName, "id", "DisplayName", "");
-            objMainClass.fnFillComboBox(strCou, cmbCityCountry, "id", "DisplayName", "");
+             
+            
             FillDataParamter(dgCountry, "Country Name", strCou);
             TotalCheckBoxes = dgCountry.RowCount;
             TotalCheckedCheckBoxes = 0;
-            str = "";
-            str = "select DFClientID as Id,ClientName as DisplayName  from ( select DFClientID,ClientName from DFClients where CountryCode is not null and DFClients.IsDealer=1  ";
-            str = str + " ) as a order by ClientName desc ";
-            objMainClass.fnFillComboBox(str, cmbDealer, "Id", "DisplayName", "");
-            FillDataParamter(dgDealer, "Dealer Code", str);
-            TotalCheckBoxesDealer = dgDealer.RowCount;
-            TotalCheckedCheckBoxesDealer = 0;
+             
         }
 
-        private void cmbDealerCountry_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (chkDealer.Checked == true)
-            {
-                string str = "";
-                str = "";
-                str = "select tbdealerlogin.DFClientID as Id, tbdealerlogin.dealercode as DisplayName from tbdealerlogin ";
-                str = str + " inner join dfclients on tbdealerlogin.dfclientid= dfclients.dfclientid";
-                if (Convert.ToInt32(cmbDealerCountry.SelectedValue) != 0)
-                {
-                    str = str + " where  dfclients.countrycode=" + Convert.ToInt32(cmbDealerCountry.SelectedValue) + "  ";
-                }
-                str = str + " order by tbdealerlogin.DFClientID desc ";
-                FillDataParamter(dgDealer, "Dealer Code", str);
-                TotalCheckBoxesDealer = dgDealer.RowCount;
-                TotalCheckedCheckBoxesDealer = 0;
-            }
-        }
+       
 
         private Boolean SubmitValidationAdvt()
         {
@@ -1085,29 +1127,9 @@ namespace ManagementPanel
 
             IsCountryCheckBoxClicked = true;
             IsTokenCheckBoxClicked = true;
-            // FillData(dgCountry, "Country Name", "select countrycode as Id, countryName as DisplayName from CountryCodes order by countryCode");
-            //AddCountryCheckBox(dgCountry);
-            //  TotalCheckBoxes = dgCountry.RowCount;
-            //     TotalCheckedCheckBoxes = 0;
-            // CountryCheckBox.KeyUp += new KeyEventHandler(CountryCheckBox_KeyUp);
-            //  CountryCheckBox.MouseClick += new MouseEventHandler(CountryCheckBox_MouseClick);
-
-
-            // AddStateCheckBox(dgState);
-            //    StateCheckBox.KeyUp += new KeyEventHandler(StateCheckBox_KeyUp);
-            //    StateCheckBox.MouseClick += new MouseEventHandler(StateCheckBox_MouseClick);
-
-            //    AddCityCheckBox(dgCity);
-            //   CityCheckBox.KeyUp += new KeyEventHandler(CityCheckBox_KeyUp);
-            //   CityCheckBox.MouseClick += new MouseEventHandler(CityCheckBox_MouseClick);
-
-
-            IsDealerCheckBoxClicked = true;
-            //  AddDealerCheckBox(dgDealer);
-            //    DealerCheckBox.KeyUp += new KeyEventHandler(DealerCheckBox_KeyUp);
-            //     DealerCheckBox.MouseClick += new MouseEventHandler(DealerCheckBox_MouseClick);
-
-
+              
+           IsDealerCheckBoxClicked = true;
+         
 
             InitilizeGrid(dgState, "State Name");
             InitilizeGrid(dgCity, "City Name");
@@ -1148,18 +1170,18 @@ namespace ManagementPanel
                 FileInfo objFile = new FileInfo(filename);
                 if (AdType == "Audio")
                 {
-                    ftpServerIP = "ftp://85.195.82.94:21/AMMusicFiles/ripper/AdvtSongs/" + ReturnAdvtId + ".mp3";
+                    ftpServerIP = "ftp://37.61.214.210:21/AdvtSongs/" + ReturnAdvtId + ".mp3";
                 }
                 else if (AdType == "Picture")
                 {
-                    ftpServerIP = "ftp://85.195.82.94:21/AMMusicFiles/ripper/AdvtSongs/" + ReturnAdvtId + ".jpg";
+                    ftpServerIP = "ftp://37.61.214.210:21/AdvtSongs/" + ReturnAdvtId + ".jpg";
                 }
                 else
                 {
-                    ftpServerIP = "ftp://85.195.82.94:21/AMMusicFiles/ripper/AdvtSongs/" + ReturnAdvtId + ".mp4";
+                    ftpServerIP = "ftp://37.61.214.210:21/AdvtSongs/" + ReturnAdvtId + ".mp4";
                 }
-                string ftpUserName = "harish";
-                string ftpPassword = "Mohali123";
+                string ftpUserName = "ftpTalwinder";
+                string ftpPassword = "Roop!@#123";
 
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(new Uri(ftpServerIP));
                 request.Method = WebRequestMethods.Ftp.UploadFile;
@@ -1249,17 +1271,17 @@ namespace ManagementPanel
             if (cmbType.Text == "Video")
             {
                 cmd.Parameters.Add(new SqlParameter("@AdvtFilePath", SqlDbType.VarChar));
-                cmd.Parameters["@AdvtFilePath"].Value = "http://85.195.82.94/AdvtSongs/" + ReturnAdvtId + ".mp4";
+                cmd.Parameters["@AdvtFilePath"].Value = "http://37.61.214.210/AdvtSongs/" + ReturnAdvtId + ".mp4";
             }
             else if (cmbType.Text == "Picture")
             {
                 cmd.Parameters.Add(new SqlParameter("@AdvtFilePath", SqlDbType.VarChar));
-                cmd.Parameters["@AdvtFilePath"].Value = "http://85.195.82.94/AdvtSongs/" + ReturnAdvtId + ".jpg";
+                cmd.Parameters["@AdvtFilePath"].Value = "http://37.61.214.210/AdvtSongs/" + ReturnAdvtId + ".jpg";
             }
             else
             {
                 cmd.Parameters.Add(new SqlParameter("@AdvtFilePath", SqlDbType.VarChar));
-                cmd.Parameters["@AdvtFilePath"].Value = "http://85.195.82.94/AdvtSongs/" + ReturnAdvtId + ".mp3";
+                cmd.Parameters["@AdvtFilePath"].Value = "http://37.61.214.210/AdvtSongs/" + ReturnAdvtId + ".mp3";
             }
             cmd.Parameters.Add(new SqlParameter("@AdvtPlayertype", SqlDbType.VarChar));
             cmd.Parameters["@AdvtPlayertype"].Value = "NativeCR";
@@ -1287,16 +1309,16 @@ namespace ManagementPanel
             cmd.Parameters["@IsClient"].Value = 0;
 
             cmd.Parameters.Add(new SqlParameter("@StateCountryId", SqlDbType.BigInt));
-            cmd.Parameters["@StateCountryId"].Value = Convert.ToInt32(cmbCountryName.SelectedValue);
+            cmd.Parameters["@StateCountryId"].Value = "0";
 
             cmd.Parameters.Add(new SqlParameter("@CityStateId", SqlDbType.BigInt));
-            cmd.Parameters["@CityStateId"].Value = Convert.ToInt32(cmbStateName.SelectedValue);
+            cmd.Parameters["@CityStateId"].Value = "0";
 
             cmd.Parameters.Add(new SqlParameter("@CityCountryId", SqlDbType.BigInt));
-            cmd.Parameters["@CityCountryId"].Value = Convert.ToInt32(cmbCityCountry.SelectedValue);
+            cmd.Parameters["@CityCountryId"].Value = "0";
 
             cmd.Parameters.Add(new SqlParameter("@DealerCountryId", SqlDbType.BigInt));
-            cmd.Parameters["@DealerCountryId"].Value = Convert.ToInt32(cmbDealerCountry.SelectedValue);
+            cmd.Parameters["@DealerCountryId"].Value = "0";
 
             cmd.Parameters.Add(new SqlParameter("@ClientCountryId", SqlDbType.BigInt));
             cmd.Parameters["@ClientCountryId"].Value = 0;
@@ -1305,7 +1327,7 @@ namespace ManagementPanel
             cmd.Parameters["@IsToken"].Value = Convert.ToByte(chkDealerClient.Checked);
 
             cmd.Parameters.Add(new SqlParameter("@TokenDealerId", SqlDbType.BigInt));
-            cmd.Parameters["@TokenDealerId"].Value = Convert.ToInt32(cmbDealer.SelectedValue);
+            cmd.Parameters["@TokenDealerId"].Value = "0";
 
             cmd.Parameters.Add(new SqlParameter("@DealerId", SqlDbType.BigInt));
             cmd.Parameters["@DealerId"].Value = ReturnDealerId;
@@ -1479,21 +1501,21 @@ namespace ManagementPanel
             catch (Exception ex)
             {
                 MessageBox.Show("Record not saved", "!! Problem !!");
-                if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
-                StaticClass.constr.Open();
-                SqlCommand cmd1 = new SqlCommand();
-                cmd1.Connection = StaticClass.constr;
-                cmd1.CommandText = "delete from tbAdvtAdmin where advtid=" + ReturnAdvtId;
-                cmd1.ExecuteNonQuery();
-                StaticClass.constr.Close();
+                //if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
+                //StaticClass.constr.Open();
+                //SqlCommand cmd1 = new SqlCommand();
+                //cmd1.Connection = StaticClass.constr;
+                //cmd1.CommandText = "delete from tbAdvtAdmin where advtid=" + ReturnAdvtId;
+                //cmd1.ExecuteNonQuery();
+                //StaticClass.constr.Close();
 
-                if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
-                StaticClass.constr.Open();
-                cmd1 = new SqlCommand();
-                cmd1.Connection = StaticClass.constr;
-                cmd1.CommandText = "delete from tbAdvtAdminDetail where advtid=" + ReturnAdvtId;
-                cmd1.ExecuteNonQuery();
-                StaticClass.constr.Close();
+                //if (StaticClass.constr.State == ConnectionState.Open) StaticClass.constr.Close();
+                //StaticClass.constr.Open();
+                //cmd1 = new SqlCommand();
+                //cmd1.Connection = StaticClass.constr;
+                //cmd1.CommandText = "delete from tbAdvtAdminDetail where advtid=" + ReturnAdvtId;
+                //cmd1.ExecuteNonQuery();
+                //StaticClass.constr.Close();
 
                 ClearData();
                 return;
@@ -1505,76 +1527,66 @@ namespace ManagementPanel
         }
         private void SaveCountryList(int WeekId, int IsAllWeek)
         {
-            if (CountryCheckBox.Checked == true)
+            if (chkCountry.Checked == true)
             {
-                //  SaveAdvtDetail(ReturnAdvtId, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, WeekId, IsAllWeek,0,0);
-                //  return;
-            }
-            for (int i = 0; i < dgCountry.Rows.Count; i++)
-            {
-                if (Convert.ToBoolean(dgCountry.Rows[i].Cells[1].Value) == true)
+                for (int i = 0; i < dgCountry.Rows.Count; i++)
                 {
-                    SaveAdvtDetail(ReturnAdvtId, Convert.ToInt32(dgCountry.Rows[i].Cells["Id"].Value), 0, 0, 0, 0, 0, 0, 0, 0, 0, WeekId, IsAllWeek, 0, 0);
+                    if (Convert.ToBoolean(dgCountry.Rows[i].Cells[1].Value) == true)
+                    {
+                        SaveAdvtDetail(ReturnAdvtId, Convert.ToInt32(dgCountry.Rows[i].Cells["Id"].Value), 0, 0, 0, 0, 0, 0, 0, 0, 0, WeekId, IsAllWeek, 0, 0);
+                    }
                 }
             }
         }
         private void SaveStateList(int WeekId, int IsAllWeek)
         {
-            if (StateCheckBox.Checked == true)
+            if (chkState.Checked == true)
             {
-                //  SaveAdvtDetail(ReturnAdvtId, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, WeekId, IsAllWeek, 0, 0);
-                //   return;
-            }
-            for (int i = 0; i < dgState.Rows.Count; i++)
-            {
-                if (Convert.ToBoolean(dgState.Rows[i].Cells[1].Value) == true)
+                for (int i = 0; i < dgState.Rows.Count; i++)
                 {
-                    SaveAdvtDetail(ReturnAdvtId, 0, Convert.ToInt32(dgState.Rows[i].Cells["Id"].Value), 0, 0, 0, 0, 0, 0, 0, 0, WeekId, IsAllWeek, 0, 0);
+                    if (Convert.ToBoolean(dgState.Rows[i].Cells[1].Value) == true)
+                    {
+                        SaveAdvtDetail(ReturnAdvtId, 0, Convert.ToInt32(dgState.Rows[i].Cells["Id"].Value), 0, 0, 0, 0, 0, 0, 0, 0, WeekId, IsAllWeek, 0, 0);
+                    }
                 }
             }
         }
         private void SaveCityList(int WeekId, int IsAllWeek)
         {
-            if (CityCheckBox.Checked == true)
+            if (chkCity.Checked == true)
             {
-                //  SaveAdvtDetail(ReturnAdvtId, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, WeekId, IsAllWeek, 0, 0);
-                //  return;
-            }
-            for (int i = 0; i < dgCity.Rows.Count; i++)
-            {
-                if (Convert.ToBoolean(dgCity.Rows[i].Cells[1].Value) == true)
+                for (int i = 0; i < dgCity.Rows.Count; i++)
                 {
-                    SaveAdvtDetail(ReturnAdvtId, 0, 0, Convert.ToInt32(dgCity.Rows[i].Cells["Id"].Value), 0, 0, 0, 0, 0, 0, 0, WeekId, IsAllWeek, 0, 0);
+                    if (Convert.ToBoolean(dgCity.Rows[i].Cells[1].Value) == true)
+                    {
+                        SaveAdvtDetail(ReturnAdvtId, 0, 0, Convert.ToInt32(dgCity.Rows[i].Cells["Id"].Value), 0, 0, 0, 0, 0, 0, 0, WeekId, IsAllWeek, 0, 0);
+                    }
                 }
             }
         }
         private void SaveDealerList(int WeekId, int IsAllWeek)
         {
-            if (DealerCheckBox.Checked == true)
+            if (chkDealer.Checked == true)
             {
-                // SaveAdvtDetail(ReturnAdvtId, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, WeekId, IsAllWeek, 0, 0);
-                //  return;
-            }
-            for (int i = 0; i < dgDealer.Rows.Count; i++)
-            {
-                if (Convert.ToBoolean(dgDealer.Rows[i].Cells[1].Value) == true)
+                for (int i = 0; i < dgDealer.Rows.Count; i++)
                 {
-                    SaveAdvtDetail(ReturnAdvtId, 0, 0, 0, Convert.ToInt32(dgDealer.Rows[i].Cells["Id"].Value), 0, 0, 0, 0, 0, 0, WeekId, IsAllWeek, 0, 0);
+                    if (Convert.ToBoolean(dgDealer.Rows[i].Cells[1].Value) == true)
+                    {
+                        SaveAdvtDetail(ReturnAdvtId, 0, 0, 0, Convert.ToInt32(dgDealer.Rows[i].Cells["Id"].Value), 0, 0, 0, 0, 0, 0, WeekId, IsAllWeek, 0, 0);
+                    }
                 }
             }
         }
         private void SaveTokenList(int WeekId, int IsAllWeek)
         {
-            if (TokenCheckBox.Checked == true)
+            if (chkDealerClient.Checked == true)
             {
-                //  SaveAdvtDetail(ReturnAdvtId, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, WeekId, IsAllWeek, 0, 1);
-                //  return;
-            }
-            for (int i = 0; i < dgToken.Rows.Count; i++)
-            {
-                if (Convert.ToBoolean(dgToken.Rows[i].Cells[1].Value) == true)
+                for (int i = 0; i < dgToken.Rows.Count; i++)
                 {
-                    SaveAdvtDetail(ReturnAdvtId, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, WeekId, IsAllWeek, Convert.ToInt32(dgToken.Rows[i].Cells["Id"].Value), 0);
+                    if (Convert.ToBoolean(dgToken.Rows[i].Cells[1].Value) == true)
+                    {
+                        SaveAdvtDetail(ReturnAdvtId, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, WeekId, IsAllWeek, Convert.ToInt32(dgToken.Rows[i].Cells["Id"].Value), 0);
+                    }
                 }
             }
         }
@@ -1750,6 +1762,11 @@ namespace ManagementPanel
         }
         private void FillSaveAdvt(DataGridView dgGrid, string Query)
         {
+            if (Convert.ToInt32(cmbSearchDealer.SelectedValue) == 0)
+            {
+                InitilizeAdvertisement(dgGrid);
+                return;
+            }
             string bTime = "";
             int iCtr;
             DataTable dtDetail;
@@ -1971,120 +1988,22 @@ namespace ManagementPanel
                     }
                     #endregion
 
-                    #region Get Country List
-                    Localstr = "";
-                    Localstr = "select distinct countryId, IsAllCountry from tbAdvtAdminDetail where advtid=" + ReturnAdvtId + " and countryId != IsAllCountry";
-                    dtCommon = new DataTable();
-                    dtCommon = objMainClass.fnFillDataTable(Localstr);
-                    if ((dtCommon.Rows.Count > 0))
+                    
+
+                    if (chkState.Checked == true)
                     {
-                        CountryCheckBox.Checked = Convert.ToBoolean(dtCommon.Rows[0]["IsAllCountry"]);
-                        if (CountryCheckBox.Checked == false)
-                        {
-                            for (int iCtr = 0; (iCtr <= (dtCommon.Rows.Count - 1)); iCtr++)
-                            {
-                                for (int i = 0; i < dgCountry.Rows.Count; i++)
-                                {
-                                    if (Convert.ToInt32(dgCountry.Rows[i].Cells["Id"].Value) == Convert.ToInt32(dtCommon.Rows[iCtr]["countryId"]))
-                                    {
-                                        dgCountry.Rows[i].Cells[1].Value = true;
-                                    }
-                                }
-                            }
-                        }
-                        if (CountryCheckBox.Checked == true)
-                        {
-                            CountryCheckBoxClick(CountryCheckBox);
-                        }
+                        //FillCountryState();
                     }
-                    #endregion
 
-                    #region Get State List
-                    Localstr = "";
-                    Localstr = "select distinct Stateid, IsAllState  from tbAdvtAdminDetail where advtid=" + ReturnAdvtId + " and Stateid != IsAllState  ";
-                    dtCommon = new DataTable();
-                    dtCommon = objMainClass.fnFillDataTable(Localstr);
-                    if ((dtCommon.Rows.Count > 0))
-                    {
-                        StateCheckBox.Checked = Convert.ToBoolean(dtCommon.Rows[0]["IsAllState"]);
-
-                        cmbCountryName.SelectedValue = Convert.ToInt32(dtDetail.Rows[0]["StateCountryId"]);
-                        for (int iCtr = 0; (iCtr <= (dtCommon.Rows.Count - 1)); iCtr++)
-                        {
-                            for (int i = 0; i < dgState.Rows.Count; i++)
-                            {
-                                if (Convert.ToInt32(dgState.Rows[i].Cells["Id"].Value) == Convert.ToInt32(dtCommon.Rows[iCtr]["Stateid"]))
-                                {
-                                    dgState.Rows[i].Cells[1].Value = true;
-                                }
-                            }
-                        }
-                        if (StateCheckBox.Checked == true)
-                        {
-                            StateCheckBoxClick(StateCheckBox);
-                        }
-                    }
-                    #endregion
-
-                    #region Get City List
-                    Localstr = "";
-                    Localstr = "select distinct CityId, IsAllCity from tbAdvtAdminDetail where advtid=" + ReturnAdvtId + " and CityId != IsAllCity  ";
-                    dtCommon = new DataTable();
-                    dtCommon = objMainClass.fnFillDataTable(Localstr);
-                    if ((dtCommon.Rows.Count > 0))
-                    {
-                        CityCheckBox.Checked = Convert.ToBoolean(dtCommon.Rows[0]["IsAllCity"]);
-
-                        cmbCityCountry.SelectedValue = Convert.ToInt32(dtDetail.Rows[0]["CityCountryId"]);
-                        cmbStateName.SelectedValue = Convert.ToInt32(dtDetail.Rows[0]["CityStateId"]);
-                        if (CityCheckBox.Checked == false)
-                        {
-                            for (int iCtr = 0; (iCtr <= (dtCommon.Rows.Count - 1)); iCtr++)
-                            {
-                                for (int i = 0; i < dgCity.Rows.Count; i++)
-                                {
-                                    if (Convert.ToInt32(dgCity.Rows[i].Cells["Id"].Value) == Convert.ToInt32(dtCommon.Rows[iCtr]["CityId"]))
-                                    {
-                                        dgCity.Rows[i].Cells[1].Value = true;
-                                    }
-                                }
-                            }
-                        }
-                        if (CityCheckBox.Checked == true)
-                        {
-                            CityCheckBoxClick(CityCheckBox);
-                        }
-                    }
-                    #endregion
+                    
 
                     #region Get Dealer List
-                    Localstr = "";
-                    Localstr = "select distinct DealerId, IsAllDealer from tbAdvtAdminDetail where advtid=" + ReturnAdvtId + " and DealerId != IsAllDealer  ";
-                    dtCommon = new DataTable();
-                    dtCommon = objMainClass.fnFillDataTable(Localstr);
-                    if ((dtCommon.Rows.Count > 0))
-                    {
-                        DealerCheckBox.Checked = Convert.ToBoolean(dtCommon.Rows[0]["IsAllDealer"]);
 
-                        cmbDealerCountry.SelectedValue = Convert.ToInt32(dtDetail.Rows[0]["DealerCountryId"]);
-                        if (DealerCheckBox.Checked == false)
-                        {
-                            for (int iCtr = 0; (iCtr <= (dtCommon.Rows.Count - 1)); iCtr++)
-                            {
-                                for (int i = 0; i < dgDealer.Rows.Count; i++)
-                                {
-                                    if (Convert.ToInt32(dgDealer.Rows[i].Cells["Id"].Value) == Convert.ToInt32(dtCommon.Rows[iCtr]["DealerId"]))
-                                    {
-                                        dgDealer.Rows[i].Cells[1].Value = true;
-                                    }
-                                }
-                            }
-                        }
-                        if (DealerCheckBox.Checked == true)
-                        {
-                            DealerCheckBoxClick(DealerCheckBox);
-                        }
+                    if (chkDealer.Checked == true)
+                    {
+                        //FillCountryDealer();
                     }
+                    
                     #endregion
 
 
@@ -2096,9 +2015,10 @@ namespace ManagementPanel
                     dtCommon = objMainClass.fnFillDataTable(Localstr);
                     if ((dtCommon.Rows.Count > 0))
                     {
+                        FillData();
                         TokenCheckBox.Checked = Convert.ToBoolean(dtCommon.Rows[0]["IsAllToken"]);
 
-                        cmbDealer.SelectedValue = Convert.ToInt32(dtDetail.Rows[0]["TokenDealerId"]);
+                        //cmbDealer.SelectedValue = Convert.ToInt32(dtDetail.Rows[0]["TokenDealerId"]);
                         if (TokenCheckBox.Checked == false)
                         {
                             for (int iCtr = 0; (iCtr <= (dtCommon.Rows.Count - 1)); iCtr++)
@@ -2190,6 +2110,9 @@ namespace ManagementPanel
                 
                 panToken.Visible = true;
                 tlpMain.ColumnStyles[5].Width = 21;
+                IsTokenCheckBoxClicked = true;
+                TokenCheckBox.Checked = false;
+                FillData();
             }
             else
             {
@@ -2262,7 +2185,7 @@ namespace ManagementPanel
 
             dgToken.Columns.Add("ver", "Type");
             dgToken.Columns["ver"].Width = 100;
-            dgToken.Columns["ver"].Visible = true;
+            dgToken.Columns["ver"].Visible = false;
             dgToken.Columns["ver"].ReadOnly = true;
             dgToken.Columns["ver"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
@@ -2273,7 +2196,7 @@ namespace ManagementPanel
             dgToken.Columns.Add(ModifyToken);
             ModifyToken.UseColumnTextForLinkValue = true;
             ModifyToken.Width = 70;
-            ModifyToken.Visible = true;
+            ModifyToken.Visible = false;
             dgToken.Columns[9].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
 
             dgToken.Columns.Add("uId", "uId");
@@ -2283,16 +2206,7 @@ namespace ManagementPanel
 
         }
 
-        private void cmbDealer_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            IsTokenCheckBoxClicked = true;
-            if (Convert.ToInt32(cmbDealer.SelectedValue) == 0)
-            {
-                InitilizeGrid();
-                return;
-            }
-            FillData();
-        }
+        
         private string GetReturnId(DataGridView dgGrid)
         {
             string ReturnId = "";
@@ -2314,32 +2228,79 @@ namespace ManagementPanel
         }
         private void FillData()
         {
+            string DealerId = "";
             string stateId = "";
             string CityId = "";
             string CountryId = "";
 
+
+
             CountryId = GetReturnId(dgCountry);
+            DealerId = GetReturnId(dgDealer);
             stateId = GetReturnId(dgState);
             CityId = GetReturnId(dgCity);
 
-
+            if ((chkState.Checked == true) && (stateId == ""))
+            {
+                stateId = "0";
+            }
+            if ((chkCity.Checked == true) && (CityId == ""))
+            {
+                CityId = "0";
+            }
+            TokenCheckBox.Checked = false;
+            if ((DealerId == ""))
+            {
+                InitilizeGrid();
+                return;
+            }
+            
             string sQr = "";
-            sQr = "SELECT AMPlayerTokens.TokenID , iif(isnull(tokenno,'')='' ,iif(token='used',convert(varchar(100) ,Tokenid),token),tokenno) as tNo, isnull(AMPlayerTokens.Location,'') as Location,";
+            string vQry = " where ";
+            sQr = "SELECT AMPlayerTokens.TokenID , iif(isnull(AMPlayerTokens.tokenno,'')='' ,iif(AMPlayerTokens.token='used',convert(varchar(100) ,AMPlayerTokens.Tokenid),AMPlayerTokens.token),AMPlayerTokens.tokenno) as tNo, isnull(AMPlayerTokens.Location,'') as Location,";
             sQr = sQr + " isnull(tbCity.CityName,'') as CityName, isnull(tbState.StateName,'') as StateName, isnull(CountryCodes.CountryName,'') as CountryName,isnull(AMPlayerTokens.PersonName ,'') as PersonName , AMPlayerTokens.userid, isnull(AMPlayerTokens.IsStore,0) as IsStore, isnull(AMPlayerTokens.IsStream,0) as IsStream FROM  AMPlayerTokens ";
             sQr = sQr + " LEFT OUTER JOIN tbCity ON AMPlayerTokens.CityId = tbCity.CityId LEFT OUTER JOIN tbState ON AMPlayerTokens.StateId = tbState.StateId LEFT OUTER JOIN CountryCodes ON AMPlayerTokens.CountryId = CountryCodes.CountryCode";
-            sQr = sQr + " WHERE AMPlayerTokens.ClientID = " + Convert.ToInt32(cmbDealer.SelectedValue) + " ";
-            if (CountryId != "")
+
+
+            if (DealerId != "")
             {
-                sQr = sQr + " and AMPlayerTokens.CountryId in( " + CountryId + " )";
+                if (vQry != " where ")
+                {
+                    if ((stateId != "") || (CityId != ""))
+                    {
+                        vQry = vQry + " and ";
+                    }
+                }
+                vQry = vQry + " AMPlayerTokens.clientid in( " + DealerId + " )";
             }
             if (stateId != "")
             {
-                sQr = sQr + " and AMPlayerTokens.stateid in( " + stateId + " )";
+                if (vQry != " where ")
+                {
+                    if ((DealerId != "") || (CityId != ""))
+                    {
+                        vQry = vQry + " and ";
+                    }
+                }
+                vQry = vQry + " AMPlayerTokens.stateid in( " + stateId + " )";
             }
+
             if (CityId != "")
             {
-                sQr = sQr + " and AMPlayerTokens.cityid in( " + CityId + " )";
+                if (vQry != " where ")
+                {
+                    if ((DealerId != "") || (stateId != ""))
+                    {
+                        vQry = vQry + " and ";
+                    }
+                }
+                vQry = vQry + " AMPlayerTokens.cityid in( " + CityId + " )";
             }
+
+
+
+            sQr = sQr + vQry;
+
             DataTable dtDetail = new DataTable();
             InitilizeGrid();
             dtDetail = objMainClass.fnFillDataTable(sQr);
@@ -2374,8 +2335,6 @@ namespace ManagementPanel
             }
             TotalCheckBoxesToken = dgToken.RowCount;
             TotalCheckedCheckBoxesToken = 0;
-
-            // dgToken.ClearSelection();
 
             if (ReturnAdvtId != 0)
             {
@@ -2512,7 +2471,7 @@ namespace ManagementPanel
                 frmTokenInformation frm = new frmTokenInformation();
                 StaticClass.DealerTokenId = 0;
                 StaticClass.dealerUserId = Convert.ToInt32(dgToken.Rows[e.RowIndex].Cells["uId"].Value);
-                StaticClass.DealerDfClientId = Convert.ToInt32(cmbDealer.SelectedValue);
+                
                 StaticClass.DealerTokenId = Convert.ToInt32(dgToken.Rows[e.RowIndex].Cells["id"].Value);
                 frm.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
                 frm.StartPosition = FormStartPosition.CenterScreen;
@@ -2526,7 +2485,7 @@ namespace ManagementPanel
         private void cmbSearchDealer_Click(object sender, EventArgs e)
         {
             string str = "";
-            str = "select DFClientID,ClientName from DFClients where CountryCode is not null and DFClients.IsDealer=1 order by DFClientID desc";
+            str = "select DFClientID,RIGHT(ClientName, LEN(ClientName) - 3) as ClientName from DFClients where CountryCode is not null and DFClients.IsDealer=1 order by RIGHT(ClientName, LEN(ClientName) - 3)";
             objMainClass.fnFillComboBox(str, cmbSearchDealer, "DFClientID", "ClientName", "");
         }
 
@@ -2785,7 +2744,12 @@ namespace ManagementPanel
         {
             if (e.ColumnIndex == 1)
             {
-                FillData();
+                if (chkDealerClient.Checked == true)
+                {
+                    IsTokenCheckBoxClicked = true;
+                    TokenCheckBox.Checked = false;
+                    FillData();
+                }
             }
         }
 
@@ -2794,5 +2758,266 @@ namespace ManagementPanel
              
             
         }
+       
+        private void dgCountry_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 1)
+            {
+                if (chkState.Checked == true)
+                {
+                    FillCountryState();
+                }
+                
+                if (chkDealer.Checked == true)
+                {
+                    FillCountryDealer();
+                }
+                
+                if (chkDealerClient.Checked == true)
+                {
+                    IsTokenCheckBoxClicked = true;
+                    TokenCheckBox.Checked = false;
+                    FillData();
+                }
+            }
+        }
+        private void FillCountryState()
+        {
+            IsStateCheckBoxClicked = true;
+            StateCheckBox.Checked = false;
+            CityCheckBox.Checked = false;
+            DealerCheckBox.Checked = false;
+
+            TokenCheckBox.Checked = false;
+            string CountryId = "";
+            CountryId = GetReturnId(dgCountry);
+            if (CountryId == "")
+            {
+                InitilizeGrid(dgState, "State Name");
+                InitilizeGrid(dgCity, "City Name");
+                
+
+                InitilizeGrid();
+                return;
+            }
+            InitilizeGrid(dgCity, "City Name");
+            
+            InitilizeGrid();
+            string str = "";
+            str = "";
+            str = "SELECT distinct tbState.StateID as Id, tbState.StateName as DisplayName FROM AMPlayerTokens ";
+            str = str + " INNER JOIN tbState ON AMPlayerTokens.StateId = tbState.Stateid ";
+            str = str + " where   ";
+
+            str = str + "   tbState.CountryId in (" + CountryId + " ) ";
+            str = str + " order by StateName ";
+
+            FillDataParamter(dgState, "State Name", str);
+            TotalCheckBoxesState = dgState.RowCount;
+            TotalCheckedCheckBoxesState = 0;
+
+
+
+            if (ReturnAdvtId != 0)
+            {
+                if (chkState.Checked == true)
+                {
+                        #region Get State List
+                       string Localstr = "";
+                        Localstr = "select distinct Stateid, IsAllState  from tbAdvtAdminDetail where advtid=" + ReturnAdvtId + " and Stateid != IsAllState  ";
+                        DataTable dtCommon = new DataTable();
+                        dtCommon = objMainClass.fnFillDataTable(Localstr);
+                        if ((dtCommon.Rows.Count > 0))
+                        {
+                            StateCheckBox.Checked = Convert.ToBoolean(dtCommon.Rows[0]["IsAllState"]);
+                            for (int iCtr = 0; (iCtr <= (dtCommon.Rows.Count - 1)); iCtr++)
+                            {
+                                for (int i = 0; i < dgState.Rows.Count; i++)
+                                {
+                                    if (Convert.ToInt32(dgState.Rows[i].Cells["Id"].Value) == Convert.ToInt32(dtCommon.Rows[iCtr]["Stateid"]))
+                                    {
+                                        dgState.Rows[i].Cells[1].Value = true;
+                                    }
+                                }
+                            }
+                            if (StateCheckBox.Checked == true)
+                            {
+                                StateCheckBoxClick(StateCheckBox);
+                            }
+                        }
+                        #endregion
+                }
+                if (chkCity.Checked == true)
+                {
+                    if (dgCity.Rows.Count == 0)
+                    {
+                        FillStateCity();
+                    }
+                    
+                }
+            }
+
+        }
+       
+
+        private void dgState_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 1)
+            {
+                if (chkCity.Checked == true)
+                {
+                    FillStateCity();
+                }
+                if (chkDealerClient.Checked == true)
+                {
+                    IsTokenCheckBoxClicked = true;
+                    TokenCheckBox.Checked = false;
+                    FillData();
+                }
+            }
+        }
+        private void FillStateCity()
+        {
+            IsCityCheckBoxClicked = true;
+            CityCheckBox.Checked = false;
+            string StateId = "";
+            StateId = GetReturnId(dgState);
+            if (StateId == "")
+            {
+                InitilizeGrid(dgCity, "City Name");
+                return;
+            }
+            string str = "";
+            str = "";
+            str = "SELECT distinct tbCity.CityId as Id, tbCity.CityName as DisplayName FROM AMPlayerTokens  ";
+            str = str + " INNER JOIN tbCity ON AMPlayerTokens.CityId = tbCity.CityId ";
+            str = str + " INNER JOIN Users ON AMPlayerTokens.UserId = Users.UserID";
+            str = str + " where ";
+
+            str = str + "   tbCity.StateId in( " + StateId + " ) ";
+            str = str + " order by tbCity.CityName ";
+            FillDataParamter(dgCity, "City Name", str);
+            TotalCheckBoxesCity = dgCity.RowCount;
+            TotalCheckedCheckBoxesCity = 0;
+
+            if (ReturnAdvtId != 0)
+            {
+                if (chkCity.Checked == true)
+                {
+                    #region Get City List
+                    string Localstr = "";
+                    Localstr = "select distinct CityId, IsAllCity from tbAdvtAdminDetail where advtid=" + ReturnAdvtId + " and CityId != IsAllCity  ";
+                    DataTable dtCommon = new DataTable();
+                    dtCommon = objMainClass.fnFillDataTable(Localstr);
+                    if ((dtCommon.Rows.Count > 0))
+                    {
+                        CityCheckBox.Checked = Convert.ToBoolean(dtCommon.Rows[0]["IsAllCity"]);
+                        if (CityCheckBox.Checked == false)
+                        {
+                            for (int iCtr = 0; (iCtr <= (dtCommon.Rows.Count - 1)); iCtr++)
+                            {
+                                for (int i = 0; i < dgCity.Rows.Count; i++)
+                                {
+                                    if (Convert.ToInt32(dgCity.Rows[i].Cells["Id"].Value) == Convert.ToInt32(dtCommon.Rows[iCtr]["CityId"]))
+                                    {
+                                        dgCity.Rows[i].Cells[1].Value = true;
+                                    }
+                                }
+                            }
+                        }
+                        if (CityCheckBox.Checked == true)
+                        {
+                            CityCheckBoxClick(CityCheckBox);
+                        }
+                    }
+                    #endregion
+                }
+            }
+        }
+
+        
+        private void FillCountryDealer()
+        {
+            
+            string CountryId = "";
+            CountryId = GetReturnId(dgCountry);
+            if (CountryId == "")
+            {
+                InitilizeGrid(dgDealer, "Customer Name");
+                return;
+            }
+
+            IsDealerCheckBoxClicked = true;
+            DealerCheckBox.Checked = false;
+            string str = "";
+            str = "select DFClientID as Id,RIGHT(ClientName, LEN(ClientName) - 3) as  DisplayName  from ( ";
+            str = str + "  select distinct DFClients.DFClientID, DFClients.ClientName from DFClients ";
+            str = str + " inner join AMPlayerTokens on AMPlayerTokens.clientid=DFClients.dfclientid ";
+            str = str + " where AMPlayerTokens.countryid  in (" + CountryId + ") and DFClients.IsDealer=1   ";
+            str = str + " ) as a order by RIGHT(ClientName, LEN(ClientName) - 3)    ";
+
+            FillDataParamter(dgDealer, "Customer Name", str);
+            TotalCheckBoxesDealer = dgDealer.RowCount;
+            TotalCheckedCheckBoxesDealer = 0;
+
+
+            if (ReturnAdvtId != 0)
+            {
+                if (chkDealer.Checked == false)
+                {
+                    return;
+                }
+                string Localstr = "";
+                Localstr = "select distinct DealerId, IsAllDealer from tbAdvtAdminDetail where advtid=" + ReturnAdvtId + " and DealerId != IsAllDealer  ";
+                DataTable dtCommon = new DataTable();
+                dtCommon = objMainClass.fnFillDataTable(Localstr);
+                if ((dtCommon.Rows.Count > 0))
+                {
+                    DealerCheckBox.Checked = Convert.ToBoolean(dtCommon.Rows[0]["IsAllDealer"]);
+                    if (DealerCheckBox.Checked == false)
+                    {
+                        for (int iCtr = 0; (iCtr <= (dtCommon.Rows.Count - 1)); iCtr++)
+                        {
+                            for (int i = 0; i < dgDealer.Rows.Count; i++)
+                            {
+                                if (Convert.ToInt32(dgDealer.Rows[i].Cells["Id"].Value) == Convert.ToInt32(dtCommon.Rows[iCtr]["DealerId"]))
+                                {
+                                    dgDealer.Rows[i].Cells[1].Value = true;
+                                }
+                            }
+                        }
+                    }
+                    if (DealerCheckBox.Checked == true)
+                    {
+                        DealerCheckBoxClick(DealerCheckBox);
+                    }
+
+                    if (chkDealerClient.Checked == true)
+                    {
+                        if (dgToken.Rows.Count == 0)
+                        {
+                            FillData();
+                        }
+                    }
+                }
+            }
+
+
+
+        }
+
+        private void dgDealer_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 1)
+            {
+                if (chkDealerClient.Checked == true)
+                {
+                    IsTokenCheckBoxClicked = true;
+                    TokenCheckBox.Checked = false;
+                    FillData();
+                }
+            }
+        }
+         
     }
 }

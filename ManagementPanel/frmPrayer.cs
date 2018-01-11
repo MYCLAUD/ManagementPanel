@@ -1909,7 +1909,7 @@ namespace ManagementPanel
             str = "select DFClientID as Id,ClientName as DisplayName  from ( select DFClientID,ClientName from DFClients where CountryCode in (" + CountryId + ") and DFClients.IsDealer=1  ";
             str = str + " ) as a order by ClientName desc ";
 
-            FillDataParam(dgDealer, "Dealer Name", str);
+            FillDataParam(dgDealer, "Customer Name", str);
             TotalCheckBoxesDealer = dgDealer.RowCount;
             TotalCheckedCheckBoxesDealer = 0;
         }
